@@ -3,6 +3,7 @@
 
 # Ignore eclipse metadata
 .metadata/
+game/.settings/
 
 # Ignore maven artifacts
 game/target/*.jar
