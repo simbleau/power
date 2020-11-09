@@ -1,4 +1,4 @@
-package com.game.physics;
+package com.game.example;
 
 import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractGame;

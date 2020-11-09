@@ -1,12 +1,9 @@
-package com.game;
+package com.game.example;
 
 import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractGame;
 import com.game.engine.game.AbstractPlane;
 import com.game.engine.rendering.common.RenderMode;
-import com.game.physics.ExampleCamera;
-import com.game.physics.ExampleGame;
-import com.game.physics.ExamplePlane;
 
 import java.awt.Dimension;
 
@@ -17,7 +14,7 @@ import com.game.engine.display.DisplaySettings;
 import com.game.engine.driver.DriverSettings;
 
 @SuppressWarnings("javadoc")
-public class GameTest {
+public class ExampleGameDriver {
 
 	public static void main(String[] args) {
 		// Setup the game driver settings

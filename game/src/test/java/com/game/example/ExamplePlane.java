@@ -1,4 +1,4 @@
-package com.game.physics;
+package com.game.example;
 
 import java.util.Random;
 

@@ -1,4 +1,4 @@
-package com.game.physics;
+package com.game.example;
 
 import java.awt.event.KeyEvent;
 
@@ -10,7 +10,7 @@ import com.game.engine.input.MouseKeyboard;
 public class ExampleCamera extends AbstractCamera {
 
 	public ExampleCamera() {
-		super(0, 0, 1);
+		super(0, 0, 0.5);
 	}
 
 	@Override
