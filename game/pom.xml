@@ -2,12 +2,12 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.avatar</groupId>
-	<artifactId>avatar</artifactId>
+	<groupId>com.game</groupId>
+	<artifactId>game</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<dependencies>
-		<!--  Apache Net Commons for NTP client support -->
+		<!-- Apache Net Commons for NTP client support -->
 		<dependency>
 			<groupId>commons-net</groupId>
 			<artifactId>commons-net</artifactId>
@@ -17,36 +17,32 @@
 		<dependency>
 			<groupId>org.jogamp.gluegen</groupId>
 			<artifactId>gluegen-rt-main</artifactId>
-			<version>2.3.1</version>
+			<version>2.3.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.jogamp.jogl</groupId>
 			<artifactId>jogl-all-main</artifactId>
-			<version>2.3.1</version>
+			<version>2.3.2</version>
 		</dependency>
-		<!-- JInput for Gamepad support -->
+
+		<!-- JUNIT -->
 		<dependency>
-			<groupId>net.java.jinput</groupId>
-			<artifactId>jinput</artifactId>
-			<version>2.0.9</version>
-		</dependency>
-		<dependency>
-			<groupId>net.java.jinput</groupId>
-			<artifactId>jinput</artifactId>
-			<version>2.0.9</version>
-			<classifier>natives-all</classifier>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.13</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
 	<properties>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
 	<build>
 		<plugins>
+			<!-- Build an executable JAR with Maven -->
 			<plugin>
-				<!-- Build an executable JAR -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
 				<version>3.1.0</version>
@@ -55,15 +51,20 @@
 						<manifest>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
-							<mainClass>com.avatar.main.Main</mainClass>
+							<mainClass>com.game.main.Main</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
 			</plugin>
-			<!-- Natives for JInput -->
+
+			<!-- Maven surefire for testing -->
 			<plugin>
-				<groupId>com.googlecode.mavennatives</groupId>
-				<artifactId>maven-nativedependencies-plugin</artifactId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.2</version>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.22.2</version>
 			</plugin>
 		</plugins>
 	</build>
