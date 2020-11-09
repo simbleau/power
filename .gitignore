@@ -1,2 +1,12 @@
+# Ignore class files
 *.class
+
+# Ignore eclipse metadata
 .metadata/
+
+# Ignore maven artifacts
+game/target/*.jar
+game/target/maven-archiver/
+game/target/maven-status/
+game/target/surefire-reports/
+
