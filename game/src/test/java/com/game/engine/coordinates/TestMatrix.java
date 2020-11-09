@@ -162,15 +162,15 @@ public class TestMatrix {
 	@Test
 	public void testRandom() {
 		Matrix m = Matrix.random(TEST_ROWS, TEST_COLUMNS);
-		
-		//Test construction
+
+		// Test construction
 		Assert.assertEquals(TEST_ROWS, m.getNumRows());
 		Assert.assertEquals(TEST_COLUMNS, m.getNumCols());
-		
-		//Test randomness. This may fail due to luck.
+
+		// Test randomness. This may fail due to luck.
 		for (int ri = 0; ri < m.getNumRows(); ri++) {
 			for (int ci = 1; ci < m.getNumCols(); ci++) {
-				Assert.assertFalse(m.get(ri, ci) == m.get(ri, ci -1));
+				Assert.assertFalse(m.get(ri, ci) == m.get(ri, ci - 1));
 			}
 		}
 	}

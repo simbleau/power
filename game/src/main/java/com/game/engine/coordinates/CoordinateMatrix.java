@@ -39,8 +39,7 @@ public class CoordinateMatrix extends Matrix {
 	 * @return a rotation matrix
 	 */
 	private static Matrix rotationMatrix(double theta) {
-		double[][] rotMatrix = { { Math.cos(theta), Math.sin(theta) },
-				{ -Math.sin(theta), Math.cos(theta) } };
+		double[][] rotMatrix = { { Math.cos(theta), Math.sin(theta) }, { -Math.sin(theta), Math.cos(theta) } };
 		return new Matrix(rotMatrix, 2, 2);
 	}
 
@@ -92,7 +91,7 @@ public class CoordinateMatrix extends Matrix {
 		Matrix buf = this.times(rotationMatrix(theta));
 		return CoordinateMatrix.create(buf.matrix[0][0], buf.matrix[0][1]);
 	}
-	
+
 	/**
 	 * Rotates this matrix by a given angle.
 	 * 
@@ -109,12 +108,13 @@ public class CoordinateMatrix extends Matrix {
 	 * @param theta - the angle of rotation (in radians)
 	 * @param x     - anchor point x to rotate around
 	 * @param y     - anchor point y to rotate around
-	 * @return A new matrix equaling this matrix rotated by a given theta around an anchor point.
+	 * @return A new matrix equaling this matrix rotated by a given theta around an
+	 *         anchor point.
 	 */
 	public CoordinateMatrix rotate(double theta, double x, double y) {
 		return this.translate(-x, -y).rotateEquals(theta).translateEquals(x, y);
 	}
-	
+
 	/**
 	 * Rotates this matrix by a given angle around an anchor point.
 	 * 
@@ -138,7 +138,7 @@ public class CoordinateMatrix extends Matrix {
 		Matrix buf = this.times(scaleMatrix(sx, sy));
 		return CoordinateMatrix.create(buf.matrix[0][0], buf.matrix[0][1]);
 	}
-	
+
 	/**
 	 * Scales this matrix by given scalars
 	 * 
@@ -149,7 +149,7 @@ public class CoordinateMatrix extends Matrix {
 	public CoordinateMatrix scaleEquals(double sx, double sy) {
 		return (CoordinateMatrix) this.timesEquals(scaleMatrix(sx, sy));
 	}
-	
+
 	/**
 	 * Scales a matrix by a constant scalar
 	 * 
@@ -160,7 +160,7 @@ public class CoordinateMatrix extends Matrix {
 		Matrix buf = this.times(s);
 		return CoordinateMatrix.create(buf.matrix[0][0], buf.matrix[0][1]);
 	}
-	
+
 	/**
 	 * Scales this matrix by a constant scalar
 	 * 
@@ -180,7 +180,7 @@ public class CoordinateMatrix extends Matrix {
 	public CoordinateMatrix transform(AbstractCamera camera) {
 		return this.translate(-camera.x(), -camera.y()).scaleEquals(camera.zoom());
 	}
-	
+
 	/**
 	 * Transform this matrix by a given camera.
 	 *
@@ -190,7 +190,7 @@ public class CoordinateMatrix extends Matrix {
 	public CoordinateMatrix transformEquals(AbstractCamera camera) {
 		return this.translateEquals(-camera.x(), -camera.y()).scaleEquals(camera.zoom());
 	}
-	
+
 	/**
 	 * @return the x value in this coordinate matrix
 	 */

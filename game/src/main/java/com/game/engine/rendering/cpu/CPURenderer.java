@@ -44,7 +44,7 @@ public class CPURenderer extends AbstractRenderer {
 		// Create canvas
 		this.canvas = new CPUCanvas(this.processor);
 
-		//Resize the buffered image to the canvas size
+		// Resize the buffered image to the canvas size
 		this.processor.resize(1, 1);
 	}
 

@@ -21,7 +21,7 @@ public abstract class AbstractGame implements Updateable, Renderable {
 	 * The minimum resolution height for this game without rendering issues.
 	 */
 	public final int MIN_RESOLUTION_HEIGHT;
-	
+
 	/**
 	 * The current plane
 	 *

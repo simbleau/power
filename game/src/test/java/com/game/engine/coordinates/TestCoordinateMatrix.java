@@ -238,7 +238,7 @@ public class TestCoordinateMatrix {
 	 */
 	@Test
 	public void testTransform() {
-		//Initialize values
+		// Initialize values
 		CoordinateMatrix m = CoordinateMatrix.create(TEST_X, TEST_Y);
 		double dx = 5d, dy = 3d, zoom = 2d;
 		AbstractCamera c = new AbstractCamera(dx, dy, zoom) {
@@ -248,12 +248,12 @@ public class TestCoordinateMatrix {
 			}
 		};
 
-		//Test transform
+		// Test transform
 		double x2 = (TEST_X - dx) * zoom, y2 = (TEST_Y - dy) * zoom;
 		CoordinateMatrix m2 = CoordinateMatrix.create(x2, y2);
 		Assert.assertEquals(m2, m.transform(c));
 		Assert.assertEquals(m2, m.transformEquals(c));
-		
+
 	}
 
 	/**

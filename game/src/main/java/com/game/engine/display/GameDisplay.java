@@ -99,7 +99,7 @@ public class GameDisplay {
 				driver.stop();
 			}
 		});
-		
+
 		this.frame.add(this.renderer.getCanvas(), BorderLayout.CENTER);
 
 		// Set minimum dimensions for the canvas

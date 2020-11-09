@@ -85,7 +85,7 @@ public class TestDriverSettings {
 		d.restrictFPS(TEST_FPS);
 		Assert.assertEquals(TEST_FPS, d.getFPSGoal());
 	}
-	
+
 	/**
 	 * Test {@link DriverSettings#getFrameDuration()}.
 	 */
@@ -203,7 +203,7 @@ public class TestDriverSettings {
 		d.restrictFPS(TEST_FPS);
 		Assert.assertTrue(d.isFpsRestricted());
 	}
-	
+
 	/**
 	 * Test {@link DriverSettings#isServerClockInitialized()}.
 	 */
@@ -222,7 +222,7 @@ public class TestDriverSettings {
 		}
 		Assert.assertTrue(d.isServerClockInitialized());
 	}
-	
+
 	/**
 	 * Test {@link DriverSettings#restrictFPS(int)}.
 	 */
@@ -231,13 +231,13 @@ public class TestDriverSettings {
 		// Initialize values
 		DriverSettings d = DriverSettings.create(TEST_TPS);
 		Duration testFpsDuration = Duration.ofSeconds(1).dividedBy(TEST_FPS);
-		
+
 		// Test
 		d.restrictFPS(TEST_FPS);
 		Assert.assertEquals(TEST_FPS, d.getFPSGoal());
 		Assert.assertEquals(testFpsDuration, d.getFrameDuration());
 	}
-	
+
 	/**
 	 * Test {@link DriverSettings#setTicksPerSecond(int)}.
 	 */
@@ -246,13 +246,13 @@ public class TestDriverSettings {
 		// Initialize values
 		DriverSettings d = DriverSettings.create(1);
 		Duration testTickDuration = Duration.ofSeconds(1).dividedBy(TEST_TPS);
-		
+
 		// Test
 		d.setTicksPerSecond(TEST_TPS);
 		Assert.assertEquals(testTickDuration, d.getTickDuration());
 		Assert.assertEquals(TEST_TPS, d.getTicksPerSecond());
 	}
-	
+
 	/**
 	 * Test {@link DriverSettings#unrestrictFPS()}.
 	 */
@@ -260,7 +260,7 @@ public class TestDriverSettings {
 	public void testUnrestrictFps() {
 		// Initialize values
 		DriverSettings d = DriverSettings.create(TEST_TPS, TEST_FPS);
-		
+
 		// Test
 		d.unrestrictFPS();
 		Assert.assertEquals(0, d.getFPSGoal());

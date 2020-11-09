@@ -10,6 +10,7 @@ import java.awt.Dimension;
 import com.game.engine.cache.Cache;
 import com.game.engine.cache.LRUCache;
 import com.game.engine.camera.AbstractCamera;
+import com.game.engine.camera.DevCamera;
 import com.game.engine.display.DisplaySettings;
 import com.game.engine.driver.DriverSettings;
 
@@ -28,7 +29,7 @@ public class ExampleGameDriver {
 		// Setup the display settings
 		Dimension resolution = new Dimension(720, 600);
 		RenderMode mode = RenderMode.OPENGL;
-		AbstractCamera camera = new ExampleCamera();
+		AbstractCamera camera = new DevCamera();
 		DisplaySettings displaySettings = DisplaySettings.create(resolution, // Game resolution
 				mode, // Rendering mode
 				camera);

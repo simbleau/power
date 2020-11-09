@@ -23,12 +23,14 @@ public abstract class RenderRequest implements Comparable<RenderRequest> {
 
 	/**
 	 * The logical depth level of rendering for this request.
+	 * 
 	 * @see #compareTo(RenderRequest)
 	 */
 	public final RenderLevel level;
 
 	/**
 	 * The depth used for sorting render requests on the same {@link #level}.
+	 * 
 	 * @see #compareTo(RenderRequest)
 	 */
 	public final int depth;

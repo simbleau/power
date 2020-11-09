@@ -16,10 +16,10 @@ public class LineRequest extends RenderRequest {
 	/**
 	 * Initialize line request
 	 *
-	 * @param line - the line to render
+	 * @param line  - the line to render
 	 * @param level - the render level
-	 * @param x    - The x coordinate to render at
-	 * @param y    - The y coordinate to render at
+	 * @param x     - The x coordinate to render at
+	 * @param y     - The y coordinate to render at
 	 */
 	public LineRequest(Line line, RenderLevel level, int x, int y) {
 		super(line, level, y + line.getDy(), x, y);

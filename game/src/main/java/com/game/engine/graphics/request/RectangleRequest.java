@@ -16,10 +16,10 @@ public class RectangleRequest extends RenderRequest {
 	/**
 	 * Initialize rectangle request
 	 *
-	 * @param rect - the rectangle to render
+	 * @param rect  - the rectangle to render
 	 * @param level - the render level
-	 * @param x    - The x coordinate to render at
-	 * @param y    - The y coordinate to render at
+	 * @param x     - The x coordinate to render at
+	 * @param y     - The y coordinate to render at
 	 */
 	public RectangleRequest(Rectangle rect, RenderLevel level, int x, int y) {
 		super(rect, level, y + rect.getHeight(), x, y);

@@ -116,7 +116,8 @@ class TestSquare extends AbstractGameObject {
 					(int) this.y);
 			break;
 		case 3:
-			request = new Ellipse(size, size, 0xffff0000).asRequest(RenderLevel.WORLD_OBJECTS, (int) this.x, (int) this.y);
+			request = new Ellipse(size, size, 0xffff0000).asRequest(RenderLevel.WORLD_OBJECTS, (int) this.x,
+					(int) this.y);
 			break;
 		default:
 			request = new Line(this.size, this.size, 0xff00ffff).asRequest(RenderLevel.WORLD_OBJECTS, (int) this.x,

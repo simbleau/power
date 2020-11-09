@@ -32,7 +32,8 @@ public enum RenderLevel {
 	WORLD_PLUGIN,
 
 	/**
-	 * Elements meant to be game-given hints and guides which overlay the game world.
+	 * Elements meant to be game-given hints and guides which overlay the game
+	 * world.
 	 */
 	WORLD_OVERLAY,
 

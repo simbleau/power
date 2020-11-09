@@ -122,10 +122,10 @@ public class TestDisplaySettings {
 	@Test
 	public void testSetCamera() {
 		Assert.assertEquals(TEST_CAMERA, s.getCamera());
-		
+
 		DevCamera testCam = new DevCamera();
 		s.setCamera(testCam);
-		
+
 		Assert.assertEquals(testCam, s.getCamera());
 	}
 }
