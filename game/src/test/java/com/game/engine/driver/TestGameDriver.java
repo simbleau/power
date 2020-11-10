@@ -1,7 +1,5 @@
 package com.game.engine.driver;
 
-import java.awt.Dimension;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,15 +7,16 @@ import org.junit.Test;
 
 import com.game.engine.cache.Cache;
 import com.game.engine.cache.LRUCache;
-import com.game.engine.camera.DevCamera;
 import com.game.engine.display.DisplaySettings;
+import com.game.engine.display.mock.MockDisplaySettings;
+import com.game.engine.driver.mock.MockDriverSettings;
 import com.game.engine.game.AbstractGame;
 import com.game.engine.game.AbstractPlane;
+import com.game.engine.game.mock.MockPlane;
 import com.game.engine.rendering.common.AbstractRenderer;
-import com.game.engine.rendering.common.RenderMode;
 
 /**
- * Test {@link GameDriver}
+ * Test {@link GameDriver}.
  * 
  * @author Spencer Imbleau
  * @version November 2020
@@ -44,33 +43,22 @@ public class TestGameDriver {
 	/**
 	 * An arbitrary set of driver settings for testing.
 	 */
-	private static final DriverSettings TEST_DRIVER_SETTINGS = DriverSettings.create(2, 60);
+	private static final DriverSettings TEST_DRIVER_SETTINGS = new MockDriverSettings();
 
 	/**
 	 * An arbitrary set of settings for display.
 	 */
-	private static final DisplaySettings TEST_DISPLAY_SETTINGS = DisplaySettings.create(new Dimension(200, 200),
-			RenderMode.SAFE, new DevCamera());
+	private static final DisplaySettings TEST_DISPLAY_SETTINGS = new MockDisplaySettings();
 
+	/** 
+	 * An arbitrary plane for testing.
+	 */
+	private static final AbstractPlane TEST_PLANE = new MockPlane();
+	
 	/**
 	 * An arbitrary cache for testing.
 	 */
-	private static final Cache TEST_CACHE = new LRUCache(2);
-
-	/**
-	 * An arbitrary plane for testing.
-	 */
-	private static final AbstractPlane TEST_PLANE = new AbstractPlane() {
-		@Override
-		public int getWidth() {
-			return 10;
-		}
-
-		@Override
-		public int getHeight() {
-			return 10;
-		}
-	};
+	private static final Cache TEST_CACHE = new LRUCache(0);
 
 	/**
 	 * A buffer to count total updates by the {@link #TEST_GAME}.
@@ -85,19 +73,17 @@ public class TestGameDriver {
 	/**
 	 * A game which counts updates and frames for testing analysis.
 	 */
-	private static final AbstractGame TEST_GAME = new AbstractGame(100, 100, TEST_PLANE) {
+	private static final AbstractGame TEST_GAME = new AbstractGame(0, 0, TEST_PLANE) {
 		@Override
 		public void update(GameDriver driver) {
 			super.update(driver);
 			updates++;
 		}
-
 		@Override
 		public void stage(GameDriver driver, AbstractRenderer renderer) {
 			super.stage(driver, renderer);
 			frames++;
 		}
-
 	};
 
 	/**

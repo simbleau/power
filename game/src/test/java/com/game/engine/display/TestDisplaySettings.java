@@ -9,7 +9,6 @@ import org.junit.Test;
 
 import com.game.engine.camera.AbstractCamera;
 import com.game.engine.camera.DevCamera;
-import com.game.engine.driver.GameDriver;
 import com.game.engine.rendering.common.RenderMode;
 
 /**
@@ -23,7 +22,7 @@ public class TestDisplaySettings {
 	/**
 	 * An arbitrary resolution for testing.
 	 */
-	private static final Dimension TEST_PREFERRED_RESOLUTION = new Dimension(50, 50);
+	private static final Dimension TEST_PREFERRED_RESOLUTION = new Dimension(480, 360);
 
 	/**
 	 * An arbitrary render mode for testing.
@@ -33,12 +32,7 @@ public class TestDisplaySettings {
 	/**
 	 * An arbitrary camera for testing.
 	 */
-	private static final AbstractCamera TEST_CAMERA = new AbstractCamera(0, 0, 0) {
-		@Override
-		public void update(GameDriver driver) {
-			// Do nothing
-		}
-	};
+	private static final AbstractCamera TEST_CAMERA = new DevCamera();
 
 	/**
 	 * A buffer {@link DisplaySettings} object for tests.

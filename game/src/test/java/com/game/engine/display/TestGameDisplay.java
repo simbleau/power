@@ -1,6 +1,5 @@
 package com.game.engine.display;
 
-import java.awt.Dimension;
 import java.lang.reflect.Field;
 
 import javax.swing.JFrame;
@@ -11,15 +10,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.game.engine.cache.LRUCache;
-import com.game.engine.camera.AbstractCamera;
-import com.game.engine.driver.DriverSettings;
+import com.game.engine.display.mock.MockDisplaySettings;
 import com.game.engine.driver.GameDriver;
-import com.game.engine.rendering.common.RenderMode;
+import com.game.engine.driver.mock.MockGameDriver;
 import com.game.engine.rendering.cpu.CPURenderer;
 import com.game.engine.rendering.opengl.JOGLRenderer;
-import com.game.engine.game.AbstractGame;
-import com.game.engine.game.AbstractPlane;
 
 /**
  * Test a {@link GameDisplay}.
@@ -32,33 +27,12 @@ public class TestGameDisplay {
 	/**
 	 * Arbitrary test driver settings.
 	 */
-	private static final GameDriver TEST_DRIVER = new GameDriver(DriverSettings.create(1), new LRUCache(0),
-			new AbstractGame(50, 50, new AbstractPlane() {
-				@Override
-				public int getWidth() {
-					// TODO Auto-generated method stub
-					return 0;
-				}
-
-				@Override
-				public int getHeight() {
-					// TODO Auto-generated method stub
-					return 0;
-				}
-			}) {
-			});
+	private static final GameDriver TEST_DRIVER = new MockGameDriver();
 
 	/**
 	 * Arbitrary test display settings.
 	 */
-	private static final DisplaySettings TEST_DISPLAY_SETTINGS = DisplaySettings.create(new Dimension(100, 100),
-			RenderMode.SAFE, new AbstractCamera(0, 0, 1) {
-				@Override
-				public void update(GameDriver driver) {
-					// TODO Auto-generated method stub
-
-				}
-			});
+	private static final DisplaySettings TEST_DISPLAY_SETTINGS = new MockDisplaySettings();
 
 	/**
 	 * A buffer {@link GameDisplay} object for tests.

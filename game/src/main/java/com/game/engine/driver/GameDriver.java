@@ -110,7 +110,10 @@ public class GameDriver implements Runnable {
 	}
 
 	/**
-	 * Run the game loop
+	 * Run the game loop. This should not be called by the developer, instead invoke
+	 * start, which spawns a thread to call this runnable.
+	 * 
+	 * @see GameDriver#start(DisplaySettings)
 	 */
 	@Override
 	public void run() {
