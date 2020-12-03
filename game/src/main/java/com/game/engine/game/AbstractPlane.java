@@ -31,11 +31,26 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 	protected List<AbstractGameObject> levelObjects;
 
 	/**
-	 * Construct an abstract plane
+	 * The pixel width of the plane.
 	 */
-	public AbstractPlane() {
+	public final int width;
+
+	/**
+	 * The pixel height of the plane.
+	 */
+	public final int height;
+
+	/**
+	 * Construct an abstract plane
+	 * 
+	 * @param width  - pixel width of the plane
+	 * @param height - pixel height of the plane
+	 */
+	public AbstractPlane(final int width, final int height) {
 		this.chunker = new Chunker(this);
 		this.levelObjects = new ArrayList<AbstractGameObject>();
+		this.width = width;
+		this.height = height;
 	}
 
 	/**
@@ -63,14 +78,22 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 			currentChunks.next().stage(driver, renderer);
 		}
 	}
-
+	
 	/**
-	 * @return the pixel width of the plane
+	 * Add a game object which exists on the plane.
+	 * 
+	 * @param obj - The object to add to the level.
 	 */
-	public abstract int getWidth();
-
+	public void addGameObject(AbstractGameObject obj) {
+		this.levelObjects.add(obj);
+	}
+	
 	/**
-	 * @return the pixel height of the plane
+	 * Remove a game object if it exists on the plane.
+	 * 
+	 * @param obj - The object to remove from the level.
 	 */
-	public abstract int getHeight();
+	public void removeGameObject(AbstractGameObject obj) {
+		this.levelObjects.remove(obj);
+	}
 }
