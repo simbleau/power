@@ -20,7 +20,7 @@ import com.game.engine.input.MouseKeyboard;
 public class GameDriver implements Runnable {
 
 	/**
-	 * The settings for the game
+	 * The settings for the driver
 	 */
 	public final DriverSettings settings;
 

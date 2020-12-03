@@ -41,7 +41,7 @@ public abstract class AbstractProcessor {
 	 * Sort the render and overlay requests
 	 */
 	public void sort() {
-		Collections.sort(this.requests);
+		Collections.sort(this.requests); // O(n*logn) worst case, O(n) best case
 	}
 
 	/**
