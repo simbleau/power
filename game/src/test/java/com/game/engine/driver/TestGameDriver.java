@@ -153,7 +153,7 @@ public class TestGameDriver {
 		// Test we are near the target goal
 		if (d.settings.isFpsRestricted()) {
 			int delta = Math.abs(d.getFps() - d.settings.getFPSGoal()); // Deviation from fps goal to true fps
-			Assert.assertTrue(delta <= ACCEPTABLE_UPDATE_DEVIATION);
+			Assert.assertTrue(delta <= ACCEPTABLE_FRAME_DEVIATION);
 		} else {
 			// Test frames were rendered
 			Assert.assertTrue(d.getFps() > 0);
