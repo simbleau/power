@@ -47,10 +47,10 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 	 * @param height - pixel height of the plane
 	 */
 	public AbstractPlane(final int width, final int height) {
-		this.chunker = new Chunker(this);
-		this.levelObjects = new ArrayList<AbstractGameObject>();
 		this.width = width;
 		this.height = height;
+		this.levelObjects = new ArrayList<AbstractGameObject>();
+		this.chunker = new Chunker(this);
 	}
 
 	/**
