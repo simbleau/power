@@ -130,7 +130,7 @@ public class Image implements Drawable {
 	 * @param sy - the scale y-axis factor
 	 * @return a new image, scaled accordingly
 	 */
-	public Image resize(float sx, float sy) {
+	public Image resize(double sx, double sy) {
 		int sWidth = (int) (this.width * sx);
 		int sHeight = (int) (this.height * sy);
 		BufferedImage buf = new BufferedImage(sWidth, sHeight, BufferedImage.TYPE_INT_ARGB);
