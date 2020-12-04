@@ -15,46 +15,50 @@ public abstract class AbstractGameObject implements Updateable, Renderable {
 	/**
 	 * The x coordinate for the object
 	 */
-	protected float x;
+	protected double x = 0;
 
 	/**
 	 * The y coordinate for the object
 	 */
-	protected float y;
+	protected double y = 0;
 
 	/**
 	 * The width of the object
 	 */
-	protected int width;
+	protected int width = 0;
 
 	/**
 	 * The height of the object
 	 */
-	protected int height;
+	protected int height = 0;
 
 	/**
 	 * @return the x coordinate of the object
 	 */
-	public float x() {
+	public double x() {
 		return this.x;
 	}
 
 	/**
 	 * @return the y coordinate of the object
 	 */
-	public float y() {
+	public double y() {
 		return this.y;
 	}
 
 	/**
 	 * @return the pixel width of the object
 	 */
-	public abstract int getWidth();
+	public int width() {
+		return this.width;
+	}
 
 	/**
 	 * @return the pixel height of the object
 	 */
-	public abstract int getHeight();
+	public int height() {
+		return this.height;
+	}
 
 	@Override
 	public abstract void update(GameDriver driver);
