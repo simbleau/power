@@ -160,8 +160,8 @@ public class GameDriver implements Runnable {
 				while (durationSinceLastUpdate.toNanos() >= settings.getTickDuration().toNanos()) {
 					durationSinceLastUpdate = durationSinceLastUpdate.minus(settings.getTickDuration());
 
-					this.game.update(this);
 					this.display.settings.getCamera().update(this);
+					this.game.update(this);
 				}
 
 				// Check if we have surpassed a second of time for FPS measurement
