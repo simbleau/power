@@ -48,7 +48,7 @@ public class TestDisplaySettings {
 	}
 
 	/**
-	 * Test {@link DisplaySettings#create(Dimension, RenderMode, AbstractCamera)}.
+	 * Test {@link DisplaySettings#DisplaySettings(Dimension, RenderMode, AbstractCamera)}.
 	 */
 	@Test
 	public void testCreate() {

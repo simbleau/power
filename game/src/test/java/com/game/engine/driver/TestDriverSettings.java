@@ -45,7 +45,7 @@ public class TestDriverSettings {
 	private static final int TEST_TIMEOUT_MS = 5000;
 
 	/**
-	 * Test {@link DriverSettings#create(int)}.
+	 * Test {@link DriverSettings#DriverSettings(int)}.
 	 */
 	@Test
 	public void testCreate1() {
@@ -59,7 +59,7 @@ public class TestDriverSettings {
 	}
 
 	/**
-	 * Test {@link DriverSettings#create(int, int)}.
+	 * Test {@link DriverSettings#DriverSettings(int, int)}.
 	 */
 	@Test
 	public void testCreate2() {
