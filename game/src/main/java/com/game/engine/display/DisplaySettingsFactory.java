@@ -1,4 +1,4 @@
-package com.game.demos;
+package com.game.engine.display;
 
 import java.awt.Dimension;
 import java.util.Optional;
