@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import com.game.engine.camera.AbstractCamera;
 import com.game.engine.camera.DevCamera;
-import com.game.engine.display.DisplaySettings;
 import com.game.engine.rendering.common.RenderMode;
 
 /**
