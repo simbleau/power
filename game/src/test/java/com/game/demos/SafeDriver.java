@@ -5,7 +5,9 @@ import org.junit.Assert;
 import com.game.demos.gfxtest.GFXTestGame;
 import com.game.demos.gfxtest.GFXTestPlane;
 import com.game.engine.cache.LRUCache;
+import com.game.engine.display.DisplaySettingsFactory;
 import com.game.engine.driver.GameDriver;
+import com.game.engine.driver.GameDriverFactory;
 import com.game.engine.rendering.common.RenderMode;
 
 /**
