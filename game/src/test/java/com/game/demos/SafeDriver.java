@@ -24,8 +24,8 @@ public class SafeDriver {
 	public static void main(String[] args) {
 		Assert.assertTrue(args.length == 4 || args.length == 3);
 
-		int resX = Integer.parseInt(args[0]);
-		int resY = Integer.parseInt(args[1]);
+		int resWidth = Integer.parseInt(args[0]);
+		int resHeight = Integer.parseInt(args[1]);
 		int tps = Integer.parseInt(args[2]);
 		int fps = (args.length == 4) ? Integer.parseInt(args[3]) : -1;
 
@@ -41,8 +41,8 @@ public class SafeDriver {
 		// Setup the display settings
 		DisplaySettingsFactory dsF = new DisplaySettingsFactory();
 		dsF.setMode(RenderMode.SAFE);
-		dsF.setResX(resX);
-		dsF.setResY(resY);
+		dsF.setResolutionWidth(resWidth);
+		dsF.setResolutionHeight(resHeight);
 
 		// Start the game
 		GameDriver driver = gdF.get();

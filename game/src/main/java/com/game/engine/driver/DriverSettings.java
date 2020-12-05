@@ -56,7 +56,7 @@ public class DriverSettings {
 	 *
 	 * @param tps - the ticks per second
 	 */
-	protected DriverSettings(int tps) {
+	public DriverSettings(int tps) {
 		setTicksPerSecond(tps);
 		unrestrictFPS();
 	}
@@ -67,30 +67,9 @@ public class DriverSettings {
 	 * @param tps           - the ticks per second
 	 * @param restrictedFps - the restricted FPS
 	 */
-	protected DriverSettings(int tps, int restrictedFps) {
+	public DriverSettings(int tps, int restrictedFps) {
 		setTicksPerSecond(tps);
 		restrictFPS(restrictedFps);
-	}
-
-	/**
-	 * Create driver settings
-	 *
-	 * @param tps - the ticks per second
-	 * @return driver settings
-	 */
-	public static DriverSettings create(int tps) {
-		return new DriverSettings(tps);
-	}
-
-	/**
-	 * Create driver settings
-	 *
-	 * @param tps           - the ticks per second
-	 * @param restrictedFps - the fps to restrict
-	 * @return driver settings
-	 */
-	public static DriverSettings create(int tps, int restrictedFps) {
-		return new DriverSettings(tps, restrictedFps);
 	}
 
 	/**

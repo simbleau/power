@@ -50,7 +50,7 @@ public class TestDriverSettings {
 	@Test
 	public void testCreate1() {
 		// Initialize values
-		DriverSettings d = DriverSettings.create(TEST_TPS);
+		DriverSettings d = new DriverSettings(TEST_TPS);
 
 		// Test
 		Assert.assertEquals(TEST_TPS, d.getTicksPerSecond());
@@ -64,7 +64,7 @@ public class TestDriverSettings {
 	@Test
 	public void testCreate2() {
 		// Initialize values
-		DriverSettings d = DriverSettings.create(TEST_TPS, TEST_FPS);
+		DriverSettings d = new DriverSettings(TEST_TPS, TEST_FPS);
 
 		// Test
 		Assert.assertEquals(TEST_TPS, d.getTicksPerSecond());
@@ -78,7 +78,7 @@ public class TestDriverSettings {
 	@Test
 	public void testGetFPSGoal() {
 		// Initialize values
-		DriverSettings d = DriverSettings.create(TEST_TPS);
+		DriverSettings d = new DriverSettings(TEST_TPS);
 
 		// Test
 		Assert.assertEquals(0, d.getFPSGoal());
@@ -92,7 +92,7 @@ public class TestDriverSettings {
 	@Test
 	public void testGetFrameDuration() {
 		// Initialize values
-		DriverSettings d = DriverSettings.create(TEST_TPS);
+		DriverSettings d = new DriverSettings(TEST_TPS);
 
 		// Test
 		Assert.assertEquals(Duration.ZERO, d.getFrameDuration());
@@ -106,7 +106,7 @@ public class TestDriverSettings {
 	@Test
 	public void testGetGameClock() {
 		// Initialize values
-		DriverSettings d = DriverSettings.create(TEST_TPS);
+		DriverSettings d = new DriverSettings(TEST_TPS);
 
 		// Test time
 		Assert.assertEquals(System.currentTimeMillis(), d.getGameClock().millis());
@@ -118,7 +118,7 @@ public class TestDriverSettings {
 	@Test
 	public void testGetServerClock() {
 		// Initialize values
-		DriverSettings d = DriverSettings.create(TEST_TPS);
+		DriverSettings d = new DriverSettings(TEST_TPS);
 		try {
 			d.initServerClock(TEST_NTP_SERVER, TEST_TIMEOUT_MS);
 		} catch (IOException e) {
@@ -153,7 +153,7 @@ public class TestDriverSettings {
 	@Test
 	public void testGetTickDuration() {
 		// Initialize values
-		DriverSettings d = DriverSettings.create(TEST_TPS);
+		DriverSettings d = new DriverSettings(TEST_TPS);
 
 		// Test
 		Assert.assertEquals(Duration.ofSeconds(1).dividedBy(TEST_TPS), d.getTickDuration());
@@ -165,7 +165,7 @@ public class TestDriverSettings {
 	@Test
 	public void testGetTicksPerSecond() {
 		// Initialize values
-		DriverSettings d = DriverSettings.create(TEST_TPS);
+		DriverSettings d = new DriverSettings(TEST_TPS);
 
 		// Test
 		Assert.assertEquals(TEST_TPS, d.getTicksPerSecond());
@@ -177,7 +177,7 @@ public class TestDriverSettings {
 	@Test
 	public void testInitServerClock() {
 		// Initialize values
-		DriverSettings d = DriverSettings.create(TEST_TPS);
+		DriverSettings d = new DriverSettings(TEST_TPS);
 
 		try {
 			d.initServerClock(TEST_NTP_SERVER, TEST_TIMEOUT_MS);
@@ -196,7 +196,7 @@ public class TestDriverSettings {
 	@Test
 	public void testIsFPSRestricted() {
 		// Initialize values
-		DriverSettings d = DriverSettings.create(TEST_TPS);
+		DriverSettings d = new DriverSettings(TEST_TPS);
 
 		// Test
 		Assert.assertFalse(d.isFpsRestricted());
@@ -210,7 +210,7 @@ public class TestDriverSettings {
 	@Test
 	public void testIsServerClockInitialized() {
 		// Initialize values
-		DriverSettings d = DriverSettings.create(TEST_TPS);
+		DriverSettings d = new DriverSettings(TEST_TPS);
 
 		// Test
 		Assert.assertFalse(d.isServerClockInitialized());
@@ -229,7 +229,7 @@ public class TestDriverSettings {
 	@Test
 	public void testRestrictFps() {
 		// Initialize values
-		DriverSettings d = DriverSettings.create(TEST_TPS);
+		DriverSettings d = new DriverSettings(TEST_TPS);
 		Duration testFpsDuration = Duration.ofSeconds(1).dividedBy(TEST_FPS);
 
 		// Test
@@ -244,7 +244,7 @@ public class TestDriverSettings {
 	@Test
 	public void testSetTicksPerSecond() {
 		// Initialize values
-		DriverSettings d = DriverSettings.create(1);
+		DriverSettings d = new DriverSettings(1);
 		Duration testTickDuration = Duration.ofSeconds(1).dividedBy(TEST_TPS);
 
 		// Test
@@ -259,7 +259,7 @@ public class TestDriverSettings {
 	@Test
 	public void testUnrestrictFps() {
 		// Initialize values
-		DriverSettings d = DriverSettings.create(TEST_TPS, TEST_FPS);
+		DriverSettings d = new DriverSettings(TEST_TPS, TEST_FPS);
 
 		// Test
 		d.unrestrictFPS();

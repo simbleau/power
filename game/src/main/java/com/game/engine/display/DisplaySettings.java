@@ -35,22 +35,10 @@ public class DisplaySettings {
 	 * @param mode       - the rendering mode to use
 	 * @param camera     - the camera to use
 	 */
-	protected DisplaySettings(Dimension resolution, RenderMode mode, AbstractCamera camera) {
+	public DisplaySettings(Dimension resolution, RenderMode mode, AbstractCamera camera) {
 		this.preferredResolution = resolution;
 		this.mode = mode;
 		this.camera = camera;
-	}
-
-	/**
-	 * Create display settings
-	 *
-	 * @param resolution - the resolution to use
-	 * @param mode       - the rendering mode to use
-	 * @param camera     - the camera to use
-	 * @return display settings
-	 */
-	public static DisplaySettings create(Dimension resolution, RenderMode mode, AbstractCamera camera) {
-		return new DisplaySettings(resolution, mode, camera);
 	}
 
 	/**

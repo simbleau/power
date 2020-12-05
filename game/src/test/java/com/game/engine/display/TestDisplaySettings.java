@@ -44,7 +44,7 @@ public class TestDisplaySettings {
 	 */
 	@Before
 	public void init() {
-		this.s = DisplaySettings.create(TEST_PREFERRED_RESOLUTION, TEST_RENDER_MODE, TEST_CAMERA);
+		this.s = new DisplaySettings(TEST_PREFERRED_RESOLUTION, TEST_RENDER_MODE, TEST_CAMERA);
 	}
 
 	/**
