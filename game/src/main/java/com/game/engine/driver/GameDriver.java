@@ -162,6 +162,7 @@ public class GameDriver implements Runnable {
 
 					this.display.settings.getCamera().update(this);
 					this.game.update(this);
+					this.input.update();
 				}
 
 				// Check if we have surpassed a second of time for FPS measurement
