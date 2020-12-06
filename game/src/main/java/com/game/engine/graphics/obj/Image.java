@@ -9,6 +9,7 @@ import com.game.engine.graphics.request.ImageRequest;
 import com.game.engine.rendering.common.RenderLevel;
 import com.game.engine.rendering.cpu.CPUProcessor;
 import com.game.engine.rendering.opengl.JOGLProcessor;
+import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.texture.Texture;
@@ -219,6 +220,8 @@ public class Image implements Drawable {
 		tex.enable(gl);
 		tex.bind(gl);
 
+		gl.glEnable(GL2.GL_BLEND);
+		gl.glBlendFunc(GL.GL_ONE, GL.GL_ONE_MINUS_SRC_ALPHA);
 		gl.glBegin(GL2.GL_QUADS);
 		TextureCoords texCoords = tex.getImageTexCoords();
 
@@ -238,6 +241,7 @@ public class Image implements Drawable {
 		gl.glEnd();
 
 		tex.disable(gl);
+		gl.glDisable(GL2.GL_BLEND);
 	}
 
 	@Override
