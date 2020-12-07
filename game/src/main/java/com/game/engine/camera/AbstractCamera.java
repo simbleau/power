@@ -64,7 +64,7 @@ public abstract class AbstractCamera implements Updateable {
 	 * @param x - the x co-ordinate
 	 * @param y - the x co-ordinate
 	 */
-	public void move(double x, double y) {
+	public void setOrigin(double x, double y) {
 		this.viewport.x = x;
 		this.viewport.y = y;
 	}
