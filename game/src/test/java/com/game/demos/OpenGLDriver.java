@@ -5,6 +5,7 @@ import org.junit.Assert;
 import com.game.demos.gfxtest.GFXTestGame;
 import com.game.demos.gfxtest.GFXTestPlane;
 import com.game.engine.cache.LRUCache;
+import com.game.engine.camera.DevCamera;
 import com.game.engine.display.DisplaySettingsFactory;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.driver.GameDriverFactory;
@@ -19,6 +20,7 @@ import com.game.engine.rendering.common.RenderMode;
 public class OpenGLDriver {
 	/**
 	 * Start a OpenGL-Mode demo
+	 * 
 	 * @param args - <Resolution width> <Resolution height> <Ticks per second>
 	 *             [Frames per second]
 	 */
@@ -44,6 +46,7 @@ public class OpenGLDriver {
 		dsF.setMode(RenderMode.OPENGL);
 		dsF.setResolutionWidth(resWidth);
 		dsF.setResolutionHeight(resHeight);
+		dsF.setCamera(new DevCamera(0, 0, resWidth, resHeight, 1));
 
 		// Start the game
 		GameDriver driver = gdF.get();

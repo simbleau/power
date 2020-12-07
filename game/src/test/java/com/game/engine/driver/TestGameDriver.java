@@ -11,7 +11,7 @@ import com.game.engine.display.DisplaySettings;
 import com.game.engine.display.mock.MockDisplaySettings;
 import com.game.engine.driver.mock.MockDriverSettings;
 import com.game.engine.game.AbstractGame;
-import com.game.engine.game.AbstractPlane;
+import com.game.engine.game.AbstractChunkedPlane;
 import com.game.engine.game.mock.MockPlane;
 import com.game.engine.rendering.common.AbstractRenderer;
 
@@ -50,11 +50,11 @@ public class TestGameDriver {
 	 */
 	private static final DisplaySettings TEST_DISPLAY_SETTINGS = new MockDisplaySettings();
 
-	/** 
+	/**
 	 * An arbitrary plane for testing.
 	 */
-	private static final AbstractPlane TEST_PLANE = new MockPlane();
-	
+	private static final AbstractChunkedPlane TEST_PLANE = new MockPlane();
+
 	/**
 	 * An arbitrary cache for testing.
 	 */
@@ -79,6 +79,7 @@ public class TestGameDriver {
 			super.update(driver);
 			updates++;
 		}
+
 		@Override
 		public void stage(GameDriver driver, AbstractRenderer renderer) {
 			super.stage(driver, renderer);

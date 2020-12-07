@@ -241,7 +241,7 @@ public class TestCoordinateMatrix {
 		// Initialize values
 		CoordinateMatrix m = CoordinateMatrix.create(TEST_X, TEST_Y);
 		double dx = 5d, dy = 3d, zoom = 2d;
-		AbstractCamera c = new AbstractCamera(dx, dy, zoom) {
+		AbstractCamera c = new AbstractCamera(dx, dy, 0, 0, zoom) {
 			@Override
 			public void update(GameDriver driver) {
 				// Do nothing - No update

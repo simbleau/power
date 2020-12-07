@@ -1,6 +1,5 @@
 package com.game.engine.game;
 
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,68 +9,66 @@ import com.game.engine.coordinates.CoordinateMatrix;
 import com.game.engine.driver.GameDriver;
 
 /**
- * An intermediary responsible for determines which chunks are being updated and
- * rendered.
+ * An intermediary responsible for helping determine which chunks should be
+ * updated and rendered. A chunker takes an {@link AbstractChunkedPlane} and
+ * breaks it into {@link Chunk}s of size {@link Chunk#SIZE}.
  *
- * The algorithm implemented takes an {@link AbstractPlane} and breaks it into
- * {@link Chunk}s of size {@link Chunk#SIZE}.
- *
- * This allows collision detection to occurs only on updateable chunks and their
- * neighboring chunks for n*O(log(n)) time efficiency and a render time
- * efficiency of O(log(n)) time.
+ * A chunker aims to alleviate cpu-load in collision calculations and rendering
+ * by giving insights to the neightbors of chunk i, such that all of chunk i's
+ * objects are only able to be impacted by the neighbors of chunk i.
  *
  * @author Spencer Imbleau
- * @version June 2020
+ * @version November 2020
  * @see Chunk
- * @see AbstractPlane
+ * @see AbstractChunkedPlane
  */
 public class Chunker {
 
 	/**
 	 * The plane being chunked
 	 */
-	public final AbstractPlane plane;
+	public final AbstractChunkedPlane plane;
 
 	/**
 	 * The amount of rows of chunks in this chunker's {@link #plane}
 	 */
-	private int rows;
+	protected int rows;
 
 	/**
 	 * The amount of columns of chunks in this chunker's {@link #plane}
 	 */
-	private int columns;
+	protected int columns;
 
 	/**
 	 * All chunks in the {@link #plane}
 	 */
-	private Chunk[][] chunks;
+	public final Chunk[][] chunks;
 
 	/**
-	 * The current chunks
+	 * The current chunks which are viewable to the player.
 	 */
-	private List<Chunk> currentChunks;
+	protected List<Chunk> viewableChunks;
 
 	/**
 	 * Initialize a chunker
 	 *
 	 * @param plane - the plane to chunk
 	 */
-	public Chunker(AbstractPlane plane) {
+	public Chunker(AbstractChunkedPlane plane) {
 		// Set the plane
 		this.plane = plane;
 
 		// Initialize a buffer of chunks
-		this.rows = plane.getWidth() / Chunk.SIZE + (plane.getWidth() % Chunk.SIZE == 0 ? 0 : 1);
-		this.columns = plane.getHeight() / Chunk.SIZE + (plane.getHeight() % Chunk.SIZE == 0 ? 0 : 1);
+		this.rows = plane.width / Chunk.SIZE + (plane.width % Chunk.SIZE == 0 ? 0 : 1);
+		this.columns = plane.height / Chunk.SIZE + (plane.height % Chunk.SIZE == 0 ? 0 : 1);
 		this.chunks = new Chunk[rows][columns];
 
 		// Initialize a buffer for current chunks
-		this.currentChunks = new ArrayList<Chunk>();
+		this.viewableChunks = new ArrayList<Chunk>();
 	}
 
 	/**
-	 * Initialize a chunker.
+	 * Initialize a chunker by initializing all chunks for a plane.
 	 *
 	 * @param driver - the game driver
 	 */
@@ -82,9 +79,6 @@ public class Chunker {
 				this.chunks[row][col] = new Chunk(this.plane, row, col);
 			}
 		}
-
-		// Initialize a buffer for current chunks
-		this.currentChunks = new ArrayList<Chunk>();
 
 		// Initialize neighbor chunks
 		for (int row = 0; row < this.rows; row++) {
@@ -145,7 +139,7 @@ public class Chunker {
 	}
 
 	/**
-	 * Rebuild the current chunks
+	 * Assign all level objects to chunks.
 	 *
 	 * @param driver - the driver for the game
 	 */
@@ -163,20 +157,32 @@ public class Chunker {
 			int chunkY = (int) object.y / Chunk.SIZE;
 			this.chunks[chunkX][chunkY].addObject(object);
 		}
+	}
 
+	/**
+	 * Update the current chunks to those visible by a given camera.
+	 * 
+	 * @param camera - the camera
+	 */
+	public void update(AbstractCamera camera) {
 		// Clear the current chunks
-		this.currentChunks.clear();
+		this.viewableChunks.clear();
 
 		// Build the current visible chunks
-		AbstractCamera camera = driver.getDisplay().settings.getCamera();
-		Dimension resolution = driver.getDisplay().getRenderer().getCanvas().getSize();
-		CoordinateMatrix start = CoordinateMatrix.create(camera.x(), camera.y());
-		CoordinateMatrix end = start.translate(resolution.width / camera.zoom(), resolution.height / camera.zoom());
+		CoordinateMatrix start = CoordinateMatrix.create(camera.viewport.x(), camera.viewport.y());
+		CoordinateMatrix end = start.translate(camera.viewport.width() / camera.zoom(),
+				camera.viewport.height() / camera.zoom());
 
-		for (int x = (int) start.x() / Chunk.SIZE; x < end.x() / Chunk.SIZE; x++) {
-			for (int y = (int) start.y() / Chunk.SIZE; y < end.y() / Chunk.SIZE; y++) {
-				if (x >= 0 && x < this.rows && y >= 0 && y < this.columns) {
-					this.currentChunks.add(this.chunks[x][y]);
+		// Declare the boundaries for chunks that may be in view
+		int fromRow = (int) start.x() / Chunk.SIZE;
+		int toRow = (int) end.x() / Chunk.SIZE;
+		int fromColumn = (int) start.y() / Chunk.SIZE;
+		int toColumn = (int) end.y() / Chunk.SIZE;
+
+		for (int row = fromRow; row <= toRow; row++) {
+			for (int col = fromColumn; col <= toColumn; col++) {
+				if (row >= 0 && row < this.rows && col >= 0 && col < this.columns) {
+					this.viewableChunks.add(this.chunks[row][col]);
 				}
 			}
 		}
@@ -185,8 +191,8 @@ public class Chunker {
 	/**
 	 * @return an iterator of the current viewable chunks
 	 */
-	public Iterator<Chunk> iterator() {
-		return this.currentChunks.iterator();
+	public Iterator<Chunk> viewableIterator() {
+		return this.viewableChunks.iterator();
 	}
 
 	/**

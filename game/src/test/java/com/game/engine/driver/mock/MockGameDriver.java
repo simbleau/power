@@ -14,26 +14,26 @@ import com.game.engine.game.mock.MockGame;
  * @version November 2020
  */
 public class MockGameDriver extends GameDriver {
-	
+
 	/**
 	 * An arbitrary driver settings for testing.
 	 */
 	private static final DriverSettings DRIVER_SETTINGS = new MockDriverSettings();
-	
+
 	/**
 	 * An arbitrary cache for testing.
 	 */
 	private static final Cache CACHE = new LRUCache(10);
-	
+
 	/**
 	 * An arbitrary game for testing.
 	 */
 	private static final AbstractGame GAME = new MockGame();
-	
+
 	/**
 	 * Construct an arbitrary game driver.
 	 */
-	public MockGameDriver(){
+	public MockGameDriver() {
 		super(DRIVER_SETTINGS, CACHE, GAME);
 	}
 

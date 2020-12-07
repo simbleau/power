@@ -12,7 +12,7 @@ import com.game.engine.driver.mock.MockGameDriver;
  * @version November 2020
  */
 public class MockGameDisplay extends GameDisplay {
-	
+
 	/**
 	 * An arbitrary game driver for testing.
 	 */
@@ -22,7 +22,7 @@ public class MockGameDisplay extends GameDisplay {
 	 * An arbitrary display settings for testing.
 	 */
 	private static final DisplaySettings DISPLAY_SETTINGS = new MockDisplaySettings();
-	
+
 	/**
 	 * Construct an arbitrary game display.
 	 */

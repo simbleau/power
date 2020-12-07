@@ -122,6 +122,11 @@ public class GameDisplay {
 		this.renderer.getCanvas().createBufferStrategy(2); // Double buffering
 		// Show frame
 		this.frame.setLocationRelativeTo(null); // Start center-screen
+
+		// Resize camera viewport to canvas
+		this.settings.getCamera().viewport.resize(this.renderer.getCanvas().getWidth(),
+				this.renderer.getCanvas().getHeight());
+
 		this.frame.setVisible(true);
 	}
 

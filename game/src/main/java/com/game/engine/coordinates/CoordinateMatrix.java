@@ -178,7 +178,7 @@ public class CoordinateMatrix extends Matrix {
 	 * @return A new matrix equaling this matrix transformed by a given camera.
 	 */
 	public CoordinateMatrix transform(AbstractCamera camera) {
-		return this.translate(-camera.x(), -camera.y()).scaleEquals(camera.zoom());
+		return this.translate(-camera.viewport.x(), -camera.viewport.y()).scaleEquals(camera.zoom());
 	}
 
 	/**
@@ -188,7 +188,7 @@ public class CoordinateMatrix extends Matrix {
 	 * @return This matrix transformed by a given camera.
 	 */
 	public CoordinateMatrix transformEquals(AbstractCamera camera) {
-		return this.translateEquals(-camera.x(), -camera.y()).scaleEquals(camera.zoom());
+		return this.translateEquals(-camera.viewport.x(), -camera.viewport.y()).scaleEquals(camera.zoom());
 	}
 
 	/**

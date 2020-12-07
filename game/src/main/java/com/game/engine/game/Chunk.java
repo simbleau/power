@@ -12,7 +12,7 @@ import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.common.RenderLevel;
 
 /**
- * A chunk of a {@link AbstractPlane}
+ * A chunk of a {@link AbstractChunkedPlane}
  *
  * @author Spencer Imbleau
  * @version June 2020
@@ -27,7 +27,7 @@ public class Chunk implements Updateable, Renderable {
 	/**
 	 * The parent plane
 	 */
-	protected AbstractPlane plane;
+	protected AbstractChunkedPlane plane;
 
 	/**
 	 * The chunk's row in the parent plane
@@ -47,7 +47,7 @@ public class Chunk implements Updateable, Renderable {
 	/**
 	 * The level objects in this chunk
 	 */
-	protected List<AbstractGameObject> levelObjects;
+	protected List<AbstractGameObject> chunkObjects;
 
 	/**
 	 * Initialize a chunk
@@ -56,13 +56,13 @@ public class Chunk implements Updateable, Renderable {
 	 * @param row   - the chunk's row in the parent plane
 	 * @param col   - the chunk's column in the parent plane
 	 */
-	public Chunk(AbstractPlane plane, int row, int col) {
+	public Chunk(AbstractChunkedPlane plane, int row, int col) {
 		this.plane = plane;
 		this.row = row;
 		this.column = col;
 
 		this.neighbors = new ArrayList<Chunk>();
-		this.levelObjects = new ArrayList<AbstractGameObject>();
+		this.chunkObjects = new ArrayList<AbstractGameObject>();
 	}
 
 	/**
@@ -87,42 +87,52 @@ public class Chunk implements Updateable, Renderable {
 	 * @param object - an {@link AbstractGameObject}
 	 */
 	public void addObject(AbstractGameObject object) {
-		this.levelObjects.add(object);
+		this.chunkObjects.add(object);
 	}
 
 	/**
 	 * Clear the level objects off this chunk
 	 */
 	public void clear() {
-		this.levelObjects.clear();
+		this.chunkObjects.clear();
+	}
+
+	/**
+	 * Initialize this chunk.
+	 * 
+	 * @param driver - the driver for this game
+	 */
+	public void init(GameDriver driver) {
+		// Initialize all chunk objects
+		this.chunkObjects.forEach(obj -> obj.init(driver));
 	}
 
 	@Override
 	public void update(GameDriver driver) {
-		for (AbstractGameObject object : this.levelObjects) {
-			object.update(driver);
-		}
+		// Update all chunk objects
+		this.chunkObjects.forEach(obj -> obj.update(driver));
 	}
 
 	@Override
 	public void stage(GameDriver driver, AbstractRenderer renderer) {
-		int red = 0xff - (int) ((float) this.row / driver.game.plane.chunker.getRows() * 0xff);
+		// Stage a boundary with color differentiation
+		int red = 0xff - (int) ((float) this.row / this.plane.chunker.getRows() * 0xff);
 
-		int green = 0xff - (int) ((float) this.column / driver.game.plane.chunker.getColumns() * 0xff);
+		int green = 0xff - (int) ((float) this.column / this.plane.chunker.getColumns() * 0xff);
 		int blue = 0xff - (int) ((float) (this.row + this.column)
-				/ (driver.game.plane.chunker.getRows() + driver.game.plane.chunker.getColumns()) * 0xff);
+				/ (this.plane.chunker.getRows() + this.plane.chunker.getColumns()) * 0xff);
 
 		int argb = (0xff << 24 | red << 16 | green << 8 | blue);
 
-		int width = (this.row == this.plane.chunker.getRows() - 1) ? this.plane.chunker.plane.getWidth() % SIZE : SIZE;
-		int height = (this.column == this.plane.chunker.getColumns() - 1) ? this.plane.chunker.plane.getHeight() % SIZE
+		int width = (this.row == this.plane.chunker.getRows() - 1) ? this.plane.chunker.plane.width % SIZE : SIZE;
+		int height = (this.column == this.plane.chunker.getColumns() - 1) ? this.plane.chunker.plane.height % SIZE
 				: SIZE;
 		Rectangle rect = new Rectangle(width, height, argb);
-		RectangleRequest request = new RectangleRequest(rect, RenderLevel.WORLD_GROUND, -1, (int) this.row * SIZE,
+		RectangleRequest request = new RectangleRequest(rect, RenderLevel.VOID, 0, (int) this.row * SIZE,
 				(int) this.column * SIZE);
 		renderer.stage(request);
-		for (AbstractGameObject object : this.levelObjects) {
-			object.stage(driver, renderer);
-		}
+
+		// Stage all chunk objects
+		this.chunkObjects.forEach(obj -> obj.stage(driver, renderer));
 	}
 }

@@ -3,6 +3,7 @@ package com.game.demos.gfxtest;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractGame;
 import com.game.engine.game.AbstractPlane;
+import com.game.engine.rendering.common.AbstractRenderer;
 
 @SuppressWarnings("javadoc")
 public class GFXTestGame extends AbstractGame {
@@ -12,8 +13,18 @@ public class GFXTestGame extends AbstractGame {
 	}
 
 	@Override
+	public void init(GameDriver driver) {
+		super.init(driver);
+	}
+
+	@Override
 	public void update(GameDriver driver) {
-		// TODO Auto-generated method stub
 		super.update(driver);
 	}
+
+	@Override
+	public void stage(GameDriver driver, AbstractRenderer renderer) {
+		super.stage(driver, renderer);
+	}
+
 }

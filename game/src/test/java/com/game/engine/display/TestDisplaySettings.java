@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import com.game.engine.camera.AbstractCamera;
 import com.game.engine.camera.DevCamera;
+import com.game.engine.camera.mock.MockCamera;
 import com.game.engine.rendering.common.RenderMode;
 
 /**
@@ -32,7 +33,7 @@ public class TestDisplaySettings {
 	/**
 	 * An arbitrary camera for testing.
 	 */
-	private static final AbstractCamera TEST_CAMERA = new DevCamera();
+	private static final AbstractCamera TEST_CAMERA = new MockCamera(0, 0, 0, 0, 1);
 
 	/**
 	 * A buffer {@link DisplaySettings} object for tests.
@@ -48,7 +49,8 @@ public class TestDisplaySettings {
 	}
 
 	/**
-	 * Test {@link DisplaySettings#DisplaySettings(Dimension, RenderMode, AbstractCamera)}.
+	 * Test
+	 * {@link DisplaySettings#DisplaySettings(Dimension, RenderMode, AbstractCamera)}.
 	 */
 	@Test
 	public void testCreate() {
@@ -117,7 +119,7 @@ public class TestDisplaySettings {
 	public void testSetCamera() {
 		Assert.assertEquals(TEST_CAMERA, s.getCamera());
 
-		DevCamera testCam = new DevCamera();
+		DevCamera testCam = new DevCamera(0, 0, 0, 0, 1);
 		s.setCamera(testCam);
 
 		Assert.assertEquals(testCam, s.getCamera());

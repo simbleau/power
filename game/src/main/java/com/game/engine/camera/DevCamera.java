@@ -24,64 +24,41 @@ public class DevCamera extends AbstractCamera {
 	private static final double ZOOM_SPEED = 0.03;
 
 	/**
-	 * Initialize a dev camera at origin with standard zoom.
-	 */
-	public DevCamera() {
-		super(0, 0, 1);
-	}
-
-	/**
-	 * Initialize a dev camera at given coordinate with standard zoom.
+	 * Initialize a dev camera.
 	 * 
-	 * @param x - starting x position
-	 * @param y - starting y position
+	 * @param x      - starting x position
+	 * @param y      - starting y position
+	 * @param width  - width of the viewport
+	 * @param height - height of the viewport
+	 * @param zoom   - starting zoom
 	 */
-	public DevCamera(double x, double y) {
-		super(x, y, 1);
-	}
-
-	/**
-	 * Initialize a dev camera at given coordinate and zoom.
-	 * 
-	 * @param x    - starting x position
-	 * @param y    - starting y position
-	 * @param zoom - starting zoom
-	 */
-	public DevCamera(double x, double y, double zoom) {
-		super(x, y, zoom);
+	public DevCamera(double x, double y, int width, int height, double zoom) {
+		super(x, y, width, height, zoom);
 	}
 
 	@Override
 	public void update(GameDriver driver) {
-		if (driver.getInput().isKeyDown(MouseKeyboard.KEYS.MOVE_UP)) {
-			this.y -= PAN_SPEED;
+		super.update(driver);
+
+		if (driver.getInput().isKeyActive(MouseKeyboard.KEYS.MOVE_UP)) {
+			this.translateY(-PAN_SPEED);
 		}
-		if (driver.getInput().isKeyDown(MouseKeyboard.KEYS.MOVE_DOWN)) {
-			this.y += PAN_SPEED;
+		if (driver.getInput().isKeyActive(MouseKeyboard.KEYS.MOVE_DOWN)) {
+			this.translateY(PAN_SPEED);
 		}
-		if (driver.getInput().isKeyDown(MouseKeyboard.KEYS.MOVE_LEFT)) {
-			this.x -= PAN_SPEED;
+		if (driver.getInput().isKeyActive(MouseKeyboard.KEYS.MOVE_LEFT)) {
+			this.translateX(-PAN_SPEED);
 		}
-		if (driver.getInput().isKeyDown(MouseKeyboard.KEYS.MOVE_RIGHT)) {
-			this.x += PAN_SPEED;
+		if (driver.getInput().isKeyActive(MouseKeyboard.KEYS.MOVE_RIGHT)) {
+			this.translateX(PAN_SPEED);
 		}
 
-		if (driver.getInput().isKeyDown(KeyEvent.VK_UP)) {
+		if (driver.getInput().isKeyActive(KeyEvent.VK_UP)) {
 			this.zoom += ZOOM_SPEED;
 		}
-		if (driver.getInput().isKeyDown(KeyEvent.VK_DOWN)) {
+		if (driver.getInput().isKeyActive(KeyEvent.VK_DOWN)) {
 			this.zoom -= ZOOM_SPEED;
 		}
-	}
-
-	@Override
-	public double x() {
-		return this.x;
-	}
-
-	@Override
-	public double y() {
-		return this.y;
 	}
 
 }

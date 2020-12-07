@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.util.Optional;
 
 import com.game.engine.camera.AbstractCamera;
-import com.game.engine.camera.DevCamera;
 import com.game.engine.rendering.common.RenderMode;
 
 /**
@@ -29,6 +28,11 @@ public class DisplaySettingsFactory {
 	 * The stage for a rendering mode.
 	 */
 	Optional<RenderMode> mode = Optional.empty();
+
+	/**
+	 * The stage for a camera.
+	 */
+	Optional<AbstractCamera> camera = Optional.empty();
 
 	/**
 	 * Stage a resolution width for use by this factory.
@@ -58,6 +62,15 @@ public class DisplaySettingsFactory {
 	}
 
 	/**
+	 * Stage a camera for use by this factory.
+	 * 
+	 * @param camera - the camera to be staged.
+	 */
+	public void setCamera(AbstractCamera camera) {
+		this.camera = Optional.of(camera);
+	}
+
+	/**
 	 * @return display settings generated from staged values
 	 * @throws IllegalArgumentException if required stages are empty
 	 */
@@ -72,10 +85,12 @@ public class DisplaySettingsFactory {
 		if (!this.mode.isPresent()) {
 			throw new IllegalArgumentException("RenderMode not staged.");
 		}
+		if (!this.camera.isPresent()) {
+			throw new IllegalArgumentException("Camera not staged.");
+		}
 
 		// Setup the display settings
-		Dimension res = new Dimension(resWidth.get(), resHeight.get());
-		AbstractCamera cam = new DevCamera();
-		return new DisplaySettings(res, mode.get(), cam);
+		Dimension res = new Dimension(this.resWidth.get(), this.resHeight.get());
+		return new DisplaySettings(res, this.mode.get(), this.camera.get());
 	}
 }

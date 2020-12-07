@@ -1,6 +1,9 @@
 package com.game.engine.camera;
 
+import java.awt.Canvas;
+
 import com.game.engine.driver.GameDriver;
+import com.game.engine.game.AbstractGameObject;
 import com.game.engine.game.Updateable;
 
 /**
@@ -12,14 +15,9 @@ import com.game.engine.game.Updateable;
 public abstract class AbstractCamera implements Updateable {
 
 	/**
-	 * The displacement on the X axis
+	 * The viewport of the camera.
 	 */
-	protected double x;
-
-	/**
-	 * The displacement on the Y axis
-	 */
-	protected double y;
+	public final Viewport viewport;
 
 	/**
 	 * The magnification of the XY axis
@@ -29,28 +27,93 @@ public abstract class AbstractCamera implements Updateable {
 	/**
 	 * Initialize a camera.
 	 *
-	 * @param x    - starting x displacement
-	 * @param y    - starting y displacement
-	 * @param zoom - the zoom factor
+	 * @param x      - starting x displacement
+	 * @param y      - starting y displacement
+	 * @param width  - width of the viewport
+	 * @param height - height of the viewport
+	 * @param zoom   - the zoom factor
 	 */
-	protected AbstractCamera(double x, double y, double zoom) {
-		this.x = x;
-		this.y = y;
+	protected AbstractCamera(double x, double y, int width, int height, double zoom) {
+		this.viewport = new Viewport(x, y, width, height);
 		this.zoom = zoom;
 	}
 
 	/**
-	 * @return the camera's x coordinate
+	 * Center the camera's view onto a point.
+	 * 
+	 * @param x - the x co-ordinate
+	 * @param y - the x co-ordinate
 	 */
-	public double x() {
-		return this.x;
+	public void lookAt(double x, double y) {
+		this.viewport.x = x - (this.viewport.width / 2);
+		this.viewport.y = y - (this.viewport.height / 2);
 	}
 
 	/**
-	 * @return the camera's y coordinate
+	 * Center the camera's view onto an object.
+	 * 
+	 * @param obj - the object to look at
 	 */
-	public double y() {
-		return this.y;
+	public void lookAt(AbstractGameObject obj) {
+		lookAt(obj.x(), obj.y());
+	}
+
+	/**
+	 * Replace the origin of this camera to a new position.
+	 * 
+	 * @param x - the x co-ordinate
+	 * @param y - the x co-ordinate
+	 */
+	public void move(double x, double y) {
+		this.viewport.x = x;
+		this.viewport.y = y;
+	}
+
+	/**
+	 * Replace the zoom scale of this camera to a new scale.
+	 * 
+	 * @param zoom - the zoom scale
+	 */
+	public void setZoom(double zoom) {
+		this.zoom = zoom;
+	}
+
+	/**
+	 * Translate the camera by a delta on both axes.
+	 * 
+	 * @param dx - delta x to translate the camera
+	 * @param dy - delta y to translate the camera
+	 */
+	public void translate(double dx, double dy) {
+		this.viewport.x += dx;
+		this.viewport.y += dy;
+	}
+
+	/**
+	 * Translate the camera by a delta on the X axis.
+	 * 
+	 * @param dx - delta x to translate the camera
+	 */
+	public void translateX(double dx) {
+		this.viewport.x += dx;
+	}
+
+	/**
+	 * Translate the camera by a delta on the Y axis.
+	 * 
+	 * @param dy - delta y to translate the camera
+	 */
+	public void translateY(double dy) {
+		this.viewport.y += dy;
+	}
+
+	/**
+	 * Adjust the zoom by a delta zoom factor.
+	 * 
+	 * @param dz - delta zoom factor to magnify the camera's zoom
+	 */
+	public void magnify(double dz) {
+		this.zoom += dz;
 	}
 
 	/**
@@ -61,6 +124,10 @@ public abstract class AbstractCamera implements Updateable {
 	}
 
 	@Override
-	public abstract void update(GameDriver driver);
+	public void update(GameDriver driver) {
+		// Resize viewport to canvas size
+		Canvas canvas = driver.getDisplay().getRenderer().getCanvas();
+		this.viewport.resize(canvas.getWidth(), canvas.getHeight());
+	}
 
 }

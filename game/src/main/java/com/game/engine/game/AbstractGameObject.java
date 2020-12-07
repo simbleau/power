@@ -60,6 +60,13 @@ public abstract class AbstractGameObject implements Updateable, Renderable {
 		return this.height;
 	}
 
+	/**
+	 * Initialize this object.
+	 * 
+	 * @param driver - the driver for the game
+	 */
+	public abstract void init(GameDriver driver);
+
 	@Override
 	public abstract void update(GameDriver driver);
 

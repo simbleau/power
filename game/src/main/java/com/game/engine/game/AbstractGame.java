@@ -62,9 +62,9 @@ public abstract class AbstractGame implements Updateable, Renderable {
 	}
 
 	/**
-	 * Returns the current level of the game
+	 * Returns the current plane of the game
 	 *
-	 * @return the current level of the game
+	 * @return the current plane of the game
 	 */
 	public AbstractPlane getPlane() {
 		return this.plane;

@@ -9,17 +9,17 @@ import com.game.engine.driver.DriverSettings;
  * @version November 2020
  */
 public class MockDriverSettings extends DriverSettings {
-	
+
 	/**
 	 * An arbitrary ticks per second.
 	 */
 	private static int TICKS_PER_SECOND = 20;
-	
+
 	/**
 	 * An arbitrary frames per second.
 	 */
 	private static int FRAMES_PER_SECOND = 60;
-	
+
 	/**
 	 * Construct arbitrary driver settings.
 	 */

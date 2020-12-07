@@ -200,6 +200,7 @@ public class GameDriver implements Runnable {
 		} catch (RuntimeException | InterruptedException e) {
 			// Interrupted by developer or non-recoverable error - Stop running
 			this.isRunning = false;
+			e.printStackTrace();
 		}
 
 	}
