@@ -55,6 +55,24 @@ public class CoordinateMatrix extends Matrix {
 		double[][] scaleMatrix = { { sx, 0 }, { 0, sy } };
 		return new Matrix(scaleMatrix, 2, 2);
 	}
+	
+	/**
+	 * Setter method for the X element element.
+	 * 
+	 * @param s - The value to set for X
+	 */
+	public void setX(double s) {
+		this.matrix[0][0] = s;
+	}
+	
+	/**
+	 * Setter method for the Y element element.
+	 * 
+	 * @param s - The value to set for Y
+	 */
+	public void setY(double s) {
+		this.matrix[0][1] = s;
+	}
 
 	/**
 	 * Translates a matrix by given deltas.
