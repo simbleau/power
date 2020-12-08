@@ -20,17 +20,16 @@ public class GFXTestPlane extends AbstractChunkedPlane {
 
 	static Random rand = new Random();
 
-	static final int MIN_OBJ_COUNT = 10;
-	static final int MAX_OBJ_COUNT = 20;
+	static final int MIN_OBJ_COUNT = 50;
+	static final int MAX_OBJ_COUNT = 100;
 	static final int MAX_OBJ_SIZE = 200;
 
 	public GFXTestPlane() {
-		super(1400, 1200);
+		super(4400, 4200);
 
 		// Add random graphic objects on the map
 		for (int i = 0; i < MIN_OBJ_COUNT + rand.nextInt(MAX_OBJ_COUNT - MIN_OBJ_COUNT); i++) {
-			AbstractGameObject obj = new TestGraphicObject(this, i);
-			this.levelObjects.add(obj);
+			this.levelObjects.add(new TestGraphicObject(this, i));
 		}
 	}
 
@@ -83,6 +82,8 @@ class TestGraphicObject extends AbstractGameObject {
 		this.parent = plane;
 		this.type = type;
 		this.size = Math.max(10, GFXTestPlane.rand.nextInt(GFXTestPlane.MAX_OBJ_SIZE));
+		this.width = this.size;
+		this.height = this.size;
 
 		// Put in a random location
 		this.x = GFXTestPlane.rand.nextInt(parent.width - this.size);
