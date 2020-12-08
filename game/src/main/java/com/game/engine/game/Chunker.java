@@ -153,8 +153,8 @@ public class Chunker {
 
 		// Build the chunks
 		for (AbstractGameObject object : this.plane.levelObjects) {
-			int chunkX = (int) object.x / Chunk.SIZE;
-			int chunkY = (int) object.y / Chunk.SIZE;
+			int chunkX = (int) object.x() / Chunk.SIZE;
+			int chunkY = (int) object.y() / Chunk.SIZE;
 			this.chunks[chunkX][chunkY].addObject(object);
 		}
 	}

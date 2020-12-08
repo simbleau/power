@@ -87,8 +87,8 @@ class TestGraphicObject extends AbstractGameObject {
 		this.height = this.size;
 
 		// Put in a random location
-		this.x = GFXTestPlane.rand.nextInt(parent.width - this.size);
-		this.y = GFXTestPlane.rand.nextInt(parent.height - this.size);
+		this.position.set(GFXTestPlane.rand.nextInt(parent.width - this.size),
+				GFXTestPlane.rand.nextInt(parent.height - this.size));
 		this.drawable = null;
 	}
 
@@ -120,13 +120,13 @@ class TestGraphicObject extends AbstractGameObject {
 	public void update(GameDriver driver) {
 		double dx = 5 * rng.nextDouble() * ((rng.nextBoolean()) ? 1 : -1);
 		double dy = 5 * rng.nextDouble() * ((rng.nextBoolean()) ? 1 : -1);
-		this.x = Math.max(0, Math.min(this.x + dx, this.parent.width - this.size));
-		this.y = Math.max(0, Math.min(this.y + dy, this.parent.height - this.size));
+		this.position.set(Math.max(0, Math.min(this.x() + dx, this.parent.width - this.size)),
+				Math.max(0, Math.min(this.y() + dy, this.parent.height - this.size)));
 	}
 
 	@Override
 	public void stage(GameDriver driver, AbstractRenderer renderer) {
-		RenderRequest request = this.drawable.asRequest(RenderLevel.WORLD_OBJECTS, (int) this.x, (int) this.y);
+		RenderRequest request = this.drawable.asRequest(RenderLevel.WORLD_OBJECTS, (int) this.x(), (int) this.y());
 		renderer.stage(request);
 	}
 

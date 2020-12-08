@@ -182,8 +182,8 @@ public class TestChunker {
 			c.chunk(TEST_DRIVER);
 
 			for (AbstractGameObject obj : c.plane.levelObjects) {
-				int chunkX = (int) obj.x / Chunk.SIZE;
-				int chunkY = (int) obj.y / Chunk.SIZE;
+				int chunkX = (int) obj.x() / Chunk.SIZE;
+				int chunkY = (int) obj.y() / Chunk.SIZE;
 				Assert.assertTrue(c.chunks[chunkX][chunkY].chunkObjects.contains(obj));
 			}
 		}

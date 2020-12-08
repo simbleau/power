@@ -1,5 +1,6 @@
 package com.game.engine.game;
 
+import com.game.engine.coordinates.CoordinateMatrix;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.graphics.common.Renderable;
 import com.game.engine.rendering.common.AbstractRenderer;
@@ -11,16 +12,11 @@ import com.game.engine.rendering.common.AbstractRenderer;
  * @version June 2020
  */
 public abstract class AbstractGameObject implements Updateable, Renderable {
-
+	
 	/**
-	 * The x coordinate for the object
+	 * The position of the object, which is attached to the plane.
 	 */
-	protected double x = 0;
-
-	/**
-	 * The y coordinate for the object
-	 */
-	protected double y = 0;
+	protected CoordinateMatrix position = CoordinateMatrix.create(0, 0);
 
 	/**
 	 * The width of the object
@@ -36,14 +32,14 @@ public abstract class AbstractGameObject implements Updateable, Renderable {
 	 * @return the x coordinate of the object
 	 */
 	public double x() {
-		return this.x;
+		return this.position.x();
 	}
 
 	/**
 	 * @return the y coordinate of the object
 	 */
 	public double y() {
-		return this.y;
+		return this.position.y();
 	}
 
 	/**
