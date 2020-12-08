@@ -55,7 +55,18 @@ public class CoordinateMatrix extends Matrix {
 		double[][] scaleMatrix = { { sx, 0 }, { 0, sy } };
 		return new Matrix(scaleMatrix, 2, 2);
 	}
-	
+
+	/**
+	 * Setter method for the X and Y element at once.
+	 * 
+	 * @param x - The value to set for X
+	 * @param y - The value to set for Y
+	 */
+	public void set(double x, double y) {
+		this.matrix[0][0] = x;
+		this.matrix[0][1] = y;
+	}
+
 	/**
 	 * Setter method for the X element element.
 	 * 
@@ -64,7 +75,7 @@ public class CoordinateMatrix extends Matrix {
 	public void setX(double s) {
 		this.matrix[0][0] = s;
 	}
-	
+
 	/**
 	 * Setter method for the Y element element.
 	 * 
@@ -95,6 +106,52 @@ public class CoordinateMatrix extends Matrix {
 	 */
 	public CoordinateMatrix translateEquals(double tx, double ty) {
 		this.matrix[0][0] = this.matrix[0][0] + tx;
+		this.matrix[0][1] = this.matrix[0][1] + ty;
+		return this;
+	}
+
+	/**
+	 * Translates the X co-ordinate of a matrix by a given delta.
+	 * 
+	 * @param tx - translational delta x
+	 * @return A new matrix equaling this matrix translated on the X axis by a given
+	 *         constant.
+	 */
+	public CoordinateMatrix translateX(double tx) {
+		double[][] translateData = { { this.matrix[0][0] + tx, this.matrix[0][1] } };
+		return new CoordinateMatrix(translateData);
+	}
+
+	/**
+	 * Translates the X co-ordinate of this matrix by a given delta.
+	 * 
+	 * @param tx - translational delta x
+	 * @return this matrix equaling translated on the X axis by given constant.
+	 */
+	public CoordinateMatrix translateXEquals(double tx) {
+		this.matrix[0][0] = this.matrix[0][0] + tx;
+		return this;
+	}
+
+	/**
+	 * Translates the Y co-ordinate of a matrix by a given delta.
+	 * 
+	 * @param ty - translational delta y
+	 * @return A new matrix equaling this matrix translated on the Y axis by a given
+	 *         constant.
+	 */
+	public CoordinateMatrix translateY(double ty) {
+		double[][] translateData = { { this.matrix[0][0], this.matrix[0][1] + ty } };
+		return new CoordinateMatrix(translateData);
+	}
+
+	/**
+	 * Translates the Y co-ordinate of this matrix by a given delta.
+	 * 
+	 * @param ty - translational delta y
+	 * @return this matrix equaling translated on the Y axis by given constant.
+	 */
+	public CoordinateMatrix translateYEquals(double ty) {
 		this.matrix[0][1] = this.matrix[0][1] + ty;
 		return this;
 	}
