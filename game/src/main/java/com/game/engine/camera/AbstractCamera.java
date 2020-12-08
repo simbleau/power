@@ -45,8 +45,7 @@ public abstract class AbstractCamera implements Updateable {
 	 * @param y - the x co-ordinate
 	 */
 	public void lookAt(double x, double y) {
-		this.viewport.x = x - (this.viewport.width / 2);
-		this.viewport.y = y - (this.viewport.height / 2);
+		this.viewport.origin.set(x - (this.viewport.width / this.zoom / 2), y - (this.viewport.height / this.zoom / 2));
 	}
 
 	/**
@@ -56,17 +55,6 @@ public abstract class AbstractCamera implements Updateable {
 	 */
 	public void lookAt(AbstractGameObject obj) {
 		lookAt(obj.x(), obj.y());
-	}
-
-	/**
-	 * Replace the origin of this camera to a new position.
-	 * 
-	 * @param x - the x co-ordinate
-	 * @param y - the x co-ordinate
-	 */
-	public void setOrigin(double x, double y) {
-		this.viewport.x = x;
-		this.viewport.y = y;
 	}
 
 	/**
@@ -85,8 +73,7 @@ public abstract class AbstractCamera implements Updateable {
 	 * @param dy - delta y to translate the camera
 	 */
 	public void translate(double dx, double dy) {
-		this.viewport.x += dx;
-		this.viewport.y += dy;
+		this.viewport.origin.translateEquals(dx, dy);
 	}
 
 	/**
@@ -95,7 +82,7 @@ public abstract class AbstractCamera implements Updateable {
 	 * @param dx - delta x to translate the camera
 	 */
 	public void translateX(double dx) {
-		this.viewport.x += dx;
+		this.viewport.origin.translateXEquals(dx);
 	}
 
 	/**
@@ -104,7 +91,7 @@ public abstract class AbstractCamera implements Updateable {
 	 * @param dy - delta y to translate the camera
 	 */
 	public void translateY(double dy) {
-		this.viewport.y += dy;
+		this.viewport.origin.translateYEquals(dy);
 	}
 
 	/**

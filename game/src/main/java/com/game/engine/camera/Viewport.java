@@ -1,5 +1,7 @@
 package com.game.engine.camera;
 
+import com.game.engine.coordinates.CoordinateMatrix;
+
 /**
  * The user's visible area.
  * 
@@ -7,16 +9,11 @@ package com.game.engine.camera;
  * @version December 2020
  */
 public class Viewport {
-
+	
 	/**
-	 * The displacement on the X axis.
+	 * The origin of the camera, also the top-left point of the camera.
 	 */
-	protected double x;
-
-	/**
-	 * The displacement on the Y axis.
-	 */
-	protected double y;
+	protected CoordinateMatrix origin;
 
 	/**
 	 * The width of the viewport.
@@ -37,8 +34,7 @@ public class Viewport {
 	 * @param height - height of the viewport
 	 */
 	public Viewport(double x, double y, int width, int height) {
-		this.x = x;
-		this.y = y;
+		this.origin = CoordinateMatrix.create(x, y);
 		this.width = width;
 		this.height = height;
 	}
@@ -47,14 +43,14 @@ public class Viewport {
 	 * @return the viewport's displacement on the X-axis
 	 */
 	public double x() {
-		return this.x;
+		return this.origin.x();
 	}
 
 	/**
 	 * @return the viewport's displacement on the Y-axis
 	 */
 	public double y() {
-		return this.y;
+		return this.origin.y();
 	}
 
 	/**
@@ -87,19 +83,19 @@ public class Viewport {
 	 */
 	public boolean canSee(double x, double y) {
 		// Too far west
-		if (this.x > x) {
+		if (this.origin.x() > x) {
 			return false;
 		}
 		// Too far east
-		if (x > this.x + this.width) {
+		if (x > this.origin.x() + this.width) {
 			return false;
 		}
 		// Too far north
-		if (this.y > y) {
+		if (this.origin.y() > y) {
 			return false;
 		}
 		// To far south
-		if (y > this.y + this.height) {
+		if (y > this.origin.y() + this.height) {
 			return false;
 		}
 		return true;
