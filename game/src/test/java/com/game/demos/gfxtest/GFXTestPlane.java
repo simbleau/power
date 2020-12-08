@@ -1,5 +1,6 @@
 package com.game.demos.gfxtest;
 
+import java.nio.file.Paths;
 import java.util.Random;
 
 import com.game.engine.driver.GameDriver;
@@ -95,7 +96,7 @@ class TestGraphicObject extends AbstractGameObject {
 	public void init(GameDriver driver) {
 		switch (this.type % 4) {
 		case 0:
-			Image img = driver.cache.fetch("C:\\Users\\Spencer Imbleau\\Pictures\\Designs\\twitch\\sub3mo.png");
+			Image img = driver.cache.fetch(Paths.get("src", "test", "resources", "pixel.png").toString());
 			float sx = (float) this.size / img.getWidth();
 			float sy = (float) this.size / img.getHeight();
 			this.drawable = img.resize(sx, sy);
