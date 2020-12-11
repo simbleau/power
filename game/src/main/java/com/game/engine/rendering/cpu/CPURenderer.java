@@ -55,7 +55,7 @@ public class CPURenderer extends AbstractRenderer {
 
 		// Clear pixel map
 		for (int i = 0; i < this.processor.pixels.length; i++) {
-			this.processor.pixels[i] = 0xff00ff00;
+			this.processor.pixels[i] = 0xff000000;
 		}
 
 		// Draw background
