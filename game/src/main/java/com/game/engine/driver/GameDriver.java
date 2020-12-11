@@ -174,7 +174,6 @@ public class GameDriver implements Runnable {
 
 				// Render if allowed
 				if (render || !settings.isFpsRestricted()) {
-					this.display.setFrameTitle("FPS : " + this.fps);
 					// Collect render requests
 					this.game.stage(this, this.display.getRenderer());
 					// Render the screen
