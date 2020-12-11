@@ -90,10 +90,10 @@ public class TargetCamera extends AbstractCamera {
 		}
 
 		if (driver.getInput().isKeyActive(KeyEvent.VK_UP)) {
-			this.zoom += ZOOM_SPEED;
+			this.magnify(ZOOM_SPEED);
 		}
 		if (driver.getInput().isKeyActive(KeyEvent.VK_DOWN)) {
-			this.zoom -= ZOOM_SPEED;
+			this.magnify(-ZOOM_SPEED);
 		}
 
 		if (this.target == null) {

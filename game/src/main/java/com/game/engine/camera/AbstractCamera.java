@@ -15,6 +15,11 @@ import com.game.engine.game.Updateable;
 public abstract class AbstractCamera implements Updateable {
 
 	/**
+	 * The minimum zoom allowed.
+	 */
+	protected static final double MIN_ZOOM = 0.1; 
+	
+	/**
 	 * The viewport of the camera.
 	 */
 	public final Viewport viewport;
@@ -35,7 +40,7 @@ public abstract class AbstractCamera implements Updateable {
 	 */
 	protected AbstractCamera(double x, double y, int width, int height, double zoom) {
 		this.viewport = new Viewport(x, y, width, height);
-		this.zoom = zoom;
+		this.zoom = Math.max(MIN_ZOOM, zoom);
 	}
 
 	/**
@@ -58,12 +63,28 @@ public abstract class AbstractCamera implements Updateable {
 	}
 
 	/**
+	 * @return the camera's zoom
+	 */
+	public double zoom() {
+		return this.zoom;
+	}
+
+	/**
 	 * Replace the zoom scale of this camera to a new scale.
 	 * 
 	 * @param zoom - the zoom scale
 	 */
 	public void setZoom(double zoom) {
-		this.zoom = zoom;
+		this.zoom = Math.max(MIN_ZOOM, zoom);
+	}
+	
+	/**
+	 * Adjust the zoom by a delta zoom factor.
+	 * 
+	 * @param dz - delta zoom factor to magnify the camera's zoom
+	 */
+	public void magnify(double dz) {
+		this.zoom = Math.max(MIN_ZOOM, this.zoom + dz);
 	}
 
 	/**
@@ -92,22 +113,6 @@ public abstract class AbstractCamera implements Updateable {
 	 */
 	public void translateY(double dy) {
 		this.viewport.origin.translateYEquals(dy);
-	}
-
-	/**
-	 * Adjust the zoom by a delta zoom factor.
-	 * 
-	 * @param dz - delta zoom factor to magnify the camera's zoom
-	 */
-	public void magnify(double dz) {
-		this.zoom += dz;
-	}
-
-	/**
-	 * @return the camera's zoom
-	 */
-	public double zoom() {
-		return this.zoom;
 	}
 
 	@Override
