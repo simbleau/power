@@ -86,8 +86,17 @@ public class Chunk implements Updateable, Renderable {
 	 *
 	 * @param object - an {@link AbstractGameObject}
 	 */
-	public void addObject(AbstractGameObject object) {
+	public void addGameObject(AbstractGameObject object) {
 		this.chunkObjects.add(object);
+	}
+
+	/**
+	 * Remove an object from this chunk
+	 *
+	 * @param object - an {@link AbstractGameObject}
+	 */
+	public void removeGameObject(AbstractGameObject object) {
+		this.chunkObjects.remove(object);
 	}
 
 	/**

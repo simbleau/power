@@ -155,7 +155,7 @@ public class Chunker {
 		for (AbstractGameObject object : this.plane.levelObjects) {
 			int chunkX = (int) object.x() / Chunk.SIZE;
 			int chunkY = (int) object.y() / Chunk.SIZE;
-			this.chunks[chunkX][chunkY].addObject(object);
+			this.chunks[chunkX][chunkY].addGameObject(object);
 		}
 	}
 
