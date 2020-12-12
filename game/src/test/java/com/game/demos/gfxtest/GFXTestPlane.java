@@ -23,7 +23,7 @@ public class GFXTestPlane extends AbstractChunkedPlane {
 
 	static final int MIN_OBJ_COUNT = 50;
 	static final int MAX_OBJ_COUNT = 100;
-	static final int MAX_OBJ_SIZE = 200;
+	static final int MAX_OBJ_SIZE = 400;
 
 	public GFXTestPlane() {
 		super(4400, 4200);
@@ -108,7 +108,7 @@ class TestGraphicObject extends AbstractGameObject {
 			this.drawable = new Rectangle(this.size, this.size, 0xffff0000);
 			break;
 		case 3:
-			this.drawable = new Ellipse(size, size, 0xffff0000);
+			this.drawable = new Ellipse(size / 2, size / 2, 0xffff0000);
 			break;
 		default:
 			System.err.println("Unexpected graphic type: " + this.type);

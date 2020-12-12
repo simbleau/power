@@ -95,28 +95,31 @@ public class Ellipse implements Drawable {
 	}
 
 	@Override
-	public void draw(JOGLProcessor processor, GL2 gl, double cx, double cy, double sx, double sy) {
+	public void draw(JOGLProcessor processor, GL2 gl, double x, double y, double sx, double sy) {
 		gl.glBegin(GL2.GL_LINE_LOOP);
 		float a = (this.argb >> 24 & 0xff) / 255f;
 		float r = (this.argb >> 16 & 0xff) / 255f;
 		float g = (this.argb >> 8 & 0xff) / 255f;
 		float b = (this.argb & 0xff) / 255f;
 		gl.glColor4f(r, g, b, a);
-
+	
 		// Initialize point which is rotated to create ellipse
-		CoordinateMatrix init = CoordinateMatrix.create(this.rx, this.ry).scale(sx, sy);
+		double srx = this.rx * sx;
+		double sry = this.ry * sy;
 
 		// An optimized, estimate formula for determining circumference of the
 		// ellipse
-		int circumference = (int) (2 * Math.PI * Math.sqrt(((init.x() * init.x()) + (init.y() * init.y())) / 2));
-		// Determine amount of verticies for optimized fidelity
+		int circumference = (int) (2 * Math.PI * Math.sqrt(((srx * srx) + (sry * sry)) / 2));
+		// Determine amount of verticies for optimized fidelity based on circumference
 		int verticies = Math.max(20, circumference / 20);
+		
 		// Arclength between verticies, in radians
-		float vertexRadian = (float) (2 * Math.PI / verticies);
-		for (int i = 0; i < verticies; i++) {
-			float theta = vertexRadian * i;
-			CoordinateMatrix xy = init.scale((float) Math.cos(theta), (float) Math.sin(theta)).translate(cx, cy);
-			gl.glVertex2d(xy.x(), xy.y());
+		double vertexRadian = 2 * Math.PI / verticies;
+		for (int i = 0; i <= verticies; i++) {
+			double theta = vertexRadian * i;
+			double xi = srx * Math.cos(theta) + x + srx;
+			double yi = sry * Math.sin(theta) + y + sry;
+			gl.glVertex2d(xi, yi);
 		}
 		gl.glEnd();
 	}
