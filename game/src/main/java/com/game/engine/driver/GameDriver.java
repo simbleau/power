@@ -11,6 +11,7 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import com.game.engine.cache.Cache;
 import com.game.engine.display.DisplaySettings;
@@ -98,13 +99,6 @@ public class GameDriver implements Runnable {
 	 */
 	public GameDriver(final DriverSettings settings, final Cache cache, final AbstractGame game) {
 		this.logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
-		this.logger.addHandler(new ConsoleHandler());
-		try {
-			this.logger.addHandler(new FileHandler());
-			this.logger.info("File logging initiated.");
-		} catch (IOException e) {
-			this.logger.log(Level.WARNING, "File logging could not be initialized", e);
-		}
 		this.settings = settings;
 		this.cache = cache;
 		this.game = game;
@@ -121,6 +115,15 @@ public class GameDriver implements Runnable {
 	 * @param displaySettings - display settings for the game
 	 */
 	public void start(DisplaySettings displaySettings) {
+		// Add handlers for logger
+		this.logger.addHandler(new ConsoleHandler());
+		try {
+			this.logger.addHandler(new FileHandler());
+			this.logger.info("File logging initiated.");
+		} catch (IOException e) {
+			this.logger.log(Level.WARNING, "File logging could not be initialized", e);
+		}
+		
 		// Initialize display
 		this.display = new GameDisplay(this, displaySettings);
 		this.display.init();
@@ -143,8 +146,9 @@ public class GameDriver implements Runnable {
 	public void stop() {
 		if (this.thread != null) {
 			this.thread.interrupt();
-			this.isRunning = false;
 		}
+		this.isRunning = false;
+		Stream.of(this.logger.getHandlers()).forEach(handler -> handler.close());
 	}
 
 	/**
