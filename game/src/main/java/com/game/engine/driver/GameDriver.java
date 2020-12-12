@@ -1,7 +1,16 @@
 package com.game.engine.driver;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import com.game.engine.cache.Cache;
 import com.game.engine.display.DisplaySettings;
@@ -18,6 +27,17 @@ import com.game.engine.input.MouseKeyboard;
  * @version June 2020
  */
 public class GameDriver implements Runnable {
+
+	/**
+	 * The path for the logger properties.
+	 */
+	private static final Path PROPERTIES = Paths.get("src", "main", "java", "com", "game", "engine", "logger",
+			"logging.properties");
+
+	/**
+	 * The logger for the game
+	 */
+	public final Logger logger;
 
 	/**
 	 * The settings for the driver
@@ -59,6 +79,16 @@ public class GameDriver implements Runnable {
 	 */
 	private boolean isRunning;
 
+	static {
+		try {
+			LogManager.getLogManager().readConfiguration(new FileInputStream(PROPERTIES.toString()));
+		} catch (SecurityException | IOException e) {
+			System.err.println("Could not read properties: " + PROPERTIES.toAbsolutePath().toString());
+			e.printStackTrace();
+			System.exit(1);
+		}
+	}
+
 	/**
 	 * Construct the game driver
 	 *
@@ -67,6 +97,14 @@ public class GameDriver implements Runnable {
 	 * @param game     - a game to manage
 	 */
 	public GameDriver(final DriverSettings settings, final Cache cache, final AbstractGame game) {
+		this.logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+		this.logger.addHandler(new ConsoleHandler());
+		try {
+			this.logger.addHandler(new FileHandler());
+			this.logger.info("File logging initiated.");
+		} catch (IOException e) {
+			this.logger.log(Level.WARNING, "File logging could not be initialized", e);
+		}
 		this.settings = settings;
 		this.cache = cache;
 		this.game = game;
