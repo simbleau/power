@@ -1,6 +1,5 @@
 package com.game.engine.graphics.obj;
 
-import com.game.engine.coordinates.CoordinateMatrix;
 import com.game.engine.graphics.common.Drawable;
 import com.game.engine.graphics.common.RenderRequest;
 import com.game.engine.graphics.request.EllipseRequest;
@@ -12,28 +11,33 @@ import com.jogamp.opengl.GL2;
 /**
  * An graphics object which contains information describing an ellipse
  *
- * @version July 2020
+ * @version December 2020
  * @author Spencer Imbleau
  */
 public class Ellipse implements Drawable {
 
 	/**
-	 * The x-radius
+	 * The acceptable error for circle arclength accuracy.
+	 */
+	private static final double ACCEPTABLE_ERROR = 0.33;
+
+	/**
+	 * The x-radius.
 	 */
 	private int rx;
 
 	/**
-	 * The y-radius
+	 * The y-radius.
 	 */
 	private int ry;
 
 	/**
-	 * The color of the ellipse
+	 * The color of the ellipse.
 	 */
 	private int argb;
 
 	/**
-	 * Initialize an ellipse
+	 * Initialize an ellipse.
 	 *
 	 * @param rx   - the x-radius
 	 * @param ry   - the y-radius
@@ -91,7 +95,29 @@ public class Ellipse implements Drawable {
 
 	@Override
 	public void draw(CPUProcessor processor, int x, int y, double sx, double sy) {
-		// TODO
+		// The scaled radii
+		double srx = this.rx * sx;
+		double sry = this.ry * sy;
+
+		// Calculate the amount of vertices needed using the delta angle between adjacent vertices
+		double da = Math.acos(2 * (1 - ACCEPTABLE_ERROR / srx) * (1 - ACCEPTABLE_ERROR / sry) - 1);
+		int vertices = (int) Math.ceil(2 * Math.PI / da);
+
+		// Draw lines between all vertices
+		int xi = (int) (srx * Math.cos(0) + x + srx);
+		int yi = (int) (sry * Math.sin(0) + y + sry);
+		double vertexRadian = 2 * Math.PI / vertices;
+		for (int i = 1; i <= vertices; i++) {
+			double theta = vertexRadian * i;
+			int xi2 = (int) (srx * Math.cos(theta) + x + srx);
+			int yi2 = (int) (sry * Math.sin(theta) + y + sry);
+			int dx = xi2 - xi;
+			int dy = yi2 - yi;
+			Line l = new Line(dx, dy, this.argb);
+			l.draw(processor, xi, yi, 1, 1);
+			xi = xi2;
+			yi = yi2;
+		}
 	}
 
 	@Override
@@ -102,20 +128,18 @@ public class Ellipse implements Drawable {
 		float g = (this.argb >> 8 & 0xff) / 255f;
 		float b = (this.argb & 0xff) / 255f;
 		gl.glColor4f(r, g, b, a);
-	
-		// Initialize point which is rotated to create ellipse
+
+		// The scaled radii
 		double srx = this.rx * sx;
 		double sry = this.ry * sy;
 
-		// An optimized, estimate formula for determining circumference of the
-		// ellipse
-		int circumference = (int) (2 * Math.PI * Math.sqrt(((srx * srx) + (sry * sry)) / 2));
-		// Determine amount of verticies for optimized fidelity based on circumference
-		int verticies = Math.max(20, circumference / 20);
-		
+		// Calculate the amount of vertices needed using the delta angle between adjacent vertices
+		double da = Math.acos(2 * (1 - ACCEPTABLE_ERROR / srx) * (1 - ACCEPTABLE_ERROR / sry) - 1);
+		int vertices = (int) Math.ceil(2 * Math.PI / da);
+
 		// Arclength between verticies, in radians
-		double vertexRadian = 2 * Math.PI / verticies;
-		for (int i = 0; i <= verticies; i++) {
+		double vertexRadian = 2 * Math.PI / vertices;
+		for (int i = 0; i < vertices; i++) {
 			double theta = vertexRadian * i;
 			double xi = srx * Math.cos(theta) + x + srx;
 			double yi = sry * Math.sin(theta) + y + sry;
