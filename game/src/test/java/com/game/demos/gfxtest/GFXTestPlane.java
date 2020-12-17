@@ -1,42 +1,56 @@
 package com.game.demos.gfxtest;
 
-import java.nio.file.Paths;
 import java.util.Random;
 
+import com.game.demos.objects.DemoEllipse;
+import com.game.demos.objects.DemoImage;
+import com.game.demos.objects.DemoLine;
+import com.game.demos.objects.DemoRectangle;
+import com.game.demos.objects.DemoUpdatingImage;
+import com.game.engine.camera.AbstractCamera;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractChunkedPlane;
 import com.game.engine.game.AbstractGameObject;
-import com.game.engine.game.AbstractPlane;
-import com.game.engine.graphics.common.Drawable;
-import com.game.engine.graphics.common.RenderRequest;
-import com.game.engine.graphics.obj.Ellipse;
-import com.game.engine.graphics.obj.Image;
-import com.game.engine.graphics.obj.Line;
-import com.game.engine.graphics.obj.Rectangle;
+import com.game.engine.game.Chunk;
 import com.game.engine.rendering.common.AbstractRenderer;
-import com.game.engine.rendering.common.RenderLevel;
 
 @SuppressWarnings("javadoc")
 public class GFXTestPlane extends AbstractChunkedPlane {
 
-	static Random rand = new Random();
+	static Random rng = new Random();
 
-	static final int MIN_OBJ_COUNT = 50;
-	static final int MAX_OBJ_COUNT = 100;
-	static final int MAX_OBJ_SIZE = 400;
+	private static final int SIZE = 3 * Chunk.SIZE / 5;
+
+	private static final AbstractGameObject objects[] = { new DemoUpdatingImage(SIZE), new DemoImage(SIZE),
+			new DemoEllipse(SIZE), new DemoRectangle(SIZE), new DemoLine(SIZE) };
 
 	public GFXTestPlane() {
-		super(4400, 4200);
+		super(Chunk.SIZE * objects.length, Chunk.SIZE * objects.length);
 
-		// Add random graphic objects on the map
-		for (int i = 0; i < MIN_OBJ_COUNT + rand.nextInt(MAX_OBJ_COUNT - MIN_OBJ_COUNT); i++) {
-			this.levelObjects.add(new TestGraphicObject(this, i));
+		// Add graphic objects on the map
+		for (AbstractGameObject obj : objects) {
+			this.levelObjects.add(obj);
 		}
 	}
 
 	@Override
 	public void init(GameDriver driver) {
 		super.init(driver);
+
+		AbstractCamera cam = driver.getDisplay().settings.getCamera();
+		if (cam.viewport.width() > cam.viewport.height()) {
+			cam.setZoom((double) cam.viewport.height() / (this.height + 100));
+		} else {
+			cam.setZoom((double) cam.viewport.width() / (this.width + 100));
+		}
+		cam.lookAt(this.width / 2, this.height / 2);
+
+		// Move all objects into diagonal position
+		int offset = (Chunk.SIZE / 2) - (SIZE / 2);
+		for (int i = 0; i < objects.length; i++) {
+			AbstractGameObject obj = objects[i];
+			obj.move(driver, (Chunk.SIZE * i) + offset, (Chunk.SIZE * i) + offset);
+		}
 	}
 
 	@Override
@@ -47,87 +61,6 @@ public class GFXTestPlane extends AbstractChunkedPlane {
 	@Override
 	public void stage(GameDriver driver, AbstractRenderer renderer) {
 		super.stage(driver, renderer);
-	}
-
-}
-
-@SuppressWarnings("javadoc")
-class TestGraphicObject extends AbstractGameObject {
-
-	/**
-	 * Rng
-	 */
-	static Random rng = new Random();
-
-	/**
-	 * Size of the graphic test object.
-	 */
-	private int size;
-
-	/**
-	 * Type of the graphic test object. 0 - Image 1 - Line 2 - Rectangle 3 - Ellipse
-	 */
-	private int type;
-
-	/**
-	 * The plane this exists on.
-	 */
-	private AbstractPlane parent;
-
-	/**
-	 * The drawable graphic object.
-	 */
-	private Drawable drawable;
-
-	public TestGraphicObject(AbstractPlane plane, int type) {
-		this.parent = plane;
-		this.type = type;
-		this.size = Math.max(10, GFXTestPlane.rand.nextInt(GFXTestPlane.MAX_OBJ_SIZE));
-		this.width = this.size;
-		this.height = this.size;
-
-		// Put in a random location
-		this.position.set(GFXTestPlane.rand.nextInt(parent.width - this.size),
-				GFXTestPlane.rand.nextInt(parent.height - this.size));
-		this.drawable = null;
-	}
-
-	@Override
-	public void init(GameDriver driver) {
-		switch (this.type % 4) {
-		case 0:
-			Image img = driver.cache.fetch(Paths.get("src", "test", "resources", "pixel.png").toString());
-			float sx = (float) this.size / img.getWidth();
-			float sy = (float) this.size / img.getHeight();
-			this.drawable = img.resize(sx, sy);
-			break;
-		case 1:
-			this.drawable = new Line(this.size, this.size, 0xffff0000);
-			break;
-		case 2:
-			this.drawable = new Rectangle(this.size, this.size, 0xffff0000);
-			break;
-		case 3:
-			this.drawable = new Ellipse(size / 2, size / 2, 0xffff0000);
-			break;
-		default:
-			System.err.println("Unexpected graphic type: " + this.type);
-			System.exit(1);
-		}
-	}
-
-	@Override
-	public void update(GameDriver driver) {
-		double dx = 5 * rng.nextDouble() * ((rng.nextBoolean()) ? 1 : -1);
-		double dy = 5 * rng.nextDouble() * ((rng.nextBoolean()) ? 1 : -1);
-		this.position.set(Math.max(0, Math.min(this.x() + dx, this.parent.width - this.size)),
-				Math.max(0, Math.min(this.y() + dy, this.parent.height - this.size)));
-	}
-
-	@Override
-	public void stage(GameDriver driver, AbstractRenderer renderer) {
-		RenderRequest request = this.drawable.asRequest(RenderLevel.WORLD_OBJECTS, (int) this.x(), (int) this.y());
-		renderer.stage(request);
 	}
 
 }

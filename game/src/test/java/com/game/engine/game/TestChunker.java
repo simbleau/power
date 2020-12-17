@@ -1,5 +1,6 @@
 package com.game.engine.game;
 
+import java.awt.Dimension;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -9,9 +10,11 @@ import org.junit.Test;
 
 import com.game.engine.camera.AbstractCamera;
 import com.game.engine.camera.mock.MockCamera;
+import com.game.engine.display.DisplaySettings;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.driver.mock.MockGameDriver;
 import com.game.engine.game.mock.MockGameObject;
+import com.game.engine.rendering.common.RenderMode;
 
 /**
  * Test {@link Chunker}.
@@ -46,7 +49,8 @@ public class TestChunker {
 				int h = (c + 1) * Chunk.SIZE;
 				AbstractChunkedPlane p = new AbstractChunkedPlane(w, h) {
 				};
-				chunkers[(r * 3) + c] = new Chunker(p);
+				chunkers[(r * 3) + c] = p.chunker;
+				p.chunker.init(TEST_DRIVER);
 
 				// Add an object in every chunk
 
@@ -190,10 +194,10 @@ public class TestChunker {
 	}
 
 	/**
-	 * Test {@link Chunker#update(AbstractCamera)}.
+	 * Test {@link Chunker#scan(GameDriver, AbstractCamera)}.
 	 */
 	@Test
-	public void testUpdate() {
+	public void testScan() {
 		for (Chunker c : chunkers) {
 			c.init(TEST_DRIVER);
 
@@ -214,7 +218,10 @@ public class TestChunker {
 
 			for (AbstractCamera cam : cams) {
 				// Refresh visible chunks
-				c.update(cam);
+				DisplaySettings ds = new DisplaySettings(new Dimension(0, 0),
+						RenderMode.SAFE, cam);
+				TEST_DRIVER.start(ds);
+				c.scan(TEST_DRIVER, cam);
 
 				// Declare the boundaries for chunks that may be in view
 				int fromRow = (int) cam.viewport.x() / Chunk.SIZE;
@@ -231,6 +238,7 @@ public class TestChunker {
 					Assert.assertTrue(next.column >= fromColumn);
 					Assert.assertTrue(next.column <= toColumn);
 				}
+				TEST_DRIVER.stop();
 			}
 		}
 	}
