@@ -123,7 +123,7 @@ public class GameDriver implements Runnable {
 		} catch (IOException e) {
 			this.logger.log(Level.WARNING, "File logging could not be initialized", e);
 		}
-		
+
 		// Initialize display
 		this.display = new GameDisplay(this, displaySettings);
 		this.display.init();
@@ -238,10 +238,12 @@ public class GameDriver implements Runnable {
 					}
 				}
 			}
-		} catch (RuntimeException | InterruptedException e) {
-			// Interrupted by developer or non-recoverable error - Stop running
+		} catch (InterruptedException | RuntimeException e) {
 			this.isRunning = false;
-			e.printStackTrace();
+			// Log the exception if it was not caused by the developer
+			if (!(e.getCause() instanceof InterruptedException)) {
+				this.logger.log(Level.SEVERE, "Non-recoverable runtime exception ocurred", e);
+			}
 		}
 
 	}
