@@ -9,6 +9,7 @@ import com.game.engine.driver.GameDriver;
 import com.game.engine.graphics.common.Renderable;
 import com.game.engine.graphics.obj.Rectangle;
 import com.game.engine.graphics.request.RectangleRequest;
+import com.game.engine.logger.PowerLogger;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.common.RenderLevel;
 import com.game.engine.rendering.opengl.JOGLCanvas;
@@ -77,11 +78,11 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 			JOGLCanvas canvas = (JOGLCanvas) driver.getDisplay().getRenderer().getCanvas();
 			this.glListeners.add(listener);
 			canvas.addGLEventListener(0, listener);
-			driver.logger.fine("GL listeners added to " + this.getClass().getSimpleName());
+			PowerLogger.LOGGER.fine("GL listeners added to " + this.getClass().getSimpleName());
 		}
 
 		// Log success
-		driver.logger.info(this.getClass().getSimpleName() + " was initialized");
+		PowerLogger.LOGGER.info(this.getClass().getSimpleName() + " was initialized");
 	}
 
 	/**
@@ -96,11 +97,11 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 				JOGLCanvas canvas = (JOGLCanvas) driver.getDisplay().getRenderer().getCanvas();
 				canvas.removeGLEventListener(listener);
 			}
-			driver.logger.fine("GL listeners removed from " + this.getClass().getSimpleName());
+			PowerLogger.LOGGER.fine("GL listeners removed from " + this.getClass().getSimpleName());
 		}
 
 		// Log success
-		driver.logger.info(this.getClass().getSimpleName() + " was disposed");
+		PowerLogger.LOGGER.info(this.getClass().getSimpleName() + " was disposed");
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.game.engine.camera.AbstractCamera;
 import com.game.engine.driver.GameDriver;
+import com.game.engine.logger.PowerLogger;
 
 /**
  * An intermediary responsible for helping determine which chunks should be
@@ -175,7 +176,7 @@ public class Chunker {
 			int chunkX = (int) obj.x() / Chunk.SIZE;
 			int chunkY = (int) obj.y() / Chunk.SIZE;
 			if (chunkX < 0 || chunkX >= this.rows || chunkY < 0 || chunkY >= this.columns) {
-				driver.logger.warning(obj.getClass().getName() + " cannot be added at " + obj.x() + "," + obj.y());
+				PowerLogger.LOGGER.warning(obj.getClass().getName() + " cannot be added at " + obj.x() + "," + obj.y());
 				this.flagGLTrash(obj);
 				continue;
 			}

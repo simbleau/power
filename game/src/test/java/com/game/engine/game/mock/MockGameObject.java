@@ -73,17 +73,17 @@ public class MockGameObject extends AbstractGameObject {
 
 	@Override
 	public void alloc(GL2 gl) {
-		// TODO Allocate some VRAM
+		// TODO Allocate retained OpenGL memory
 	}
 
 	@Override
 	public void refresh(GL2 gl) {
-		// TODO refresh the VRAM
+		// TODO Refresh retained OpenGL memory
 	}
 
 	@Override
 	public void dispose(GL2 gl) {
-		// TODO Dispose of some VRAM
+		// TODO Dispose of retained OpenGL memory
 	}
 
 }

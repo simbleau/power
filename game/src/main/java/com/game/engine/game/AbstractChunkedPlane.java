@@ -3,6 +3,7 @@ package com.game.engine.game;
 import java.util.stream.Stream;
 
 import com.game.engine.driver.GameDriver;
+import com.game.engine.logger.PowerLogger;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.opengl.JOGLCanvas;
 import com.game.engine.rendering.opengl.JOGLChunkedPlaneListener;
@@ -52,11 +53,11 @@ public abstract class AbstractChunkedPlane extends AbstractPlane {
 			JOGLCanvas canvas = (JOGLCanvas) driver.getDisplay().getRenderer().getCanvas();
 			this.glListeners.add(listener);
 			canvas.addGLEventListener(0, listener);
-			driver.logger.fine("GL listeners added to " + this.getClass().getSimpleName());
+			PowerLogger.LOGGER.fine("GL listeners added to " + this.getClass().getSimpleName());
 		}
 
 		// Log success
-		driver.logger.info(this.getClass().getSimpleName() + " was initialized");
+		PowerLogger.LOGGER.info(this.getClass().getSimpleName() + " was initialized");
 	}
 
 	@Override

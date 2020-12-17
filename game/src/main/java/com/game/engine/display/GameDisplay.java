@@ -4,11 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.logging.Level;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
 import com.game.engine.driver.GameDriver;
+import com.game.engine.logger.PowerLogger;
 import com.game.engine.rendering.cpu.CPURenderer;
 import com.game.engine.rendering.opengl.JOGLRenderer;
 import com.game.engine.rendering.common.AbstractRenderer;
@@ -73,8 +75,8 @@ public class GameDisplay {
 		try {
 			this.renderer.init();
 		} catch (Exception e) {
-			// TODO : send to logger as warning
-			e.printStackTrace();
+			PowerLogger.LOGGER.log(Level.WARNING, "Expected rendering context "
+					+ this.renderer.display.settings.getRenderingMode() + " could not be initialized", e);
 			// Default to safe mode
 			this.settings.setRenderingMode(RenderMode.SAFE);
 			this.renderer = new CPURenderer(this);
@@ -82,9 +84,7 @@ public class GameDisplay {
 				// There's no recovering from this if it fails
 				this.renderer.init();
 			} catch (Exception e1) {
-				// This should literally never happen.
-				// TODO : send to logger as error
-				e1.printStackTrace();
+				PowerLogger.LOGGER.log(Level.SEVERE, "SafeMode rendering context could not be initialized", e1);
 				System.exit(1);
 			}
 		}

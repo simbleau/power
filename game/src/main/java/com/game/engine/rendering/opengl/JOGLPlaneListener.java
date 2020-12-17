@@ -1,6 +1,7 @@
 package com.game.engine.rendering.opengl;
 
 import com.game.engine.game.AbstractPlane;
+import com.game.engine.logger.PowerLogger;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
@@ -36,7 +37,7 @@ public class JOGLPlaneListener implements GLEventListener {
 		GL2 gl = drawable.getGL().getGL2();
 
 		// Allocate VRAM for all objects
-		System.out.println("Allocating VRAM of all objects."); // TODO log this with a proper logger
+		PowerLogger.LOGGER.finest("Allocating VRAM of all objects from " + this.getClass().getSimpleName());
 		this.plane.objectIterator().forEachRemaining(obj -> obj.alloc(gl));
 	}
 
@@ -45,7 +46,7 @@ public class JOGLPlaneListener implements GLEventListener {
 		GL2 gl = drawable.getGL().getGL2();
 
 		// Dispose VRAM for all objects
-		System.out.println("Disposing VRAM of all objects."); // TODO log this with a proper logger
+		PowerLogger.LOGGER.finest("Disposing VRAM of all objects from " + this.getClass().getSimpleName());
 		this.plane.objectIterator().forEachRemaining(obj -> obj.dispose(gl));
 	}
 

@@ -9,6 +9,7 @@ import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractChunkedPlane;
 import com.game.engine.game.AbstractGameObject;
 import com.game.engine.game.Chunk;
+import com.game.engine.logger.PowerLogger;
 import com.game.engine.rendering.common.AbstractRenderer;
 
 @SuppressWarnings("javadoc")
@@ -55,13 +56,13 @@ public class ChunkedTestPlane extends AbstractChunkedPlane {
 		// Log all disappeared chunks
 		for (Chunk c : lastChunks) {
 			if (!currentChunks.contains(c)) {
-				driver.logger.fine("Chunk disappeared: " + c.row + ", " + c.column);
+				PowerLogger.LOGGER.fine("Chunk disappeared: " + c.row + ", " + c.column);
 			}
 		}
 		// Log all new chunks
 		for (Chunk c : currentChunks) {
 			if (!lastChunks.contains(c)) {
-				driver.logger.fine("Chunk appeared: " + c.row + ", " + c.column);
+				PowerLogger.LOGGER.fine("Chunk appeared: " + c.row + ", " + c.column);
 			}
 		}
 

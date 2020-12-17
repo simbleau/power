@@ -1,17 +1,8 @@
 package com.game.engine.driver;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.FileHandler;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 import com.game.engine.cache.Cache;
 import com.game.engine.display.DisplaySettings;
@@ -19,6 +10,7 @@ import com.game.engine.display.GameDisplay;
 import com.game.engine.game.AbstractGame;
 import com.game.engine.input.Input;
 import com.game.engine.input.MouseKeyboard;
+import com.game.engine.logger.PowerLogger;
 
 /**
  * The driver for the game. This controls calls to updating and rendering for
@@ -28,17 +20,6 @@ import com.game.engine.input.MouseKeyboard;
  * @version June 2020
  */
 public class GameDriver implements Runnable {
-
-	/**
-	 * The path for the logger properties.
-	 */
-	private static final Path PROPERTIES = Paths.get("src", "main", "java", "com", "game", "engine", "logger",
-			"logging.properties");
-
-	/**
-	 * The logger for the game
-	 */
-	public final Logger logger;
 
 	/**
 	 * The settings for the driver
@@ -80,16 +61,6 @@ public class GameDriver implements Runnable {
 	 */
 	private boolean isRunning;
 
-	static {
-		try {
-			LogManager.getLogManager().readConfiguration(new FileInputStream(PROPERTIES.toString()));
-		} catch (SecurityException | IOException e) {
-			System.err.println("Could not read properties: " + PROPERTIES.toAbsolutePath().toString());
-			e.printStackTrace();
-			System.exit(1);
-		}
-	}
-
 	/**
 	 * Construct the game driver
 	 *
@@ -98,7 +69,6 @@ public class GameDriver implements Runnable {
 	 * @param game     - a game to manage
 	 */
 	public GameDriver(final DriverSettings settings, final Cache cache, final AbstractGame game) {
-		this.logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
 		this.settings = settings;
 		this.cache = cache;
 		this.game = game;
@@ -115,14 +85,8 @@ public class GameDriver implements Runnable {
 	 * @param displaySettings - display settings for the game
 	 */
 	public void start(DisplaySettings displaySettings) {
-		// Add handlers for logger
-		this.logger.addHandler(new ConsoleHandler());
-		try {
-			this.logger.addHandler(new FileHandler());
-			this.logger.info("File logging initiated.");
-		} catch (IOException e) {
-			this.logger.log(Level.WARNING, "File logging could not be initialized", e);
-		}
+		// Start the logger
+		PowerLogger.start();
 
 		// Initialize display
 		this.display = new GameDisplay(this, displaySettings);
@@ -144,11 +108,14 @@ public class GameDriver implements Runnable {
 	 * Stop the game loop.
 	 */
 	public void stop() {
+		// Stop the game
 		if (this.thread != null) {
 			this.thread.interrupt();
 		}
 		this.isRunning = false;
-		Stream.of(this.logger.getHandlers()).forEach(handler -> handler.close());
+
+		// Stop the logger
+		PowerLogger.stop();
 	}
 
 	/**
@@ -242,7 +209,7 @@ public class GameDriver implements Runnable {
 			this.isRunning = false;
 			// Log the exception if it was not caused by the developer
 			if (!(e.getCause() instanceof InterruptedException)) {
-				this.logger.log(Level.SEVERE, "Non-recoverable runtime exception ocurred", e);
+				PowerLogger.LOGGER.log(Level.SEVERE, "Non-recoverable runtime exception ocurred", e);
 			}
 		}
 

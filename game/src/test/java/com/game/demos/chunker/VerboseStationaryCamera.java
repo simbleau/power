@@ -2,6 +2,7 @@ package com.game.demos.chunker;
 
 import com.game.engine.camera.StationaryCamera;
 import com.game.engine.game.AbstractGameObject;
+import com.game.engine.logger.PowerLogger;
 
 @SuppressWarnings("javadoc")
 public class VerboseStationaryCamera extends StationaryCamera {
@@ -23,7 +24,6 @@ public class VerboseStationaryCamera extends StationaryCamera {
 	}
 
 	private void printFineCameraStatistics() {
-		// TODO log this with a proper logger
 		StringBuilder sb = new StringBuilder();
 
 		// Title
@@ -54,7 +54,8 @@ public class VerboseStationaryCamera extends StationaryCamera {
 		sb.append(',');
 		sb.append(this.viewport.furthestChunkColumn());
 
-		System.out.println(sb.toString());
+		// Log it
+		PowerLogger.LOGGER.fine(sb.toString());
 	}
 
 }
