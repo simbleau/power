@@ -5,6 +5,7 @@ import com.game.engine.game.AbstractGameObject;
 import com.game.engine.graphics.obj.Rectangle;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.common.RenderLevel;
+import com.jogamp.opengl.GL2;
 
 /**
  * An arbitrary game object for testing.
@@ -68,6 +69,21 @@ public class MockGameObject extends AbstractGameObject {
 	public void stage(GameDriver driver, AbstractRenderer renderer) {
 		// Stage a red bounding box at the x,y position
 		renderer.stage(r.asRequest(RenderLevel.WORLD_OBJECTS, (int) this.x(), (int) this.y()));
+	}
+
+	@Override
+	public void alloc(GL2 gl) {
+		// TODO Allocate some VRAM
+	}
+
+	@Override
+	public void refresh(GL2 gl) {
+		// TODO refresh the VRAM
+	}
+
+	@Override
+	public void dispose(GL2 gl) {
+		// TODO Dispose of some VRAM
 	}
 
 }

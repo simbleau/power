@@ -94,12 +94,39 @@ public class Ellipse implements Drawable {
 	}
 
 	@Override
+	public void alloc(GL2 gl) {
+		// TODO Allocate retained OpenGL memory
+	}
+
+	@Override
+	public void flagGLRefresh() {
+		// TODO Flag this for an OpenGL refresh
+	}
+
+	@Override
+	public boolean needsGLRefresh() {
+		// TODO Determine if we need to refresh retained OpenGL memory
+		return false;
+	}
+
+	@Override
+	public void refresh(GL2 gl) {
+		// TODO Refresh retained OpenGL memory
+	}
+
+	@Override
+	public void dispose(GL2 gl) {
+		// TODO Dispose of retained OpenGL memory
+	}
+
+	@Override
 	public void draw(CPUProcessor processor, int x, int y, double sx, double sy) {
 		// The scaled radii
 		double srx = this.rx * sx;
 		double sry = this.ry * sy;
 
-		// Calculate the amount of vertices needed using the delta angle between adjacent vertices
+		// Calculate the amount of vertices needed using the delta angle between
+		// adjacent vertices
 		double da = Math.acos(2 * (1 - ACCEPTABLE_ERROR / srx) * (1 - ACCEPTABLE_ERROR / sry) - 1);
 		int vertices = (int) Math.ceil(2 * Math.PI / da);
 
@@ -133,7 +160,8 @@ public class Ellipse implements Drawable {
 		double srx = this.rx * sx;
 		double sry = this.ry * sy;
 
-		// Calculate the amount of vertices needed using the delta angle between adjacent vertices
+		// Calculate the amount of vertices needed using the delta angle between
+		// adjacent vertices
 		double da = Math.acos(2 * (1 - ACCEPTABLE_ERROR / srx) * (1 - ACCEPTABLE_ERROR / sry) - 1);
 		int vertices = (int) Math.ceil(2 * Math.PI / da);
 

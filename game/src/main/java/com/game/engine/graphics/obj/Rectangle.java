@@ -93,6 +93,32 @@ public class Rectangle implements Drawable {
 	}
 
 	@Override
+	public void alloc(GL2 gl) {
+		// TODO Allocate retained OpenGL memory
+	}
+
+	@Override
+	public void flagGLRefresh() {
+		// TODO Flag this for an OpenGL refresh
+	}
+
+	@Override
+	public boolean needsGLRefresh() {
+		// TODO Determine if we need to refresh retained OpenGL memory
+		return false;
+	}
+
+	@Override
+	public void refresh(GL2 gl) {
+		// TODO Refresh retained OpenGL memory
+	}
+
+	@Override
+	public void dispose(GL2 gl) {
+		// TODO Dispose of retained OpenGL memory
+	}
+
+	@Override
 	public void draw(CPUProcessor processor, int x, int y, double sx, double sy) {
 		int width = (int) (this.width * sx);
 		int height = (int) (this.height * sy);

@@ -2,6 +2,7 @@ package com.game.engine.graphics.obj;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
+import java.nio.IntBuffer;
 
 import com.game.engine.graphics.common.Drawable;
 import com.game.engine.graphics.common.RenderRequest;
@@ -9,12 +10,9 @@ import com.game.engine.graphics.request.ImageRequest;
 import com.game.engine.rendering.common.RenderLevel;
 import com.game.engine.rendering.cpu.CPUProcessor;
 import com.game.engine.rendering.opengl.JOGLProcessor;
+import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GLProfile;
-import com.jogamp.opengl.util.texture.Texture;
-import com.jogamp.opengl.util.texture.TextureCoords;
-import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 
 /**
  * An graphics object which contains information describing an image
@@ -40,14 +38,24 @@ public class Image implements Drawable {
 	protected int height;
 
 	/**
-	 * The pixel data of this image in ARGB format
+	 * The texture ID for OpenGL.
 	 */
-	protected int[] pixels;
+	protected int texId = 0;
 
 	/**
-	 * A texture which may be initialized for OpenGL rendering.
+	 * The PBO buffer ID for OpenGL.
 	 */
-	protected Texture texture;
+	protected int pboId = 0;
+
+	/**
+	 * The Pixel Buffer Object where pixel data is stored.
+	 */
+	protected IntBuffer pbo;
+
+	/**
+	 * Whether the PBO has been updated since the last render call.
+	 */
+	protected boolean pboUpdated = false;
 
 	/**
 	 * Initializes an image
@@ -55,11 +63,16 @@ public class Image implements Drawable {
 	 * @param buf - the buffered image
 	 */
 	public Image(BufferedImage buf) {
+		// Standard
+		this.buf = buf;
 		this.width = buf.getWidth();
 		this.height = buf.getHeight();
-		this.pixels = buf.getRGB(0, 0, width, height, null, 0, width);
-		this.buf = buf;
-		this.texture = null;
+		this.pbo = IntBuffer.wrap(buf.getRGB(0, 0, width, height, null, 0, width));
+
+		// OpenGL
+		this.texId = 0;
+		this.pboId = 0;
+		this.pboUpdated = false;
 	}
 
 	/**
@@ -98,7 +111,7 @@ public class Image implements Drawable {
 	 * @return the ARGB pixel data of this image
 	 */
 	public int[] getPixels() {
-		return this.pixels;
+		return this.pbo.array();
 	}
 
 	/**
@@ -107,7 +120,8 @@ public class Image implements Drawable {
 	 * @param pixels - pixel data for this image
 	 */
 	public void setPixels(int[] pixels) {
-		this.pixels = pixels;
+		this.pbo.put(pixels);
+		this.pboUpdated = true;
 	}
 
 	/**
@@ -120,10 +134,14 @@ public class Image implements Drawable {
 	/**
 	 * Writes over the current buffered image with a new buffered image
 	 *
-	 * @param image - a buffered image
+	 * @param buf - a buffered image
 	 */
-	public void setBufferedImage(BufferedImage image) {
-		this.buf = image;
+	public void setBufferedImage(BufferedImage buf) {
+		this.buf = buf;
+		this.width = buf.getWidth();
+		this.height = buf.getHeight();
+		this.pbo = IntBuffer.wrap(buf.getRGB(0, 0, width, height, null, 0, width));
+		this.pboUpdated = true;
 	}
 
 	/**
@@ -138,36 +156,102 @@ public class Image implements Drawable {
 		int[] sPixels = ((DataBufferInt) buf.getRaster().getDataBuffer()).getData();
 
 		// Resize pixels
+		int[] pixels = getPixels();
 		for (int yi = 0; yi < sHeight; yi++) {
 			int yWidth = this.width * (int) (yi / sy);
 			int syWidth = yi * sWidth;
 			for (int xi = 0; xi < sWidth; xi++) {
-				sPixels[syWidth + xi] = this.pixels[(int) (xi / sx) + yWidth];
+				sPixels[syWidth + xi] = pixels[(int) (xi / sx) + yWidth];
 			}
 		}
 
 		return new Image(buf);
 	}
 
-	/**
-	 * Initialize the texture for manual loading
-	 *
-	 * @param profile - the GL profile
-	 */
-	public void initTexture(GLProfile profile) {
-		this.texture = AWTTextureIO.newTexture(profile, this.buf, false);
+	@Override
+	public void alloc(GL2 gl) {
+		if (this.texId == 0) {
+			// Generate texture object
+			int[] texIds = new int[1];
+			gl.glGenTextures(1, texIds, 0);
+			this.texId = texIds[0];
+
+			// Bind the texture object
+			gl.glBindTexture(GL2.GL_TEXTURE_2D, this.texId);
+
+			// Clamp texture so it doesn't repeat
+			gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_NEAREST);
+			gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_NEAREST);
+			gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP);
+			gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP);
+
+			// Bind texture to PBO
+			gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA8, this.buf.getWidth(), this.buf.getHeight(), 0,
+					GL2.GL_BGRA, GL2.GL_UNSIGNED_INT_8_8_8_8_REV, this.pbo);
+
+			// Unbind texture object
+			gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+
+			// Generate a new buffer object
+			int[] pboIds = new int[1];
+			gl.glGenBuffers(1, pboIds, 0);
+			this.pboId = pboIds[0];
+
+			// Seems unnecessary?
+
+			// Bind the buffer object
+			gl.glBindBuffer(GL2.GL_PIXEL_UNPACK_BUFFER, this.pboId);
+
+			// Bind PBO to texture
+			long size = this.buf.getWidth() * this.buf.getHeight() * Buffers.SIZEOF_INT;
+			gl.glBufferData(GL2.GL_PIXEL_UNPACK_BUFFER, size, this.pbo, GL2.GL_STREAM_DRAW);
+
+			// Unbind
+			gl.glBindBuffer(GL2.GL_PIXEL_UNPACK_BUFFER, 0);
+		}
 	}
 
-	/**
-	 * @param profile - a profile to initialize the texture if not already
-	 * @return a texture object from this image
-	 */
-	public Texture getTexture(GLProfile profile) {
-		// Singleton
-		if (this.texture == null) {
-			initTexture(profile);
+	@Override
+	public void flagGLRefresh() {
+		this.pboUpdated = true;
+	}
+
+	@Override
+	public boolean needsGLRefresh() {
+		return this.pboUpdated;
+	}
+
+	@Override
+	public void refresh(GL2 gl) {
+		if (this.pboUpdated) {
+			// Bind the texture
+			gl.glEnable(GL2.GL_TEXTURE_2D);
+			gl.glBindTexture(GL2.GL_TEXTURE_2D, this.texId);
+
+			// Update the texture if there was a change
+			gl.glTexSubImage2D(GL2.GL_TEXTURE_2D, 0, 0, 0, this.buf.getWidth(), this.buf.getHeight(), GL2.GL_BGRA,
+					GL2.GL_UNSIGNED_INT_8_8_8_8_REV, this.pbo);
+
+			// Unbind texture
+			gl.glDisable(GL2.GL_TEXTURE_2D);
+			gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+
+			this.pboUpdated = false;
 		}
-		return this.texture;
+	}
+
+	@Override
+	public void dispose(GL2 gl) {
+		if (this.texId != 0) {
+			int[] textures = { this.texId };
+			gl.glDeleteTextures(textures.length, textures, 0);
+
+			int[] buffers = { this.pboId };
+			gl.glDeleteBuffers(buffers.length, buffers, 0);
+
+			this.pboId = 0;
+			this.texId = 0;
+		}
 	}
 
 	@Override
@@ -204,44 +288,51 @@ public class Image implements Drawable {
 		}
 
 		// Draw
+		int[] pixels = this.pbo.array();
 		for (int yi = yStart; yi < yEnd; yi++) {
 			int syi = (int) (yi / sy);
 			int syWidth = syi * this.width;
 			for (int xi = xStart; xi < xEnd; xi++) {
 				int sxi = (int) (xi / sx);
-				processor.setPixel(xi + x, yi + y, this.pixels[sxi + syWidth]);
+				processor.setPixel(xi + x, yi + y, pixels[sxi + syWidth]);
 			}
 		}
 	}
 
 	@Override
 	public void draw(JOGLProcessor processor, GL2 gl, double x, double y, double sx, double sy) {
-		Texture tex = getTexture(gl.getGLProfile());
-		tex.enable(gl);
-		tex.bind(gl);
-
+		// Enable blending
 		gl.glEnable(GL2.GL_BLEND);
-		gl.glBlendFunc(GL.GL_ONE, GL.GL_ONE_MINUS_SRC_ALPHA);
-		gl.glBegin(GL2.GL_QUADS);
-		TextureCoords texCoords = tex.getImageTexCoords();
+		gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
-		gl.glColor3f(1, 1, 1); // Make sure the image is full alpha
+		// Bind the texture
+		gl.glEnable(GL2.GL_TEXTURE_2D);
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, this.texId);
+
+		// Draw quad
+		gl.glColor3f(1, 1, 1);
+		gl.glBegin(GL2.GL_QUADS);
+
+		gl.glTexCoord2i(0, 0);
 		gl.glVertex2d(x, y);
-		gl.glTexCoord2f(texCoords.left(), texCoords.bottom());
-//		gl.glTexCoord2f(texCoords.left(), texCoords.top());
+
+		gl.glTexCoord2i(0, 1);
 		gl.glVertex2d(x, y + this.height * sy);
-//		gl.glTexCoord2f(texCoords.right(), texCoords.top());
-		gl.glTexCoord2f(texCoords.right(), texCoords.bottom());
+
+		gl.glTexCoord2i(1, 1);
 		gl.glVertex2d(x + this.width * sx, y + this.height * sy);
-//		gl.glTexCoord2f(texCoords.right(), texCoords.bottom());
-		gl.glTexCoord2f(texCoords.right(), texCoords.top());
+
+		gl.glTexCoord2i(1, 0);
 		gl.glVertex2d(x + this.width * sx, y);
-//		gl.glTexCoord2f(texCoords.left(), texCoords.bottom());
-		gl.glTexCoord2f(texCoords.left(), texCoords.top());
+
 		gl.glEnd();
 
-		tex.disable(gl);
+		// Disable blending and texture
+		gl.glDisable(GL2.GL_TEXTURE_2D);
 		gl.glDisable(GL2.GL_BLEND);
+
+		// Unbind texture
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
 	}
 
 	@Override

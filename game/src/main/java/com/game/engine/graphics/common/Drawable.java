@@ -11,7 +11,18 @@ import com.jogamp.opengl.GL2;
  * @author Spencer Imbleau
  * @version July 2020
  */
-public interface Drawable {
+public interface Drawable extends GLObject {
+
+	/**
+	 * Flag this object as needing OpenGL to update its components or resources.
+	 */
+	public void flagGLRefresh();
+
+	/**
+	 * @return true if this object has updated local resources that need to be
+	 *         pushed to OpenGL, false otherwise.
+	 */
+	public boolean needsGLRefresh();
 
 	/**
 	 * Draw for a CPU processor
