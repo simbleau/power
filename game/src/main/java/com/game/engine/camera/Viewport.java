@@ -1,6 +1,8 @@
 package com.game.engine.camera;
 
 import com.game.engine.coordinates.CoordinateMatrix;
+import com.game.engine.game.AbstractGameObject;
+import com.game.engine.game.Chunk;
 
 /**
  * The user's visible area.
@@ -9,7 +11,12 @@ import com.game.engine.coordinates.CoordinateMatrix;
  * @version December 2020
  */
 public class Viewport {
-	
+
+	/**
+	 * The parent camera for this viewport
+	 */
+	private final AbstractCamera camera;
+
 	/**
 	 * The origin of the camera, also the top-left point of the camera.
 	 */
@@ -28,12 +35,14 @@ public class Viewport {
 	/**
 	 * Initialize a viewport with dimensions.
 	 * 
+	 * @param camera - the parent camera
 	 * @param x      - starting displacement on the X axis
 	 * @param y      - starting displacement on the Y axis
 	 * @param width  - width of the viewport
 	 * @param height - height of the viewport
 	 */
-	public Viewport(double x, double y, int width, int height) {
+	public Viewport(AbstractCamera camera, double x, double y, int width, int height) {
+		this.camera = camera;
 		this.origin = CoordinateMatrix.create(x, y);
 		this.width = width;
 		this.height = height;
@@ -100,4 +109,63 @@ public class Viewport {
 		}
 		return true;
 	}
+
+	/**
+	 * @param obj - an object
+	 * @return true if the viewport can see the given object, false otherwise
+	 */
+	public boolean canSee(AbstractGameObject obj) {
+		return this.canSee(obj.x(), obj.y());
+	}
+
+	/**
+	 * @return the closest chunk row index visible by this viewport
+	 */
+	public int closestChunkRow() {
+		return (int) this.origin.x() / Chunk.SIZE;
+	}
+
+	/**
+	 * @return the closest chunk column index visible by this viewport
+	 */
+	public int closestChunkColumn() {
+		return (int) this.origin.y() / Chunk.SIZE;
+	}
+
+	/**
+	 * @return the furthest chunk row index visible by this viewport
+	 */
+	public int furthestChunkRow() {
+		int toX = (int) (this.origin.x() + (this.width / this.camera.zoom));
+		int toChunkX = (toX < 0) ? toX / Chunk.SIZE - 1 : toX / Chunk.SIZE;
+		if (toX % Chunk.SIZE == 0) {
+			// Viewport clips on the boundary of a new chunk, we will exclude that new
+			// chunk.
+			if (toX < 0) {
+				toChunkX++;
+			} else {
+				toChunkX--;
+			}
+		}
+		return toChunkX;
+	}
+
+	/**
+	 * @return the furthest chunk column index visible by this viewport
+	 */
+	public int furthestChunkColumn() {
+		int toY = (int) (this.origin.y() + (this.height / this.camera.zoom));
+		int toChunkY = (toY < 0) ? toY / Chunk.SIZE - 1 : toY / Chunk.SIZE;
+		if (toY % Chunk.SIZE == 0) {
+			// Viewport clips on the boundary of a new chunk, we will exclude that new
+			// chunk.
+			if (toY < 0) {
+				toChunkY++;
+			} else {
+				toChunkY--;
+			}
+		}
+		return toChunkY;
+	}
+
 }

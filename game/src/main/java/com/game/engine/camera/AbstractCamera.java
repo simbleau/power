@@ -2,6 +2,7 @@ package com.game.engine.camera;
 
 import java.awt.Canvas;
 
+import com.game.engine.coordinates.CoordinateMatrix;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractGameObject;
 import com.game.engine.game.Updateable;
@@ -17,15 +18,15 @@ public abstract class AbstractCamera implements Updateable {
 	/**
 	 * The minimum zoom allowed.
 	 */
-	protected static final double MIN_ZOOM = 0.1; 
-	
+	protected static final double MIN_ZOOM = 0.1;
+
 	/**
 	 * The viewport of the camera.
 	 */
 	public final Viewport viewport;
 
 	/**
-	 * The magnification of the XY axis
+	 * The magnification of the XY axis.
 	 */
 	protected double zoom;
 
@@ -39,8 +40,16 @@ public abstract class AbstractCamera implements Updateable {
 	 * @param zoom   - the zoom factor
 	 */
 	protected AbstractCamera(double x, double y, int width, int height, double zoom) {
-		this.viewport = new Viewport(x, y, width, height);
+		this.viewport = new Viewport(this, x, y, width, height);
 		this.zoom = Math.max(MIN_ZOOM, zoom);
+	}
+
+	/**
+	 * @return the camera's focus point (the center of the screen)
+	 */
+	public CoordinateMatrix focus() {
+		return this.viewport.origin.translate(this.viewport.width / this.zoom / 2,
+				this.viewport.height / this.zoom / 2);
 	}
 
 	/**
@@ -77,7 +86,7 @@ public abstract class AbstractCamera implements Updateable {
 	public void setZoom(double zoom) {
 		this.zoom = Math.max(MIN_ZOOM, zoom);
 	}
-	
+
 	/**
 	 * Adjust the zoom by a delta zoom factor.
 	 * 
