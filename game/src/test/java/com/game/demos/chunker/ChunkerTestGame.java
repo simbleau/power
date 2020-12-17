@@ -1,0 +1,33 @@
+package com.game.demos.chunker;
+
+import com.game.engine.driver.GameDriver;
+import com.game.engine.game.AbstractGame;
+import com.game.engine.game.AbstractPlane;
+import com.game.engine.game.Chunk;
+import com.game.engine.rendering.common.AbstractRenderer;
+
+@SuppressWarnings("javadoc")
+public class ChunkerTestGame extends AbstractGame {
+
+	public ChunkerTestGame(AbstractPlane plane) {
+		super(Chunk.SIZE, Chunk.SIZE, plane);
+	}
+
+	@Override
+	public void init(GameDriver driver) {
+		super.init(driver);
+	}
+
+	@Override
+	public void update(GameDriver driver) {
+		super.update(driver);
+		driver.getDisplay()
+				.setFrameTitle(driver.getDisplay().settings.getRenderingMode() + " - FPS : " + driver.getFps());
+	}
+
+	@Override
+	public void stage(GameDriver driver, AbstractRenderer renderer) {
+		super.stage(driver, renderer);
+	}
+
+}
