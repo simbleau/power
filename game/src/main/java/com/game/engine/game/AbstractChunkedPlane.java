@@ -61,7 +61,7 @@ public abstract class AbstractChunkedPlane extends AbstractPlane {
 
 	@Override
 	public void dispose(GameDriver driver) {
-		super.dispose(driver);	
+		super.dispose(driver);
 	}
 
 	@Override

@@ -15,7 +15,6 @@ import com.game.engine.rendering.common.RenderMode;
  */
 public class SafeDriver {
 
-
 	/**
 	 * Start a Safe-Mode demo
 	 * 

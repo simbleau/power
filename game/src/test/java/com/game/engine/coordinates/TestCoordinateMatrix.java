@@ -43,7 +43,7 @@ public class TestCoordinateMatrix {
 		Assert.assertEquals(1, m.getNumRows());
 		Assert.assertEquals(2, m.getNumCols());
 	}
-	
+
 	/**
 	 * Test {@link CoordinateMatrix#set(double, double)}.
 	 */
@@ -53,13 +53,13 @@ public class TestCoordinateMatrix {
 		CoordinateMatrix m = CoordinateMatrix.create(TEST_X, TEST_Y);
 		double inverseX = -m.x();
 		double inverseY = -m.y();
-		
+
 		// Test set
 		m.set(inverseX, inverseY);
 		Assert.assertEquals(inverseX, m.x(), TEST_DELTA);
 		Assert.assertEquals(inverseY, m.y(), TEST_DELTA);
 	}
-	
+
 	/**
 	 * Test {@link CoordinateMatrix#setX(double)}.
 	 */
@@ -68,12 +68,12 @@ public class TestCoordinateMatrix {
 		// Initialize Values
 		CoordinateMatrix m = CoordinateMatrix.create(TEST_X, TEST_Y);
 		double inverseX = -m.x();
-		
+
 		// Test set
 		m.setX(inverseX);
 		Assert.assertEquals(inverseX, m.x(), TEST_DELTA);
 	}
-	
+
 	/**
 	 * Test {@link CoordinateMatrix#setY(double)}.
 	 */
@@ -82,7 +82,7 @@ public class TestCoordinateMatrix {
 		// Initialize Values
 		CoordinateMatrix m = CoordinateMatrix.create(TEST_X, TEST_Y);
 		double inverseY = -m.y();
-		
+
 		// Test set
 		m.setY(inverseY);
 		Assert.assertEquals(inverseY, m.y(), TEST_DELTA);
@@ -275,7 +275,7 @@ public class TestCoordinateMatrix {
 		Assert.assertEquals(m4.x(), CoordinateMatrix.create(m.x(), m.y()).translateEquals(tx4, ty4).x(), TEST_DELTA);
 		Assert.assertEquals(m4.y(), CoordinateMatrix.create(m.x(), m.y()).translateEquals(tx4, ty4).y(), TEST_DELTA);
 	}
-	
+
 	/**
 	 * Test {@link CoordinateMatrix#translateX(double)} and
 	 * {@link CoordinateMatrix#translateXEquals(double)}.
@@ -291,7 +291,7 @@ public class TestCoordinateMatrix {
 		Assert.assertEquals(m2.x(), m.translateX(tx).x(), TEST_DELTA);
 		Assert.assertEquals(m2.x(), CoordinateMatrix.create(m.x(), m.y()).translateXEquals(tx).x(), TEST_DELTA);
 	}
-	
+
 	/**
 	 * Test {@link CoordinateMatrix#translateY(double)} and
 	 * {@link CoordinateMatrix#translateYEquals(double)}.

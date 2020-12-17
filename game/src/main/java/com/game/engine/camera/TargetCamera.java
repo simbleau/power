@@ -118,7 +118,7 @@ public class TargetCamera extends AbstractCamera {
 		double updateDt = 1d / driver.settings.getTicksPerSecond();
 		double dx = updateDt * (this.viewport.origin.x() - focus.x()) * FOLLOW_SPEED;
 		double dy = updateDt * (this.viewport.origin.y() - focus.y()) * FOLLOW_SPEED;
-		
+
 		// Update camera
 		this.viewport.origin.translateEquals(-dx, -dy);
 	}

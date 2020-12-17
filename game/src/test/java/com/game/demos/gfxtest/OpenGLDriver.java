@@ -43,4 +43,3 @@ public class OpenGLDriver {
 		driver.start(dsF.get());
 	}
 }
-
