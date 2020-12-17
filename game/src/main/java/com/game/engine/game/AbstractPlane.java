@@ -73,12 +73,14 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 
 		// OpenGL plane listener
 		if (driver.getDisplay().isGL()) {
-			GLEventListener listener = new JOGLPlaneListener(this);
-
 			JOGLCanvas canvas = (JOGLCanvas) driver.getDisplay().getRenderer().getCanvas();
-			this.glListeners.add(listener);
+
+			// Add memory listener
+			GLEventListener listener = new JOGLPlaneListener(this);
+			this.glListeners.push(listener);
 			canvas.addGLEventListener(0, listener);
-			PowerLogger.LOGGER.fine("GL listeners added to " + this.getClass().getSimpleName());
+			PowerLogger.LOGGER
+					.finer(listener.getClass().getSimpleName() + " added to " + this.getClass().getSimpleName());
 		}
 
 		// Log success
@@ -93,11 +95,17 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 	public void dispose(GameDriver driver) {
 		// Dispose of any OpenGL listeners
 		if (driver.getDisplay().isGL()) {
-			for (GLEventListener listener : this.glListeners) {
+			if (!this.glListeners.isEmpty()) {
 				JOGLCanvas canvas = (JOGLCanvas) driver.getDisplay().getRenderer().getCanvas();
-				canvas.removeGLEventListener(listener);
+				while (!this.glListeners.isEmpty()) {
+					GLEventListener listener = this.glListeners.peek();
+					canvas.removeGLEventListener(listener);
+					PowerLogger.LOGGER.finer(
+							listener.getClass().getSimpleName() + " removed from " + this.getClass().getSimpleName());
+					this.glListeners.pop();
+				}
+				PowerLogger.LOGGER.fine("All GL listeners removed from " + this.getClass().getSimpleName());
 			}
-			PowerLogger.LOGGER.fine("GL listeners removed from " + this.getClass().getSimpleName());
 		}
 
 		// Log success

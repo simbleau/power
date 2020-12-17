@@ -46,14 +46,13 @@ public abstract class AbstractChunkedPlane extends AbstractPlane {
 		// Initialize all chunks
 		Stream.of(this.chunker.chunks).flatMap(Stream::of).forEach(chunk -> chunk.init(driver));
 
-		// Add chunk listener if we are using OpenGL to allocate and dispose of chunks
+		// Add memory listener if we are using OpenGL for dynamic memory handling
 		if (driver.getDisplay().isGL()) {
-			GLEventListener listener = new JOGLChunkedPlaneListener(this);
-
+			GLEventListener memoryListener = new JOGLChunkedPlaneListener(this);
 			JOGLCanvas canvas = (JOGLCanvas) driver.getDisplay().getRenderer().getCanvas();
-			this.glListeners.add(listener);
-			canvas.addGLEventListener(0, listener);
-			PowerLogger.LOGGER.fine("GL listeners added to " + this.getClass().getSimpleName());
+			this.glListeners.add(memoryListener);
+			canvas.addGLEventListener(0, memoryListener);
+			PowerLogger.LOGGER.fine("GL memory listener added to " + this.getClass().getSimpleName());
 		}
 
 		// Log success
@@ -62,7 +61,7 @@ public abstract class AbstractChunkedPlane extends AbstractPlane {
 
 	@Override
 	public void dispose(GameDriver driver) {
-		super.dispose(driver);
+		super.dispose(driver);	
 	}
 
 	@Override

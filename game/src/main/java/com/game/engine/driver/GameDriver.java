@@ -113,6 +113,9 @@ public class GameDriver implements Runnable {
 			this.thread.interrupt();
 		}
 		this.isRunning = false;
+		
+		// Dispose resources
+		this.game.getPlane().dispose(this);
 
 		// Stop the logger
 		PowerLogger.stop();
