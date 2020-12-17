@@ -200,4 +200,18 @@ public class GameDisplay {
 	public AbstractRenderer getRenderer() {
 		return this.renderer;
 	}
+
+	/**
+	 * @return true if the renderer is an OpenGL renderer, false otherwise
+	 */
+	public boolean isGL() {
+		return this.settings.getRenderingMode() == RenderMode.OPENGL;
+	}
+
+	/**
+	 * @return true if the renderer is a safe renderer, false otherwise
+	 */
+	public boolean isSafe() {
+		return this.settings.getRenderingMode() == RenderMode.OPENGL;
+	}
 }
