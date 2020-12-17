@@ -107,10 +107,9 @@ public class TestGameDriver {
 	 */
 	@After
 	public void dispose() {
-		if (d.getDisplay() != null) {
-			d.getDisplay().close();
+		if (d.isRunning()) {
+			d.stop();
 		}
-		d.stop();
 	}
 
 	/**
