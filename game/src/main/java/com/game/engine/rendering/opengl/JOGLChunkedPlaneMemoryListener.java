@@ -19,7 +19,7 @@ import com.jogamp.opengl.GLEventListener;
  * @author Spencer Imbleau
  * @version December 2020
  */
-public class JOGLChunkedPlaneListener implements GLEventListener {
+public class JOGLChunkedPlaneMemoryListener implements GLEventListener {
 
 	/**
 	 * The plane for this listener.
@@ -32,7 +32,7 @@ public class JOGLChunkedPlaneListener implements GLEventListener {
 	 * 
 	 * @param plane - a plane
 	 */
-	public JOGLChunkedPlaneListener(AbstractChunkedPlane plane) {
+	public JOGLChunkedPlaneMemoryListener(AbstractChunkedPlane plane) {
 		this.plane = plane;
 	}
 

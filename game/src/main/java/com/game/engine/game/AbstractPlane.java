@@ -13,7 +13,7 @@ import com.game.engine.logger.PowerLogger;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.common.RenderLevel;
 import com.game.engine.rendering.opengl.JOGLCanvas;
-import com.game.engine.rendering.opengl.JOGLPlaneListener;
+import com.game.engine.rendering.opengl.JOGLPlaneMemoryListener;
 import com.jogamp.opengl.GLEventListener;
 
 /**
@@ -76,7 +76,7 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 			JOGLCanvas canvas = (JOGLCanvas) driver.getDisplay().getRenderer().getCanvas();
 
 			// Add memory listener
-			GLEventListener listener = new JOGLPlaneListener(this);
+			GLEventListener listener = new JOGLPlaneMemoryListener(this);
 			this.glListeners.push(listener);
 			canvas.addGLEventListener(0, listener);
 			PowerLogger.LOGGER

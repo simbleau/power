@@ -15,7 +15,7 @@ import com.jogamp.opengl.GLEventListener;
  * @author Spencer Imbleau
  * @version December 2020
  */
-public class JOGLPlaneListener implements GLEventListener {
+public class JOGLPlaneMemoryListener implements GLEventListener {
 
 	/**
 	 * The plane for this listener.
@@ -28,7 +28,7 @@ public class JOGLPlaneListener implements GLEventListener {
 	 * 
 	 * @param plane - a plane
 	 */
-	public JOGLPlaneListener(AbstractPlane plane) {
+	public JOGLPlaneMemoryListener(AbstractPlane plane) {
 		this.plane = plane;
 	}
 

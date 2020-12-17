@@ -6,7 +6,7 @@ import com.game.engine.driver.GameDriver;
 import com.game.engine.logger.PowerLogger;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.opengl.JOGLCanvas;
-import com.game.engine.rendering.opengl.JOGLChunkedPlaneListener;
+import com.game.engine.rendering.opengl.JOGLChunkedPlaneMemoryListener;
 import com.jogamp.opengl.GLEventListener;
 
 /**
@@ -48,7 +48,7 @@ public abstract class AbstractChunkedPlane extends AbstractPlane {
 
 		// Add memory listener if we are using OpenGL for dynamic memory handling
 		if (driver.getDisplay().isGL()) {
-			GLEventListener memoryListener = new JOGLChunkedPlaneListener(this);
+			GLEventListener memoryListener = new JOGLChunkedPlaneMemoryListener(this);
 			JOGLCanvas canvas = (JOGLCanvas) driver.getDisplay().getRenderer().getCanvas();
 			this.glListeners.add(memoryListener);
 			canvas.addGLEventListener(0, memoryListener);
