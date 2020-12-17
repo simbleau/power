@@ -22,7 +22,7 @@ public class Chunk implements Updateable, Renderable {
 	/**
 	 * The size of a chunk (width and height), measured in pixels
 	 */
-	public final static int SIZE = 500;
+	public static final int SIZE = 500;
 
 	/**
 	 * The parent plane
@@ -82,6 +82,13 @@ public class Chunk implements Updateable, Renderable {
 	}
 
 	/**
+	 * @return an iterator for the level objects
+	 */
+	public Iterator<AbstractGameObject> objectIterator() {
+		return this.chunkObjects.iterator();
+	}
+
+	/**
 	 * Add an object to this chunk
 	 *
 	 * @param object - an {@link AbstractGameObject}
@@ -133,15 +140,48 @@ public class Chunk implements Updateable, Renderable {
 
 		int argb = (0xff << 24 | red << 16 | green << 8 | blue);
 
-		int width = (this.row == this.plane.chunker.getRows() - 1) ? this.plane.chunker.plane.width % SIZE : SIZE;
-		int height = (this.column == this.plane.chunker.getColumns() - 1) ? this.plane.chunker.plane.height % SIZE
-				: SIZE;
-		Rectangle rect = new Rectangle(width, height, argb);
-		RectangleRequest request = new RectangleRequest(rect, RenderLevel.VOID, 0, (int) this.row * SIZE,
-				(int) this.column * SIZE);
+		Rectangle rect = new Rectangle(this.width(), this.height(), argb);
+		RectangleRequest request = new RectangleRequest(rect, RenderLevel.VOID, 0, this.x(), this.y());
 		renderer.stage(request);
 
 		// Stage all chunk objects
 		this.chunkObjects.forEach(obj -> obj.stage(driver, renderer));
 	}
+
+	/**
+	 * @return the x co-ordinate where this chunk starts
+	 */
+	public int x() {
+		return this.row * Chunk.SIZE;
+	}
+
+	/**
+	 * @return the y co-ordinate where this chunk starts
+	 */
+	public int y() {
+		return this.column * Chunk.SIZE;
+	}
+
+	/**
+	 * @return the width of this chunk
+	 */
+	public int width() {
+		if (this.row == this.plane.chunker.getRows() - 1 && this.plane.chunker.plane.width % SIZE != 0) {
+			return this.plane.chunker.plane.width % SIZE;
+		} else {
+			return SIZE;
+		}
+	}
+
+	/**
+	 * @return the height of this chunk
+	 */
+	public int height() {
+		if (this.column == this.plane.chunker.getColumns() - 1 && this.plane.chunker.plane.height % SIZE != 0) {
+			return this.plane.chunker.plane.height % SIZE;
+		} else {
+			return SIZE;
+		}
+	}
+
 }
