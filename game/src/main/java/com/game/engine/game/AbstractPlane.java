@@ -1,7 +1,9 @@
 package com.game.engine.game;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Stack;
 
 import com.game.engine.driver.GameDriver;
 import com.game.engine.graphics.common.Renderable;
@@ -9,13 +11,15 @@ import com.game.engine.graphics.obj.Rectangle;
 import com.game.engine.graphics.request.RectangleRequest;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.common.RenderLevel;
+import com.game.engine.rendering.opengl.JOGLCanvas;
+import com.game.engine.rendering.opengl.JOGLPlaneListener;
+import com.jogamp.opengl.GLEventListener;
 
 /**
  * An abstract plane. This is a playable plane.
  *
  * @author Spencer Imbleau
  * @version December 2020
- * @see Chunk
  */
 public abstract class AbstractPlane implements Updateable, Renderable {
 
@@ -37,15 +41,24 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 	public final int height;
 
 	/**
+	 * A list of GL EventListeners attached to this plane in an OpenGL context.
+	 */
+	protected final Stack<GLEventListener> glListeners;
+
+	/**
 	 * Construct an abstract plane
 	 * 
 	 * @param width  - pixel width of the plane
 	 * @param height - pixel height of the plane
 	 */
 	public AbstractPlane(final int width, final int height) {
+		// Standard
 		this.width = width;
 		this.height = height;
 		this.levelObjects = new ArrayList<AbstractGameObject>();
+
+		// OpenGL
+		this.glListeners = new Stack<GLEventListener>();
 	}
 
 	/**
@@ -56,6 +69,38 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 	public void init(GameDriver driver) {
 		// Initialize all level objects
 		this.levelObjects.forEach(obj -> obj.init(driver));
+
+		// OpenGL plane listener
+		if (driver.getDisplay().isGL()) {
+			GLEventListener listener = new JOGLPlaneListener(this);
+
+			JOGLCanvas canvas = (JOGLCanvas) driver.getDisplay().getRenderer().getCanvas();
+			this.glListeners.add(listener);
+			canvas.addGLEventListener(0, listener);
+			driver.logger.fine("GL listeners added to " + this.getClass().getSimpleName());
+		}
+
+		// Log success
+		driver.logger.info(this.getClass().getSimpleName() + " was initialized");
+	}
+
+	/**
+	 * Dispose this plane.
+	 *
+	 * @param driver - the driver for the game
+	 */
+	public void dispose(GameDriver driver) {
+		// Dispose of any OpenGL listeners
+		if (driver.getDisplay().isGL()) {
+			for (GLEventListener listener : this.glListeners) {
+				JOGLCanvas canvas = (JOGLCanvas) driver.getDisplay().getRenderer().getCanvas();
+				canvas.removeGLEventListener(listener);
+			}
+			driver.logger.fine("GL listeners removed from " + this.getClass().getSimpleName());
+		}
+
+		// Log success
+		driver.logger.info(this.getClass().getSimpleName() + " was disposed");
 	}
 
 	@Override
@@ -76,6 +121,13 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 	}
 
 	/**
+	 * @return an iterator for the level objects
+	 */
+	public Iterator<AbstractGameObject> objectIterator() {
+		return this.levelObjects.iterator();
+	}
+
+	/**
 	 * Add a game object which exists on the plane.
 	 * 
 	 * @param obj - The object to add to the level.
@@ -91,5 +143,12 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 	 */
 	public void removeGameObject(AbstractGameObject obj) {
 		this.levelObjects.remove(obj);
+	}
+
+	/**
+	 * @return true if this is a chunked plane, false otherwise.
+	 */
+	public boolean isChunked() {
+		return false;
 	}
 }

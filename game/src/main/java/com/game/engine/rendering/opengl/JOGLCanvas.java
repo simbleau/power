@@ -39,17 +39,33 @@ public class JOGLCanvas extends GLCanvas implements GLEventListener {
 	@Override
 	public void init(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
-		// Disable lighting
-		gl.glDisable(GL2.GL_LIGHTING);
+
 		// Clear color is black
 		gl.glClearColor(0, 0, 0, 1);
 		// This disables vsync
 		gl.setSwapInterval(0);
+
+		// Remove lighting from pipeline resulting in performance boost
+		gl.glDisable(GL2.GL_LIGHTING);
+		// Remove depth test from piepline resulting in performance boost in 2D
+		gl.glDisable(GL2.GL_DEPTH_TEST);
+
+		// Texture settings
+		// 4 channels for pixels, i.e. 0xAARRGGBB
+		gl.glPixelStorei(GL2.GL_UNPACK_ALIGNMENT, 4);
+		// Use nearest-neighbor pixel interpolation for scaling
+		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_NEAREST);
+		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_NEAREST);
 	}
 
 	@Override
 	public void dispose(GLAutoDrawable drawable) {
-		// Do nothing
+		// Remove all GL event listeners
+		for (int i = 0; i < this.getGLEventListenerCount(); i++) {
+			this.removeGLEventListener(this.getGLEventListener(i));
+		}
+		// Destroy the canvas
+		this.destroy();
 	}
 
 	@Override
@@ -63,6 +79,12 @@ public class JOGLCanvas extends GLCanvas implements GLEventListener {
 		Iterator<RenderRequest> renderIterator = this.processor.iterator();
 		while (renderIterator.hasNext()) {
 			RenderRequest request = renderIterator.next();
+
+			// Refresh assets before drawing if asked
+			if (request.drawable.needsGLRefresh()) {
+				request.drawable.refresh(gl);
+			}
+
 			switch (request.level) {
 			case UI_PLUGIN:
 			case UI_OVERLAY:

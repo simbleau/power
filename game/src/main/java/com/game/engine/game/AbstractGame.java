@@ -72,11 +72,14 @@ public abstract class AbstractGame implements Updateable, Renderable {
 
 	/**
 	 * Sets the plane
-	 *
-	 * @param plane - the plane to set
+	 * 
+	 * @param driver - the driver for the game
+	 * @param plane  - the plane to set
 	 */
-	public void setPlane(AbstractPlane plane) {
+	public void setPlane(GameDriver driver, AbstractPlane plane) {
+		this.plane.dispose(driver);
 		this.plane = plane;
+		this.init(driver);
 	}
 
 }

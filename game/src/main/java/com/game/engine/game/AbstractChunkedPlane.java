@@ -4,6 +4,9 @@ import java.util.stream.Stream;
 
 import com.game.engine.driver.GameDriver;
 import com.game.engine.rendering.common.AbstractRenderer;
+import com.game.engine.rendering.opengl.JOGLCanvas;
+import com.game.engine.rendering.opengl.JOGLChunkedPlaneListener;
+import com.jogamp.opengl.GLEventListener;
 
 /**
  * An abstract plane. This is a playable surface that gets chunked for
@@ -41,6 +44,24 @@ public abstract class AbstractChunkedPlane extends AbstractPlane {
 
 		// Initialize all chunks
 		Stream.of(this.chunker.chunks).flatMap(Stream::of).forEach(chunk -> chunk.init(driver));
+
+		// Add chunk listener if we are using OpenGL to allocate and dispose of chunks
+		if (driver.getDisplay().isGL()) {
+			GLEventListener listener = new JOGLChunkedPlaneListener(this);
+
+			JOGLCanvas canvas = (JOGLCanvas) driver.getDisplay().getRenderer().getCanvas();
+			this.glListeners.add(listener);
+			canvas.addGLEventListener(0, listener);
+			driver.logger.fine("GL listeners added to " + this.getClass().getSimpleName());
+		}
+
+		// Log success
+		driver.logger.info(this.getClass().getSimpleName() + " was initialized");
+	}
+
+	@Override
+	public void dispose(GameDriver driver) {
+		super.dispose(driver);
 	}
 
 	@Override
@@ -49,7 +70,7 @@ public abstract class AbstractChunkedPlane extends AbstractPlane {
 		this.chunker.chunk(driver);
 
 		// Update viewable chunks
-		this.chunker.update(driver.getDisplay().settings.getCamera());
+		this.chunker.scan(driver, driver.getDisplay().settings.getCamera());
 		this.chunker.viewableIterator().forEachRemaining(chunk -> chunk.update(driver));
 	}
 
@@ -62,13 +83,18 @@ public abstract class AbstractChunkedPlane extends AbstractPlane {
 	@Override
 	public void addGameObject(AbstractGameObject obj) {
 		this.levelObjects.add(obj);
-		this.chunker.chunks[(int) (obj.x() / Chunk.SIZE)][(int) (obj.y() / Chunk.SIZE)].addGameObject(obj);
+		this.chunker.chunks[(int) obj.x() / Chunk.SIZE][(int) obj.y() / Chunk.SIZE].addGameObject(obj);
 	}
 
 	@Override
 	public void removeGameObject(AbstractGameObject obj) {
 		this.levelObjects.remove(obj);
-		this.chunker.chunks[(int) (obj.x() / Chunk.SIZE)][(int) (obj.y() / Chunk.SIZE)].removeGameObject(obj);
+		this.chunker.chunks[(int) obj.x() / Chunk.SIZE][(int) obj.y() / Chunk.SIZE].removeGameObject(obj);
 	}
-	
+
+	@Override
+	public boolean isChunked() {
+		return true;
+	}
+
 }

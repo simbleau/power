@@ -1,11 +1,11 @@
 package com.game.engine.game;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.game.engine.camera.AbstractCamera;
-import com.game.engine.coordinates.CoordinateMatrix;
 import com.game.engine.driver.GameDriver;
 
 /**
@@ -15,7 +15,8 @@ import com.game.engine.driver.GameDriver;
  *
  * A chunker aims to alleviate cpu-load in collision calculations and rendering
  * by giving insights to the neightbors of chunk i, such that all of chunk i's
- * objects are only able to be impacted by the neighbors of chunk i.
+ * objects are only able to be impacted by the neighbors of chunk i. A chunker
+ * also aims to handle memory allocation for objects.
  *
  * @author Spencer Imbleau
  * @version November 2020
@@ -47,7 +48,18 @@ public class Chunker {
 	/**
 	 * The current chunks which are viewable to the player.
 	 */
-	protected List<Chunk> viewableChunks;
+	protected HashSet<Chunk> viewableChunks;
+
+	/**
+	 * A queue of objects which were trashed (no longer in view) and need cleanup by
+	 * OpenGL.
+	 */
+	protected Queue<AbstractGameObject> trashedObjects;
+
+	/**
+	 * A queue of objects which were newly visible and need resources from OpenGL.
+	 */
+	protected Queue<AbstractGameObject> loadingObjects;
 
 	/**
 	 * Initialize a chunker
@@ -63,8 +75,10 @@ public class Chunker {
 		this.columns = plane.height / Chunk.SIZE + (plane.height % Chunk.SIZE == 0 ? 0 : 1);
 		this.chunks = new Chunk[rows][columns];
 
-		// Initialize a buffer for current chunks
-		this.viewableChunks = new ArrayList<Chunk>();
+		// Initialize a buffer for currently viewable chunks
+		this.viewableChunks = new HashSet<Chunk>();
+		this.trashedObjects = new ConcurrentLinkedQueue<>();
+		this.loadingObjects = new ConcurrentLinkedQueue<>();
 	}
 
 	/**
@@ -73,6 +87,11 @@ public class Chunker {
 	 * @param driver - the game driver
 	 */
 	public void init(GameDriver driver) {
+		// Clear all chunk lists
+		this.viewableChunks.clear();
+		this.trashedObjects.clear();
+		this.loadingObjects.clear();
+
 		// Fill the chunk buffer
 		for (int row = 0; row < this.rows; row++) {
 			for (int col = 0; col < this.columns; col++) {
@@ -151,41 +170,70 @@ public class Chunker {
 			}
 		}
 
-		// Build the chunks
-		for (AbstractGameObject object : this.plane.levelObjects) {
-			int chunkX = (int) object.x() / Chunk.SIZE;
-			int chunkY = (int) object.y() / Chunk.SIZE;
-			this.chunks[chunkX][chunkY].addGameObject(object);
+		// Assign plane objects to chunks
+		for (AbstractGameObject obj : this.plane.levelObjects) {
+			int chunkX = (int) obj.x() / Chunk.SIZE;
+			int chunkY = (int) obj.y() / Chunk.SIZE;
+			if (chunkX < 0 || chunkX >= this.rows || chunkY < 0 || chunkY >= this.columns) {
+				driver.logger.warning(obj.getClass().getName() + " cannot be added at " + obj.x() + "," + obj.y());
+				this.flagGLTrash(obj);
+				continue;
+			}
+			this.chunks[chunkX][chunkY].addGameObject(obj);
 		}
 	}
 
 	/**
-	 * Update the current chunks to those visible by a given camera.
+	 * Update the viewable chunk lists relative to the scanned area visible by a
+	 * given camera.
 	 * 
+	 * @param driver - the game driver
 	 * @param camera - the camera
 	 */
-	public void update(AbstractCamera camera) {
-		// Clear the current chunks
-		this.viewableChunks.clear();
+	public void scan(GameDriver driver, AbstractCamera camera) {
+		// Declare the bounds seen from start->end by the camera
+		int fromRow = camera.viewport.closestChunkRow();
+		int fromColumn = camera.viewport.closestChunkColumn();
+		int toRow = camera.viewport.furthestChunkRow();
+		int toColumn = camera.viewport.furthestChunkColumn();
 
-		// Build the current visible chunks
-		CoordinateMatrix start = CoordinateMatrix.create(camera.viewport.x(), camera.viewport.y());
-		CoordinateMatrix end = start.translate(camera.viewport.width() / camera.zoom(),
-				camera.viewport.height() / camera.zoom());
-
-		// Declare the boundaries for chunks that may be in view
-		int fromRow = (int) start.x() / Chunk.SIZE;
-		int toRow = (int) end.x() / Chunk.SIZE;
-		int fromColumn = (int) start.y() / Chunk.SIZE;
-		int toColumn = (int) end.y() / Chunk.SIZE;
-
+		// Build a new list with the currently visible chunks
+		HashSet<Chunk> currentlyViewableChunks = new HashSet<>(
+				Math.abs(toRow - fromRow) * Math.abs(toColumn - fromColumn));
 		for (int row = fromRow; row <= toRow; row++) {
 			for (int col = fromColumn; col <= toColumn; col++) {
 				if (row >= 0 && row < this.rows && col >= 0 && col < this.columns) {
-					this.viewableChunks.add(this.chunks[row][col]);
+					currentlyViewableChunks.add(this.chunks[row][col]);
 				}
 			}
 		}
+
+		// Compare the new list with the last list to determine chunks no longer in view
+		Iterator<Chunk> lastViewableChunks = viewableIterator();
+		while (lastViewableChunks.hasNext()) {
+			Chunk c = lastViewableChunks.next();
+			if (!currentlyViewableChunks.contains(c)) {
+				// Disappeared chunk - Needs disposal
+				lastViewableChunks.remove();
+				if (driver.getDisplay().isGL()) {
+					// Dispose all chunk objects
+					c.chunkObjects.forEach(obj -> this.trashedObjects.add(obj));
+				}
+			}
+		}
+
+		// Compare the new list with the last list to determine chunks newly in view
+		for (Chunk c : currentlyViewableChunks) {
+			if (!this.viewableChunks.contains(c)) {
+				// New chunk - Needs initialization
+				this.viewableChunks.add(c);
+				if (driver.getDisplay().isGL()) {
+					// Load all chunk objects
+					c.chunkObjects.forEach(obj -> this.loadingObjects.add(obj));
+				}
+			}
+		}
+
 	}
 
 	/**
@@ -193,6 +241,22 @@ public class Chunker {
 	 */
 	public Iterator<Chunk> viewableIterator() {
 		return this.viewableChunks.iterator();
+	}
+
+	/**
+	 * @return an iterator of the currently loading objects for dynamic memory
+	 *         handling such as in OpenGL
+	 */
+	public Iterator<AbstractGameObject> loadingIterator() {
+		return this.loadingObjects.iterator();
+	}
+
+	/**
+	 * @return an iterator of the currently trashed objects for dynamic memory
+	 *         handling such as in OpenGL
+	 */
+	public Iterator<AbstractGameObject> trashedIterator() {
+		return this.trashedObjects.iterator();
 	}
 
 	/**
@@ -207,5 +271,25 @@ public class Chunker {
 	 */
 	public int getColumns() {
 		return this.columns;
+	}
+
+	/**
+	 * Flag this object as having components or resources needing to be allocated by
+	 * OpenGL.
+	 *
+	 * @param obj - an object
+	 */
+	public void flagGLLoad(AbstractGameObject obj) {
+		this.loadingObjects.add(obj);
+	}
+
+	/**
+	 * Flag this object as having components or resources needing to be disposed by
+	 * OpenGL.
+	 *
+	 * @param obj - an object
+	 */
+	public void flagGLTrash(AbstractGameObject obj) {
+		this.trashedObjects.add(obj);
 	}
 }
