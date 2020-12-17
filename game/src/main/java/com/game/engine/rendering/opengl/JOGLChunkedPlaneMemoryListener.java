@@ -14,7 +14,8 @@ import com.jogamp.opengl.GLEventListener;
  * An OpenGL Event Listener which loads and trashes objects which take up VRAM
  * for an {@link AbstractChunkedPlane}. It does this by querying a
  * {@link Chunker} attached to a {@link AbstractChunkedPlane} for any requests
- * to load or trash, and handling these requests.
+ * to load or trash, and handling these requests, as well as on
+ * {@link JOGLCanvas} initialization and {@link JOGLCanvas} disposal.
  * 
  * @author Spencer Imbleau
  * @version December 2020

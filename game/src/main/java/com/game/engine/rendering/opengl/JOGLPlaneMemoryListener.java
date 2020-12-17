@@ -8,8 +8,8 @@ import com.jogamp.opengl.GLEventListener;
 
 /**
  * An OpenGL Event Listener which loads and trashes objects which take up VRAM
- * for an {@link AbstractPlane} by initializing objects on plane initialization
- * and disposing of objects on plane disposal.
+ * for an {@link AbstractPlane} by initializing objects on {@link JOGLCanvas} initialization
+ * and disposing of objects on {@link JOGLCanvas} disposal.
  * 
  * 
  * @author Spencer Imbleau
