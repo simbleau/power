@@ -2,6 +2,7 @@ package com.game.engine.camera;
 
 import java.awt.event.KeyEvent;
 
+import com.game.engine.coordinates.CoordinateMatrix;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.input.MouseKeyboard;
 
@@ -54,10 +55,14 @@ public class DevCamera extends AbstractCamera {
 		}
 
 		if (driver.getInput().isKeyActive(KeyEvent.VK_UP)) {
+			CoordinateMatrix focus = this.focus();
 			this.magnify(ZOOM_SPEED);
+			this.lookAt(focus.x(), focus.y());
 		}
 		if (driver.getInput().isKeyActive(KeyEvent.VK_DOWN)) {
+			CoordinateMatrix focus = this.focus();
 			this.magnify(-ZOOM_SPEED);
+			this.lookAt(focus.x(), focus.y());
 		}
 	}
 

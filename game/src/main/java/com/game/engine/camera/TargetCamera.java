@@ -90,10 +90,14 @@ public class TargetCamera extends AbstractCamera {
 		}
 
 		if (driver.getInput().isKeyActive(KeyEvent.VK_UP)) {
+			CoordinateMatrix focus = this.focus();
 			this.magnify(ZOOM_SPEED);
+			this.lookAt(focus.x(), focus.y());
 		}
 		if (driver.getInput().isKeyActive(KeyEvent.VK_DOWN)) {
+			CoordinateMatrix focus = this.focus();
 			this.magnify(-ZOOM_SPEED);
+			this.lookAt(focus.x(), focus.y());
 		}
 
 		if (this.target == null) {
