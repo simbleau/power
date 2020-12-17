@@ -225,9 +225,9 @@ public class TestChunker {
 
 				// Declare the boundaries for chunks that may be in view
 				int fromRow = (int) cam.viewport.x() / Chunk.SIZE;
-				int toRow = ((int) cam.viewport.x() + cam.viewport.width()) / Chunk.SIZE;
+				int toRow = (int) (cam.viewport.x() + cam.viewport.width() / cam.zoom()) / Chunk.SIZE;
 				int fromColumn = (int) cam.viewport.y() / Chunk.SIZE;
-				int toColumn = ((int) cam.viewport.y() + cam.viewport.height()) / Chunk.SIZE;
+				int toColumn = (int) (cam.viewport.y() + cam.viewport.height() / cam.zoom()) / Chunk.SIZE;
 
 				// Check all chunks are within bounds
 				Iterator<Chunk> viewableChunks = c.viewableIterator();
