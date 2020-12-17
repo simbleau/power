@@ -3,14 +3,13 @@ package com.game.demos.chunker;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractGame;
 import com.game.engine.game.AbstractPlane;
-import com.game.engine.game.Chunk;
 import com.game.engine.rendering.common.AbstractRenderer;
 
 @SuppressWarnings("javadoc")
 public class ChunkerTestGame extends AbstractGame {
 
 	public ChunkerTestGame(AbstractPlane plane) {
-		super(Chunk.SIZE, Chunk.SIZE, plane);
+		super(480, 360, plane);
 	}
 
 	@Override
