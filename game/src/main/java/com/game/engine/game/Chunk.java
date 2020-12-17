@@ -32,12 +32,12 @@ public class Chunk implements Updateable, Renderable {
 	/**
 	 * The chunk's row in the parent plane
 	 */
-	protected int row;
+	public final int row;
 
 	/**
 	 * The chunk's column in the parent plane
 	 */
-	protected int column;
+	public final int column;
 
 	/**
 	 * This chunk's neighboring chunks
