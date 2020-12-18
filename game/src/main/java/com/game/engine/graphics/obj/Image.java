@@ -88,7 +88,8 @@ public class Image implements Drawable {
 	 * @param width - the width to set
 	 */
 	public void setWidth(int width) {
-		this.width = width;
+		//TODO implement this
+		throw new UnsupportedOperationException("This is not implemented yet");
 	}
 
 	/**
@@ -104,7 +105,8 @@ public class Image implements Drawable {
 	 * @param height - the height to set
 	 */
 	public void setHeight(int height) {
-		this.height = height;
+		//TODO implement this
+		throw new UnsupportedOperationException("This is not implemented yet");
 	}
 
 	/**
@@ -132,11 +134,8 @@ public class Image implements Drawable {
 	 * @param buf - a buffered image
 	 */
 	public void setBufferedImage(BufferedImage buf) {
-		this.buf = buf;
-		this.width = buf.getWidth();
-		this.height = buf.getHeight();
-		this.pbo = IntBuffer.wrap(buf.getRGB(0, 0, width, height, null, 0, width));
-		this.pboUpdated = true;
+		//TODO implement this
+		throw new UnsupportedOperationException("This is not implemented yet");
 	}
 
 	/**
