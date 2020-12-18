@@ -173,14 +173,14 @@ public class Chunker {
 
 		// Assign plane objects to chunks
 		for (AbstractGameObject obj : this.plane.levelObjects) {
-			int chunkX = (int) obj.x() / Chunk.SIZE;
-			int chunkY = (int) obj.y() / Chunk.SIZE;
-			if (chunkX < 0 || chunkX >= this.rows || chunkY < 0 || chunkY >= this.columns) {
-				PowerLogger.LOGGER.warning(obj.getClass().getName() + " cannot be added at " + obj.x() + "," + obj.y());
+			if (obj.chunkRow() < 0 || obj.chunkRow() >= this.rows || obj.chunkColumn() < 0
+					|| obj.chunkColumn() >= this.columns) {
+				PowerLogger.LOGGER.warning(obj.getClass().getName() + " cannot be added at " + obj.x() + "," + obj.y()
+						+ " because chunk " + obj.chunkRow() + "," + obj.chunkColumn() + " does not exist.");
 				this.flagGLTrash(obj);
 				continue;
 			}
-			this.chunks[chunkX][chunkY].addGameObject(obj);
+			this.chunks[obj.chunkRow()][obj.chunkColumn()].addGameObject(obj);
 		}
 	}
 

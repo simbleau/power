@@ -48,8 +48,8 @@ public abstract class AbstractCamera implements Updateable {
 	 * @return the camera's focus point (the center of the screen)
 	 */
 	public CoordinateMatrix focus() {
-		return this.viewport.origin.translate(this.viewport.width / this.zoom / 2,
-				this.viewport.height / this.zoom / 2);
+		return CoordinateMatrix.create(this.viewport.origin.x() + this.viewport.width / this.zoom / 2,
+				this.viewport.origin.y() + this.viewport.height / this.zoom / 2);
 	}
 
 	/**
@@ -103,7 +103,7 @@ public abstract class AbstractCamera implements Updateable {
 	 * @param dy - delta y to translate the camera
 	 */
 	public void translate(double dx, double dy) {
-		this.viewport.origin.translateEquals(dx, dy);
+		this.viewport.origin.translate(dx, dy);
 	}
 
 	/**
@@ -112,7 +112,7 @@ public abstract class AbstractCamera implements Updateable {
 	 * @param dx - delta x to translate the camera
 	 */
 	public void translateX(double dx) {
-		this.viewport.origin.translateXEquals(dx);
+		this.viewport.origin.x.translate(dx);
 	}
 
 	/**
@@ -121,7 +121,7 @@ public abstract class AbstractCamera implements Updateable {
 	 * @param dy - delta y to translate the camera
 	 */
 	public void translateY(double dy) {
-		this.viewport.origin.translateYEquals(dy);
+		this.viewport.origin.y.translate(dy);
 	}
 
 	@Override

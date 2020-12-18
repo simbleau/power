@@ -166,8 +166,8 @@ public class Chunk implements Updateable, Renderable {
 	 * @return the width of this chunk
 	 */
 	public int width() {
-		if (this.row == this.plane.chunker.getRows() - 1 && this.plane.chunker.plane.width % SIZE != 0) {
-			return this.plane.chunker.plane.width % SIZE;
+		if (this.row == this.plane.chunker.getRows() - 1 && this.plane.width % SIZE != 0) {
+			return this.plane.width % SIZE;
 		} else {
 			return SIZE;
 		}
@@ -177,8 +177,8 @@ public class Chunk implements Updateable, Renderable {
 	 * @return the height of this chunk
 	 */
 	public int height() {
-		if (this.column == this.plane.chunker.getColumns() - 1 && this.plane.chunker.plane.height % SIZE != 0) {
-			return this.plane.chunker.plane.height % SIZE;
+		if (this.column == this.plane.chunker.getColumns() - 1 && this.plane.height % SIZE != 0) {
+			return this.plane.height % SIZE;
 		} else {
 			return SIZE;
 		}

@@ -120,7 +120,7 @@ public class TargetCamera extends AbstractCamera {
 		double dy = updateDt * (this.viewport.origin.y() - focus.y()) * FOLLOW_SPEED;
 
 		// Update camera
-		this.viewport.origin.translateEquals(-dx, -dy);
+		this.viewport.origin.translate(-dx, -dy);
 	}
 
 }

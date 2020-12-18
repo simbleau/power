@@ -1,6 +1,6 @@
 package com.game.engine.camera;
 
-import com.game.engine.coordinates.CoordinateMatrix;
+import com.game.engine.coordinates.Position;
 import com.game.engine.game.AbstractGameObject;
 import com.game.engine.game.Chunk;
 
@@ -20,7 +20,7 @@ public class Viewport {
 	/**
 	 * The origin of the camera, also the top-left point of the camera.
 	 */
-	protected CoordinateMatrix origin;
+	protected Position origin;
 
 	/**
 	 * The width of the viewport.
@@ -43,7 +43,7 @@ public class Viewport {
 	 */
 	public Viewport(AbstractCamera camera, double x, double y, int width, int height) {
 		this.camera = camera;
-		this.origin = CoordinateMatrix.create(x, y);
+		this.origin = new Position(x, y);
 		this.width = width;
 		this.height = height;
 	}
@@ -122,14 +122,14 @@ public class Viewport {
 	 * @return the closest chunk row index visible by this viewport
 	 */
 	public int closestChunkRow() {
-		return (int) this.origin.x() / Chunk.SIZE;
+		return this.origin.x.asChunkIndex();
 	}
 
 	/**
 	 * @return the closest chunk column index visible by this viewport
 	 */
 	public int closestChunkColumn() {
-		return (int) this.origin.y() / Chunk.SIZE;
+		return this.origin.y.asChunkIndex();
 	}
 
 	/**

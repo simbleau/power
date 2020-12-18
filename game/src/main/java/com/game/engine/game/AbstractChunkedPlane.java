@@ -83,13 +83,13 @@ public abstract class AbstractChunkedPlane extends AbstractPlane {
 	@Override
 	public void addGameObject(AbstractGameObject obj) {
 		this.levelObjects.add(obj);
-		this.chunker.chunks[(int) obj.x() / Chunk.SIZE][(int) obj.y() / Chunk.SIZE].addGameObject(obj);
+		this.chunker.chunks[obj.chunkRow()][obj.chunkColumn()].addGameObject(obj);
 	}
 
 	@Override
 	public void removeGameObject(AbstractGameObject obj) {
 		this.levelObjects.remove(obj);
-		this.chunker.chunks[(int) obj.x() / Chunk.SIZE][(int) obj.y() / Chunk.SIZE].removeGameObject(obj);
+		this.chunker.chunks[obj.chunkRow()][obj.chunkColumn()].removeGameObject(obj);
 	}
 
 	@Override
