@@ -108,20 +108,15 @@ public class Image implements Drawable {
 	}
 
 	/**
-	 * @return the ARGB pixel data of this image
-	 */
-	public int[] getPixels() {
-		return this.pbo.array();
-	}
-
-	/**
-	 * Writes over the current pixel data with new pixel data
+	 * Gets the writable pixel buffer object backing this image. Modifications to
+	 * the PBO will modify the image. Ensure if you are modifying the PBO to call
+	 * {@link #flagGLRefresh()} after, or the pixels will not update properly on
+	 * OpenGL. Pixels are stored in 0xAARRGGBB format.
 	 *
-	 * @param pixels - pixel data for this image
+	 * @return the pixel buffer object of this image
 	 */
-	public void setPixels(int[] pixels) {
-		this.pbo.put(pixels);
-		this.pboUpdated = true;
+	public IntBuffer getPBO() {
+		return this.pbo;
 	}
 
 	/**
@@ -156,12 +151,11 @@ public class Image implements Drawable {
 		int[] sPixels = ((DataBufferInt) buf.getRaster().getDataBuffer()).getData();
 
 		// Resize pixels
-		int[] pixels = getPixels();
 		for (int yi = 0; yi < sHeight; yi++) {
 			int yWidth = this.width * (int) (yi / sy);
 			int syWidth = yi * sWidth;
 			for (int xi = 0; xi < sWidth; xi++) {
-				sPixels[syWidth + xi] = pixels[(int) (xi / sx) + yWidth];
+				sPixels[syWidth + xi] = this.pbo.get((int) (xi / sx) + yWidth);
 			}
 		}
 
@@ -197,14 +191,10 @@ public class Image implements Drawable {
 			gl.glGenBuffers(1, pboIds, 0);
 			this.pboId = pboIds[0];
 
-			// Seems unnecessary?
-
-			// Bind the buffer object
-			gl.glBindBuffer(GL2.GL_PIXEL_UNPACK_BUFFER, this.pboId);
-
-			// Bind PBO to texture
+			// This chunk seems unnecessary?
+			gl.glBindBuffer(GL2.GL_PIXEL_UNPACK_BUFFER, this.pboId); // Bind the buffer object
 			long size = this.buf.getWidth() * this.buf.getHeight() * Buffers.SIZEOF_INT;
-			gl.glBufferData(GL2.GL_PIXEL_UNPACK_BUFFER, size, this.pbo, GL2.GL_STREAM_DRAW);
+			gl.glBufferData(GL2.GL_PIXEL_UNPACK_BUFFER, size, this.pbo, GL2.GL_STREAM_DRAW); // Bind PBO to texture
 
 			// Unbind
 			gl.glBindBuffer(GL2.GL_PIXEL_UNPACK_BUFFER, 0);
@@ -288,13 +278,12 @@ public class Image implements Drawable {
 		}
 
 		// Draw
-		int[] pixels = this.pbo.array();
 		for (int yi = yStart; yi < yEnd; yi++) {
 			int syi = (int) (yi / sy);
 			int syWidth = syi * this.width;
 			for (int xi = xStart; xi < xEnd; xi++) {
 				int sxi = (int) (xi / sx);
-				processor.setPixel(xi + x, yi + y, pixels[sxi + syWidth]);
+				processor.setPixel(xi + x, yi + y, this.pbo.get(sxi + syWidth));
 			}
 		}
 	}

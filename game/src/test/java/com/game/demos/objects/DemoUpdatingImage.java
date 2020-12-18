@@ -1,5 +1,6 @@
 package com.game.demos.objects;
 
+import java.nio.IntBuffer;
 import java.nio.file.Paths;
 import java.util.Random;
 
@@ -81,10 +82,14 @@ public class DemoUpdatingImage extends AbstractGameObject {
 					Math.max(0, Math.min(this.y() + dy, parent.height - this.height)));
 		}
 
-		int[] pixels = this.drawable.getPixels();
-		for (int i = 0; i < pixels.length; i++) {
-			pixels[i] += 0x00000001;
+		IntBuffer pbo = this.drawable.getPBO();
+		while (pbo.hasRemaining()) {
+			pbo.mark();
+			int color = pbo.get();
+			pbo.reset();
+			pbo.put(color + 0x00000001);
 		}
+		pbo.flip();
 		this.drawable.flagGLRefresh();
 	}
 
