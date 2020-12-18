@@ -89,7 +89,7 @@ public class DemoUpdatingImage extends AbstractGameObject {
 			pbo.reset();
 			pbo.put(color + 0x00000001);
 		}
-		pbo.flip();
+		pbo.rewind();
 		this.drawable.flagGLRefresh();
 	}
 
