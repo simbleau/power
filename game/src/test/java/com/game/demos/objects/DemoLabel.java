@@ -68,12 +68,10 @@ public class DemoLabel extends AbstractGameObject {
 	public void init(GameDriver driver) {
 		Label label = new Label(TEST_FONT, TEST_TEXT, TEST_ARGB);
 		if (label.getWidth() > label.getHeight()) {
-			PowerLogger.LOGGER.info("wider");
 			float sx = (float) this.width / label.getWidth();
 			this.drawable = label.resize(sx, sx);
 			this.height = (int) (sx * label.getHeight());
 		} else {
-			PowerLogger.LOGGER.info("taller");
 			float sy = (float) this.height / label.getHeight();
 			this.drawable = label.resize(sy, sy);
 			this.width = (int) (sy * label.getWidth());
