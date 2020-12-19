@@ -36,7 +36,7 @@ public class MockFonts {
 	static {
 		// Load font 1
 		GlyphSheet font1GlyphSheet = new GlyphSheet(TEST_CACHE.fetch(FONT_1_SHEET_PATH).getBufferedImage());
-		for (int asciiChar = 32; asciiChar < 127; asciiChar++) {
+		for (int asciiChar = 32; asciiChar < 127; asciiChar++) { // This font features the ASCII range 32->126
 			font1GlyphSheet.add(Glyph.keycodeOf((char) asciiChar));
 		}
 		FONT_1 = GlyphReader.read(font1GlyphSheet);

@@ -53,7 +53,7 @@ public class TestGlyphReader {
 	public void testRead() {
 		BufferedImage glyphImage = TEST_CACHE.fetch(TEST_FONT_PATH).getBufferedImage();
 		GlyphSheet glyphSheet = new GlyphSheet(glyphImage);
-		for (int keycode = 32; keycode < 127; keycode++) {
+		for (int keycode = 32; keycode < 127; keycode++) { // This font features the ASCII range 32->126
 			glyphSheet.add(keycode);
 		}
 		Font font = GlyphReader.read(glyphSheet);
