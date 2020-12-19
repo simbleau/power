@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.game.demos.objects.DemoEllipse;
 import com.game.demos.objects.DemoImage;
+import com.game.demos.objects.DemoLabel;
 import com.game.demos.objects.DemoLine;
 import com.game.demos.objects.DemoRectangle;
 import com.game.demos.objects.DemoUpdatingImage;
@@ -22,7 +23,7 @@ public class GFXTestPlane extends AbstractChunkedPlane {
 	private static final int SIZE = 3 * Chunk.SIZE / 5;
 
 	private static final AbstractGameObject objects[] = { new DemoUpdatingImage(SIZE), new DemoImage(SIZE),
-			new DemoEllipse(SIZE), new DemoRectangle(SIZE), new DemoLine(SIZE) };
+			new DemoEllipse(SIZE), new DemoRectangle(SIZE), new DemoLine(SIZE), new DemoLabel(SIZE) };
 
 	public GFXTestPlane() {
 		super(Chunk.SIZE * objects.length, Chunk.SIZE * objects.length);
@@ -46,10 +47,11 @@ public class GFXTestPlane extends AbstractChunkedPlane {
 		cam.lookAt(this.width / 2, this.height / 2);
 
 		// Move all objects into diagonal position
-		int offset = (Chunk.SIZE / 2) - (SIZE / 2);
 		for (int i = 0; i < objects.length; i++) {
 			AbstractGameObject obj = objects[i];
-			obj.move(driver, (Chunk.SIZE * i) + offset, (Chunk.SIZE * i) + offset);
+			int offsetX = (Chunk.SIZE / 2) - (obj.width() / 2);
+			int offsetY = (Chunk.SIZE / 2) - (obj.height() / 2);
+			obj.move(driver, (Chunk.SIZE * i) + offsetX, (Chunk.SIZE * i) + offsetY);
 		}
 	}
 
