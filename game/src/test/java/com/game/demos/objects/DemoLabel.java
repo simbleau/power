@@ -10,7 +10,6 @@ import com.game.engine.graphics.common.RenderRequest;
 import com.game.engine.graphics.obj.Label;
 import com.game.engine.graphics.obj.fonts.Font;
 import com.game.engine.graphics.obj.fonts.mock.MockFonts;
-import com.game.engine.logger.PowerLogger;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.common.RenderLevel;
 import com.jogamp.opengl.GL2;
