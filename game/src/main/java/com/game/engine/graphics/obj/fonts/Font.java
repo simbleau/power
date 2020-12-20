@@ -74,8 +74,14 @@ public class Font {
 	public BufferedImage bakeImage(int[] keycodeSequence, int argb) {
 		// Calculate the width this image will be
 		int imgWidth = 0;
-		int imgHeight = this.size;
 
+		// Check if there's any keycodes to render
+		if (keycodeSequence.length == 0) {
+			return new BufferedImage(imgWidth, this.size, BufferedImage.TYPE_INT_ARGB);
+		}
+
+		// Calculate the image width
+		int invalidGlyphWidth = (this.size / 2);
 		for (int i = 0; i < keycodeSequence.length; i++) {
 			int keycode = keycodeSequence[i];
 			if (this.isGlyphRenderable(keycode)) {
@@ -84,12 +90,12 @@ public class Font {
 			} else {
 				// If not a keycode is not a valid glyph, we draw a box half the font size wide
 				// Hence, add half the font size
-				imgWidth += this.size / 2;
+				imgWidth += invalidGlyphWidth;
 			}
 		}
 
 		// Draw the keycode sequence into a buffered image
-		BufferedImage buf = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_ARGB);
+		BufferedImage buf = new BufferedImage(imgWidth, this.size, BufferedImage.TYPE_INT_ARGB);
 		final int[] pixels = ((DataBufferInt) buf.getRaster().getDataBuffer()).getData();
 		final int glyphSheetWidth = this.pbo.remaining() / this.size;
 
@@ -101,7 +107,7 @@ public class Font {
 				Glyph glyph = this.glyphs.get(keycode);
 
 				// Draw the character as from the glyph sheet image
-				for (int y = 0; y < imgHeight; y++) {
+				for (int y = 0; y < this.size; y++) {
 					int yGlyphStart = y * glyphSheetWidth;
 					int yImgStart = y * imgWidth;
 					for (int xi = 0; xi < glyph.width; xi++) {
@@ -115,19 +121,18 @@ public class Font {
 			} else {
 				// Draw a box, since we don't have a character map for this.
 				// Vertical Bars
-				int boxWidth = (imgHeight / 2);
-				for (int yi = 0; yi < imgHeight; yi++) {
+				for (int yi = 0; yi < this.size; yi++) {
 					int yStart = yi * imgWidth;
 					pixels[yStart + x] = argb;
-					pixels[yStart + x + boxWidth] = argb;
+					pixels[yStart + x + invalidGlyphWidth - 1] = argb;
 				}
 				// Horizontal Bars
-				int yFloorStart = (imgHeight - 1) * imgWidth;
-				for (int xi = 0; xi <= boxWidth; xi++) {
+				int yFloorStart = (this.size - 1) * imgWidth;
+				for (int xi = 0; xi < invalidGlyphWidth; xi++) {
 					pixels[x + xi] = argb;
 					pixels[yFloorStart + x + xi] = argb;
 				}
-				x += boxWidth;
+				x += invalidGlyphWidth;
 			}
 		}
 
