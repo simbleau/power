@@ -1,7 +1,6 @@
 package com.game.engine.graphics.obj.fonts;
 
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -57,15 +56,6 @@ public class GlyphSheet {
 	 */
 	public void add(Integer keycode) {
 		this.keycodeSequence.add(keycode);
-	}
-
-	/**
-	 * Add keycodes to the sequence of this glyph sheet
-	 * 
-	 * @param keycodes - integer keycodes which come next in this glyph sheet
-	 */
-	public void addAll(Integer... keycodes) {
-		this.keycodeSequence.addAll(Arrays.asList(keycodes));
 	}
 
 	/**
