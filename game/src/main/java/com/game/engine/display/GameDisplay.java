@@ -172,6 +172,17 @@ public class GameDisplay {
 	}
 
 	/**
+	 * Sets the frame to be either resizable or not resizable.
+	 * 
+	 * @param resizable - whether the frame should be resizable
+	 */
+	public void setResizable(boolean resizable) {
+		if (this.frame != null) {
+			this.frame.setResizable(resizable);
+		}
+	}
+
+	/**
 	 * Close the display window, if it exists.
 	 */
 	public void close() {
