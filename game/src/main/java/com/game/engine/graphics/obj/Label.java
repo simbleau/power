@@ -81,7 +81,8 @@ public class Label extends Image {
 	 */
 	public String getText() {
 		return Arrays.stream(this.keycodes)
-				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append).toString();
+				.collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+				.toString();
 	}
 
 	/**
