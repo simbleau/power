@@ -7,6 +7,7 @@ import com.game.engine.game.AbstractGameObject;
 import com.game.engine.game.AbstractPlane;
 import com.game.engine.graphics.common.Drawable;
 import com.game.engine.graphics.common.RenderRequest;
+import com.game.engine.graphics.obj.Image;
 import com.game.engine.graphics.obj.Label;
 import com.game.engine.graphics.obj.fonts.Font;
 import com.game.engine.graphics.obj.fonts.mock.MockFonts;
@@ -30,13 +31,13 @@ public class DemoLabel extends AbstractGameObject {
 	/**
 	 * Some demo text to render.
 	 */
-	private static final String TEST_TEXT = "Test123!";
+	private static final String DEFAULT_TEXT = "%Test123!";
 
 	/**
 	 * A color to render the text.
 	 */
 	private static final int TEST_ARGB = 0xffffffff; // Solid yellow
-	
+
 	/**
 	 * The speed of the object
 	 */
@@ -51,21 +52,43 @@ public class DemoLabel extends AbstractGameObject {
 	 * The drawable graphic object.
 	 */
 	private Drawable drawable;
-	
+
 	/**
-	 * Construct a demo ellipse
+	 * The size of the text
+	 */
+	private int size;
+
+	/**
+	 * The text on the label
+	 */
+	private String text;
+
+	/**
+	 * Construct a demo label with text.
 	 * 
+	 * @param text - the text for this label
 	 * @param size - the size for the drawable
 	 */
-	public DemoLabel(int size) {
+	public DemoLabel(String text, int size) {
+		this.text = text;
+		this.size = size;
 		this.width = size;
 		this.height = size;
 		this.drawable = null;
 	}
 
+	/**
+	 * Construct a demo label with default text.
+	 * 
+	 * @param size - the size for the drawable
+	 */
+	public DemoLabel(int size) {
+		this(DEFAULT_TEXT, size);
+	}
+
 	@Override
 	public void init(GameDriver driver) {
-		Label label = new Label(TEST_FONT, TEST_TEXT, TEST_ARGB);
+		Label label = new Label(TEST_FONT, this.text, TEST_ARGB);
 		if (label.getWidth() > label.getHeight()) {
 			float sx = (float) this.width / label.getWidth();
 			this.drawable = label.resize(sx, sx);
@@ -109,6 +132,29 @@ public class DemoLabel extends AbstractGameObject {
 	public void stage(GameDriver driver, AbstractRenderer renderer) {
 		RenderRequest request = this.drawable.asRequest(RenderLevel.WORLD_OBJECTS, (int) this.x(), (int) this.y());
 		renderer.stage(request);
+	}
+
+	/**
+	 * Change the text on this label.
+	 * 
+	 * @param text - the text for this label
+	 */
+	public void setText(String text) {
+		// TODO resize a label with a label return type instead of an image return type
+		Label label = new Label(TEST_FONT, text, TEST_ARGB);
+		if (label.getWidth() > label.getHeight()) {
+			float sx = (float) this.size / label.getWidth();
+			Image l2 = label.resize(sx, sx);
+			this.drawable = l2;
+			this.width = l2.getWidth();
+			this.height = l2.getHeight();
+		} else {
+			float sy = (float) this.size / label.getHeight();
+			Image l2 = label.resize(sy, sy);
+			this.drawable = l2;
+			this.width = l2.getWidth();
+			this.height = l2.getHeight();
+		}
 	}
 
 }

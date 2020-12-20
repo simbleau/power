@@ -1,7 +1,7 @@
 package com.game.demos.font;
 
 import com.game.engine.cache.LRUCache;
-import com.game.engine.camera.DevCamera;
+import com.game.engine.camera.StationaryCamera;
 import com.game.engine.display.DisplaySettingsFactory;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.driver.GameDriverFactory;
@@ -37,7 +37,7 @@ public class OpenGLDriver {
 		dsF.setMode(RenderMode.OPENGL);
 		dsF.setResolutionWidth(resWidth);
 		dsF.setResolutionHeight(resHeight);
-		dsF.setCamera(new DevCamera(0, 0, resWidth, resHeight, 1));
+		dsF.setCamera(new StationaryCamera(0, 0, resWidth, resHeight, 1));
 
 		// Start the game
 		GameDriver driver = gdF.get();
