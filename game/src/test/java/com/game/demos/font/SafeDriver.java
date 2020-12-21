@@ -42,5 +42,9 @@ public class SafeDriver {
 		// Start the game
 		GameDriver driver = gdF.get();
 		driver.start(dsF.get());
+
+		// Make it not resizable
+		driver.getDisplay().setResizable(false);
+		driver.setInput(new VerboseMouseKeyboard(driver));
 	}
 }

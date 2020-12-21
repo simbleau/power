@@ -15,7 +15,6 @@ public class FontTestGame extends AbstractGame {
 	@Override
 	public void init(GameDriver driver) {
 		super.init(driver);
-		driver.getDisplay().setResizable(false);
 	}
 
 	@Override
