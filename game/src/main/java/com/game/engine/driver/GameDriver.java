@@ -228,6 +228,15 @@ public class GameDriver implements Runnable {
 	}
 
 	/**
+	 * Sets the input for the driver
+	 *
+	 * @param input - an input source
+	 */
+	public void setInput(Input input) {
+		this.input = input;
+	}
+
+	/**
 	 * @return the input, or null, if the driver has not started
 	 */
 	public Input getInput() {
