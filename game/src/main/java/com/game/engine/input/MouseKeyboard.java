@@ -263,20 +263,6 @@ public class MouseKeyboard implements Input, KeyListener, MouseListener, MouseMo
 	}
 
 	@Override
-	public void keyPressed(KeyEvent e) {
-		if (e.getKeyCode() < NUM_KEYS) {
-			this.keys[e.getKeyCode()] = true;
-		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		if (e.getKeyCode() < NUM_KEYS) {
-			this.keys[e.getKeyCode()] = false;
-		}
-	}
-
-	@Override
 	public void mouseClicked(MouseEvent e) {
 		// Do nothing
 		e.consume();
@@ -292,7 +278,20 @@ public class MouseKeyboard implements Input, KeyListener, MouseListener, MouseMo
 	public void mouseExited(MouseEvent e) {
 		// Do nothing
 		e.consume();
+	}
 
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() < NUM_KEYS) {
+			this.keys[e.getKeyCode()] = true;
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		if (e.getKeyCode() < NUM_KEYS) {
+			this.keys[e.getKeyCode()] = false;
+		}
 	}
 
 	@Override
