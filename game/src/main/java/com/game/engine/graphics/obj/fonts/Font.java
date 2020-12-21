@@ -8,8 +8,6 @@ import java.util.Map;
 
 import com.game.engine.graphics.obj.Label;
 
-import javafx.scene.input.KeyCode;
-
 /**
  * A font which can be used to bake images with desired text on it, or as a
  * {@link Glyph} cache to render {@link Label}s dynamically.
