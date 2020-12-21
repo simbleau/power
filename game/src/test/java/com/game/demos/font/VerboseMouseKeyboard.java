@@ -8,6 +8,7 @@ import com.game.engine.driver.GameDriver;
 import com.game.engine.input.MouseKeyboard;
 import com.game.engine.logger.PowerLogger;
 
+@SuppressWarnings("javadoc")
 public class VerboseMouseKeyboard extends MouseKeyboard {
 
 	public VerboseMouseKeyboard(GameDriver driver) {
