@@ -47,14 +47,18 @@ public class ChunkedTestPlane extends AbstractChunkedPlane {
 	public void update(GameDriver driver) {
 		// Perform a deep clone of our old chunks
 		HashSet<Chunk> lastChunks = new HashSet<>();
-		this.chunker.viewableIterator().forEachRemaining(chunk -> lastChunks.add(chunk));
+		for (Chunk chunk : this.chunker.viewableChunks()) {
+			lastChunks.add(chunk);
+		}
 
 		// Do a regular update
 		super.update(driver);
 
 		// Perform a deep clone of our current chunks
 		HashSet<Chunk> currentChunks = new HashSet<>();
-		this.chunker.viewableIterator().forEachRemaining(chunk -> currentChunks.add(chunk));
+		for (Chunk chunk : this.chunker.viewableChunks()) {
+			currentChunks.add(chunk);
+		}
 
 		// Log all disappeared chunks
 		for (Chunk c : lastChunks) {
