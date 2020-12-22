@@ -1,5 +1,6 @@
 package com.game.engine.rendering.opengl;
 
+import com.game.engine.game.AbstractGameObject;
 import com.game.engine.game.AbstractPlane;
 import com.game.engine.logger.PowerLogger;
 import com.jogamp.opengl.GL2;
@@ -8,8 +9,8 @@ import com.jogamp.opengl.GLEventListener;
 
 /**
  * An OpenGL Event Listener which loads and trashes objects which take up VRAM
- * for an {@link AbstractPlane} by initializing objects on {@link JOGLCanvas} initialization
- * and disposing of objects on {@link JOGLCanvas} disposal.
+ * for an {@link AbstractPlane} by initializing objects on {@link JOGLCanvas}
+ * initialization and disposing of objects on {@link JOGLCanvas} disposal.
  * 
  * 
  * @author Spencer Imbleau
@@ -37,8 +38,10 @@ public class JOGLPlaneMemoryListener implements GLEventListener {
 		GL2 gl = drawable.getGL().getGL2();
 
 		// Allocate VRAM for all objects
-		PowerLogger.LOGGER.finest("Allocating VRAM of all objects from " + this.getClass().getSimpleName());
-		this.plane.objectIterator().forEachRemaining(obj -> obj.alloc(gl));
+		PowerLogger.LOGGER.finest("Allocating VRAM of all objects from " + this.plane.getClass().getSimpleName());
+		for (AbstractGameObject obj : this.plane.objects()) {
+			obj.alloc(gl);
+		}
 	}
 
 	@Override
@@ -46,8 +49,10 @@ public class JOGLPlaneMemoryListener implements GLEventListener {
 		GL2 gl = drawable.getGL().getGL2();
 
 		// Dispose VRAM for all objects
-		PowerLogger.LOGGER.finest("Disposing VRAM of all objects from " + this.getClass().getSimpleName());
-		this.plane.objectIterator().forEachRemaining(obj -> obj.dispose(gl));
+		PowerLogger.LOGGER.finest("Disposing VRAM of all objects from " + this.plane.getClass().getSimpleName());
+		for (AbstractGameObject obj : this.plane.objects()) {
+			obj.dispose(gl);
+		}
 	}
 
 	@Override

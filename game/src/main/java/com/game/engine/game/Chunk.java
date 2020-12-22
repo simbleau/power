@@ -1,7 +1,6 @@
 package com.game.engine.game;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import com.game.engine.driver.GameDriver;
@@ -77,15 +76,15 @@ public class Chunk implements Updateable, Renderable {
 	/**
 	 * @return an iterator for the neighboring chunks
 	 */
-	public Iterator<Chunk> neighborIterator() {
-		return this.neighbors.iterator();
+	public Iterable<Chunk> neighbors() {
+		return this.neighbors;
 	}
 
 	/**
 	 * @return an iterator for the level objects
 	 */
-	public Iterator<AbstractGameObject> objectIterator() {
-		return this.chunkObjects.iterator();
+	public Iterable<AbstractGameObject> objects() {
+		return this.chunkObjects;
 	}
 
 	/**

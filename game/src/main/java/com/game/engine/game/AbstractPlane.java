@@ -1,7 +1,6 @@
 package com.game.engine.game;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
@@ -132,8 +131,8 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 	/**
 	 * @return an iterator for the level objects
 	 */
-	public Iterator<AbstractGameObject> objectIterator() {
-		return this.levelObjects.iterator();
+	public Iterable<AbstractGameObject> objects() {
+		return this.levelObjects;
 	}
 
 	/**

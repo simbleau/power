@@ -1,13 +1,14 @@
 package com.game.engine.game;
 
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import com.game.engine.camera.AbstractCamera;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.logger.PowerLogger;
+import com.jogamp.opengl.GL2;
 
 /**
  * An intermediary responsible for helping determine which chunks should be
@@ -210,16 +211,19 @@ public class Chunker {
 		}
 
 		// Compare the new list with the last list to determine chunks no longer in view
-		Iterator<Chunk> lastViewableChunks = viewableIterator();
-		while (lastViewableChunks.hasNext()) {
-			Chunk c = lastViewableChunks.next();
+		Queue<Chunk> trashableChunks = new LinkedList<>();
+		for (Chunk c : viewableChunks()) {
 			if (!currentlyViewableChunks.contains(c)) {
 				// Disappeared chunk - Needs disposal
-				lastViewableChunks.remove();
-				if (driver.getDisplay().isGL()) {
-					// Dispose all chunk objects
-					c.chunkObjects.forEach(obj -> this.trashedObjects.add(obj));
-				}
+				trashableChunks.add(c);
+			}
+		}
+		// Trash the non-viewable chunks
+		for (Chunk c : trashableChunks) {
+			this.viewableChunks.remove(c);
+			if (driver.getDisplay().isGL()) {
+				// Dispose all chunk objects
+				c.chunkObjects.forEach(obj -> this.trashedObjects.add(obj));
 			}
 		}
 
@@ -238,26 +242,26 @@ public class Chunker {
 	}
 
 	/**
-	 * @return an iterator of the current viewable chunks
+	 * @return an iterable of the current viewable chunks
 	 */
-	public Iterator<Chunk> viewableIterator() {
-		return this.viewableChunks.iterator();
+	public Iterable<Chunk> viewableChunks() {
+		return this.viewableChunks;
 	}
 
 	/**
-	 * @return an iterator of the currently loading objects for dynamic memory
+	 * @return an iterable of the currently loading objects for dynamic memory
 	 *         handling such as in OpenGL
 	 */
-	public Iterator<AbstractGameObject> loadingIterator() {
-		return this.loadingObjects.iterator();
+	public Iterable<AbstractGameObject> loadingObjects() {
+		return this.loadingObjects;
 	}
 
 	/**
-	 * @return an iterator of the currently trashed objects for dynamic memory
+	 * @return an iterable of the currently trashed objects for dynamic memory
 	 *         handling such as in OpenGL
 	 */
-	public Iterator<AbstractGameObject> trashedIterator() {
-		return this.trashedObjects.iterator();
+	public Iterable<AbstractGameObject> trashedObjects() {
+		return this.trashedObjects;
 	}
 
 	/**
@@ -285,6 +289,17 @@ public class Chunker {
 	}
 
 	/**
+	 * Load an object via OpenGL.
+	 *
+	 * @param gl  - an OpenGL context
+	 * @param obj - the object to load
+	 */
+	public void load(GL2 gl, AbstractGameObject obj) {
+		obj.alloc(gl);
+		this.loadingObjects.remove(obj);
+	}
+
+	/**
 	 * Flag this object as having components or resources needing to be disposed by
 	 * OpenGL.
 	 *
@@ -292,5 +307,16 @@ public class Chunker {
 	 */
 	public void flagGLTrash(AbstractGameObject obj) {
 		this.trashedObjects.add(obj);
+	}
+
+	/**
+	 * Trash an object via OpenGL.
+	 *
+	 * @param gl  - an OpenGL context
+	 * @param obj - the object to trash
+	 */
+	public void trash(GL2 gl, AbstractGameObject obj) {
+		obj.dispose(gl);
+		this.trashedObjects.remove(obj);
 	}
 }

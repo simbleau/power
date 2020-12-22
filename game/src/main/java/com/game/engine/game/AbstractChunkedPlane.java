@@ -71,13 +71,17 @@ public abstract class AbstractChunkedPlane extends AbstractPlane {
 
 		// Update viewable chunks
 		this.chunker.scan(driver, driver.getDisplay().settings.getCamera());
-		this.chunker.viewableIterator().forEachRemaining(chunk -> chunk.update(driver));
+		for (Chunk chunk : this.chunker.viewableChunks()) {
+			chunk.update(driver);
+		}
 	}
 
 	@Override
 	public void stage(GameDriver driver, AbstractRenderer renderer) {
 		// Stage viewable chunks
-		this.chunker.viewableIterator().forEachRemaining(chunk -> chunk.stage(driver, renderer));
+		for (Chunk chunk : this.chunker.viewableChunks()) {
+			chunk.stage(driver, renderer);
+		}
 	}
 
 	@Override

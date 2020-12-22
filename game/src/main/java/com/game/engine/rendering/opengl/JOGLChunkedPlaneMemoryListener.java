@@ -1,9 +1,8 @@
 package com.game.engine.rendering.opengl;
 
-import java.util.Iterator;
-
 import com.game.engine.game.AbstractChunkedPlane;
 import com.game.engine.game.AbstractGameObject;
+import com.game.engine.game.Chunk;
 import com.game.engine.game.Chunker;
 import com.game.engine.logger.PowerLogger;
 import com.jogamp.opengl.GL2;
@@ -42,8 +41,13 @@ public class JOGLChunkedPlaneMemoryListener implements GLEventListener {
 		GL2 gl = drawable.getGL().getGL2();
 
 		// Allocate VRAM for all objects
-		PowerLogger.LOGGER.finest("Allocating VRAM of all chunks from " + this.getClass().getSimpleName());
-		this.plane.chunker.loadingIterator().forEachRemaining(chunk -> chunk.alloc(gl));
+		PowerLogger.LOGGER
+				.finest("Allocating VRAM of all viewable chunk objects from " + this.plane.getClass().getSimpleName());
+		for (Chunk chunk : this.plane.chunker.viewableChunks()) {
+			for (AbstractGameObject obj : chunk.objects()) {
+				obj.alloc(gl);
+			}
+		}
 	}
 
 	@Override
@@ -51,8 +55,13 @@ public class JOGLChunkedPlaneMemoryListener implements GLEventListener {
 		GL2 gl = drawable.getGL().getGL2();
 
 		// Dispose VRAM for all objects
-		PowerLogger.LOGGER.finest("Disposing VRAM of all chunks from " + this.getClass().getSimpleName());
-		this.plane.chunker.plane.objectIterator().forEachRemaining(obj -> obj.dispose(gl));
+		PowerLogger.LOGGER
+				.finest("Disposing VRAM of all viewable chunk objects from " + this.plane.getClass().getSimpleName());
+		for (Chunk chunk : this.plane.chunker.viewableChunks()) {
+			for (AbstractGameObject obj : chunk.objects()) {
+				obj.dispose(gl);
+			}
+		}
 	}
 
 	@Override
@@ -60,21 +69,14 @@ public class JOGLChunkedPlaneMemoryListener implements GLEventListener {
 		GL2 gl = drawable.getGL().getGL2();
 
 		// Allocate VRAM for new chunks
-		Iterator<AbstractGameObject> loadingIterator = this.plane.chunker.loadingIterator();
-		while (loadingIterator.hasNext()) {
-			AbstractGameObject obj = loadingIterator.next();
-			obj.alloc(gl);
-			loadingIterator.remove();
+		for (AbstractGameObject obj : this.plane.chunker.loadingObjects()) {
+			this.plane.chunker.load(gl, obj);
 		}
 
 		// Destroy VRAM for trashed chunks
-		Iterator<AbstractGameObject> trashedIterator = this.plane.chunker.trashedIterator();
-		while (trashedIterator.hasNext()) {
-			AbstractGameObject obj = trashedIterator.next();
-			obj.dispose(gl);
-			trashedIterator.remove();
+		for (AbstractGameObject obj : this.plane.chunker.trashedObjects()) {
+			this.plane.chunker.trash(gl, obj);
 		}
-
 	}
 
 	@Override

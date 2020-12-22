@@ -2,7 +2,6 @@ package com.game.engine.game;
 
 import java.awt.Dimension;
 import java.util.Arrays;
-import java.util.Iterator;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -229,9 +228,7 @@ public class TestChunker {
 				int toColumn = (int) (cam.viewport.y() + cam.viewport.height() / cam.zoom()) / Chunk.SIZE;
 
 				// Check all chunks are within bounds
-				Iterator<Chunk> viewableChunks = c.viewableIterator();
-				while (viewableChunks.hasNext()) {
-					Chunk next = viewableChunks.next();
+				for (Chunk next : c.viewableChunks()) {
 					Assert.assertTrue(next.row >= fromRow);
 					Assert.assertTrue(next.row <= toRow);
 					Assert.assertTrue(next.column >= fromColumn);
