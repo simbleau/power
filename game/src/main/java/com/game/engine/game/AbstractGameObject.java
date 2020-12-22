@@ -50,16 +50,16 @@ public abstract class AbstractGameObject implements Updateable, Renderable, GLOb
 	}
 
 	/**
-	 * @return the chunk column index of the object
+	 * @return the chunk row index of the object
 	 */
-	public int chunkColumn() {
+	public int chunkRow() {
 		return this.position.y.asChunkIndex();
 	}
 
 	/**
-	 * @return the chunk row index of the object
+	 * @return the chunk column index of the object
 	 */
-	public int chunkRow() {
+	public int chunkColumn() {
 		return this.position.x.asChunkIndex();
 	}
 

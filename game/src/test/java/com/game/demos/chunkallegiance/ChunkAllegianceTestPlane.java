@@ -34,8 +34,8 @@ public class ChunkAllegianceTestPlane extends GFXTestPlane {
 
 		// Display attachments between objects and chunks
 		for (AbstractGameObject obj : this.levelObjects) {
-			int dx = (obj.chunkRow() * Chunk.SIZE) + (Chunk.SIZE / 2) - (int) obj.x();
-			int dy = (obj.chunkColumn() * Chunk.SIZE) + (Chunk.SIZE / 2) - (int) obj.y();
+			int dx = (obj.chunkColumn() * Chunk.SIZE) + (Chunk.SIZE / 2) - (int) obj.x();
+			int dy = (obj.chunkRow() * Chunk.SIZE) + (Chunk.SIZE / 2) - (int) obj.y();
 			LineRequest allegianceLineReq = new LineRequest(
 					new Line(dx, dy, OVERLAY_COLOR),
 					RenderLevel.WORLD_OVERLAY,
