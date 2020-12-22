@@ -1,7 +1,5 @@
 package com.game.engine.rendering.opengl;
 
-import java.util.Iterator;
-
 import com.game.engine.graphics.common.RenderRequest;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -76,10 +74,7 @@ public class JOGLCanvas extends GLCanvas implements GLEventListener {
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT);
 
 		// Draw render requests
-		Iterator<RenderRequest> renderIterator = this.processor.iterator();
-		while (renderIterator.hasNext()) {
-			RenderRequest request = renderIterator.next();
-
+		for (RenderRequest request : this.processor.requests()) {
 			// Refresh assets before drawing if asked
 			if (request.drawable.needsGLRefresh()) {
 				request.drawable.refresh(gl);

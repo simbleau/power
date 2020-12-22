@@ -2,7 +2,6 @@ package com.game.engine.rendering.common;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import com.game.engine.graphics.common.RenderRequest;
@@ -54,8 +53,8 @@ public abstract class AbstractProcessor {
 	/**
 	 * @return an iterator with the current render requests
 	 */
-	public Iterator<RenderRequest> iterator() {
-		return this.requests.iterator();
+	public Iterable<RenderRequest> requests() {
+		return this.requests;
 	}
 
 	/**

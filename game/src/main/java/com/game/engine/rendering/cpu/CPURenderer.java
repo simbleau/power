@@ -2,7 +2,6 @@ package com.game.engine.rendering.cpu;
 
 import java.awt.Canvas;
 import java.awt.Graphics;
-import java.util.Iterator;
 
 import com.game.engine.display.GameDisplay;
 import com.game.engine.graphics.common.RenderRequest;
@@ -62,9 +61,7 @@ public class CPURenderer extends AbstractRenderer {
 		// TODO
 
 		// Draw render requests
-		Iterator<RenderRequest> renderIterator = this.processor.iterator();
-		while (renderIterator.hasNext()) {
-			RenderRequest request = renderIterator.next();
+		for (RenderRequest request : this.processor.requests()) {
 			switch (request.level) {
 			case UI_PLUGIN:
 			case UI_OVERLAY:
