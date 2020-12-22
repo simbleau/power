@@ -122,38 +122,20 @@ public class Viewport {
 	 * @return the closest chunk row index visible by this viewport
 	 */
 	public int closestChunkRow() {
-		return this.origin.x.asChunkIndex();
+		return this.origin.y.asChunkIndex();
 	}
 
 	/**
 	 * @return the closest chunk column index visible by this viewport
 	 */
 	public int closestChunkColumn() {
-		return this.origin.y.asChunkIndex();
+		return this.origin.x.asChunkIndex();
 	}
 
 	/**
 	 * @return the furthest chunk row index visible by this viewport
 	 */
 	public int furthestChunkRow() {
-		int toX = (int) (this.origin.x() + (this.width / this.camera.zoom));
-		int toChunkX = (toX < 0) ? toX / Chunk.SIZE - 1 : toX / Chunk.SIZE;
-		if (toX % Chunk.SIZE == 0) {
-			// Viewport clips on the boundary of a new chunk, we will exclude that new
-			// chunk.
-			if (toX < 0) {
-				toChunkX++;
-			} else {
-				toChunkX--;
-			}
-		}
-		return toChunkX;
-	}
-
-	/**
-	 * @return the furthest chunk column index visible by this viewport
-	 */
-	public int furthestChunkColumn() {
 		int toY = (int) (this.origin.y() + (this.height / this.camera.zoom));
 		int toChunkY = (toY < 0) ? toY / Chunk.SIZE - 1 : toY / Chunk.SIZE;
 		if (toY % Chunk.SIZE == 0) {
@@ -166,6 +148,24 @@ public class Viewport {
 			}
 		}
 		return toChunkY;
+	}
+
+	/**
+	 * @return the furthest chunk column index visible by this viewport
+	 */
+	public int furthestChunkColumn() {
+		int toX = (int) (this.origin.x() + (this.width / this.camera.zoom));
+		int toChunkX = (toX < 0) ? toX / Chunk.SIZE - 1 : toX / Chunk.SIZE;
+		if (toX % Chunk.SIZE == 0) {
+			// Viewport clips on the boundary of a new chunk, we will exclude that new
+			// chunk.
+			if (toX < 0) {
+				toChunkX++;
+			} else {
+				toChunkX--;
+			}
+		}
+		return toChunkX;
 	}
 
 }

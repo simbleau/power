@@ -29,31 +29,38 @@ public class ChunkAllegianceTestPlane extends GFXTestPlane {
 	private static final Font DEMO_FONT = MockFonts.FONT_1;
 
 	@Override
+	public void update(GameDriver driver) {
+		super.update(driver);
+	}
+
+	@Override
 	public void stage(GameDriver driver, AbstractRenderer renderer) {
 		super.stage(driver, renderer);
 
 		// Display attachments between objects and chunks
-		for (AbstractGameObject obj : this.levelObjects) {
-			int dx = (obj.chunkColumn() * Chunk.SIZE) + (Chunk.SIZE / 2) - (int) obj.x();
-			int dy = (obj.chunkRow() * Chunk.SIZE) + (Chunk.SIZE / 2) - (int) obj.y();
-			LineRequest allegianceLineReq = new LineRequest(
-					new Line(dx, dy, OVERLAY_COLOR),
-					RenderLevel.WORLD_OVERLAY,
-					Integer.MAX_VALUE,
-					(int) obj.x(), (int) obj.y());
-			RectangleRequest boundingBoxReq = new RectangleRequest(
-					new Rectangle(obj.width(), obj.height(), OVERLAY_COLOR),
-					RenderLevel.WORLD_OVERLAY,
-					Integer.MAX_VALUE,
-					(int) obj.x(), (int) obj.y());
-			RectangleRequest originPointBoxReq = new RectangleRequest(
-					new Rectangle(20, 20, OVERLAY_COLOR),
-					RenderLevel.WORLD_OVERLAY,
-					Integer.MAX_VALUE,
-					(int) obj.x() - 10, (int) obj.y() - 10);
-			renderer.stage(allegianceLineReq);
-			renderer.stage(boundingBoxReq);
-			renderer.stage(originPointBoxReq);
+		for (Chunk c : this.chunker.viewableChunks()) {
+			for (AbstractGameObject obj : c.objects()) {
+				int dx = (obj.chunkColumn() * Chunk.SIZE) + (Chunk.SIZE / 2) - (int) obj.x();
+				int dy = (obj.chunkRow() * Chunk.SIZE) + (Chunk.SIZE / 2) - (int) obj.y();
+				LineRequest allegianceLineReq = new LineRequest(
+						new Line(dx, dy, OVERLAY_COLOR),
+						RenderLevel.WORLD_OVERLAY,
+						Integer.MAX_VALUE,
+						(int) obj.x(), (int) obj.y());
+				RectangleRequest boundingBoxReq = new RectangleRequest(
+						new Rectangle(obj.width(), obj.height(), OVERLAY_COLOR),
+						RenderLevel.WORLD_OVERLAY,
+						Integer.MAX_VALUE,
+						(int) obj.x(), (int) obj.y());
+				RectangleRequest originPointBoxReq = new RectangleRequest(
+						new Rectangle(20, 20, OVERLAY_COLOR),
+						RenderLevel.WORLD_OVERLAY,
+						Integer.MAX_VALUE,
+						(int) obj.x() - 10, (int) obj.y() - 10);
+				renderer.stage(allegianceLineReq);
+				renderer.stage(boundingBoxReq);
+				renderer.stage(originPointBoxReq);
+			}
 		}
 
 		// Display chunk co-ordinates

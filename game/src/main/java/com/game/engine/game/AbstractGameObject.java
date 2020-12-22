@@ -113,7 +113,7 @@ public abstract class AbstractGameObject implements Updateable, Renderable, GLOb
 		if (driver.getDisplay().isGL() && driver.game.plane.isChunked()) {
 			Chunker chunker = ((AbstractChunkedPlane) driver.game.plane).chunker;
 			Chunk from = chunker.chunks[this.chunkRow()][this.chunkColumn()];
-			Chunk to = chunker.chunks[targetPosition.x.asChunkIndex()][targetPosition.y.asChunkIndex()];
+			Chunk to = chunker.chunks[targetPosition.y.asChunkIndex()][targetPosition.x.asChunkIndex()];
 			if (chunker.viewableChunks.contains(from) && !chunker.viewableChunks.contains(to)) {
 				// Trash this object, it's going somewhere not viewable, but was previously
 				chunker.flagGLTrash(this);

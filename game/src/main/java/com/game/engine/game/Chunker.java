@@ -73,8 +73,8 @@ public class Chunker {
 		this.plane = plane;
 
 		// Initialize a buffer of chunks
-		this.rows = plane.width / Chunk.SIZE + (plane.width % Chunk.SIZE == 0 ? 0 : 1);
-		this.columns = plane.height / Chunk.SIZE + (plane.height % Chunk.SIZE == 0 ? 0 : 1);
+		this.rows = plane.height / Chunk.SIZE + (plane.height % Chunk.SIZE == 0 ? 0 : 1);
+		this.columns = plane.width / Chunk.SIZE + (plane.width % Chunk.SIZE == 0 ? 0 : 1);
 		this.chunks = new Chunk[rows][columns];
 
 		// Initialize a buffer for currently viewable chunks

@@ -74,8 +74,8 @@ public class TestChunker {
 		for (Chunker c : chunkers) {
 			c.init(TEST_DRIVER);
 
-			int expectedRows = c.plane.width / Chunk.SIZE + (c.plane.width % Chunk.SIZE == 0 ? 0 : 1);
-			int expectedColumns = c.plane.height / Chunk.SIZE + (c.plane.height % Chunk.SIZE == 0 ? 0 : 1);
+			int expectedRows = c.plane.height / Chunk.SIZE + (c.plane.height % Chunk.SIZE == 0 ? 0 : 1);
+			int expectedColumns = c.plane.width / Chunk.SIZE + (c.plane.width % Chunk.SIZE == 0 ? 0 : 1);
 
 			Assert.assertEquals(expectedRows, c.getRows());
 			Assert.assertEquals(expectedColumns, c.getColumns());
@@ -185,9 +185,9 @@ public class TestChunker {
 			c.chunk(TEST_DRIVER);
 
 			for (AbstractGameObject obj : c.plane.levelObjects) {
-				int chunkX = (int) obj.x() / Chunk.SIZE;
-				int chunkY = (int) obj.y() / Chunk.SIZE;
-				Assert.assertTrue(c.chunks[chunkX][chunkY].chunkObjects.contains(obj));
+				int chunkRow = obj.chunkRow();
+				int chunkColumn = obj.chunkColumn();
+				Assert.assertTrue(c.chunks[chunkRow][chunkColumn].chunkObjects.contains(obj));
 			}
 		}
 	}
@@ -222,10 +222,10 @@ public class TestChunker {
 				c.scan(TEST_DRIVER, cam);
 
 				// Declare the boundaries for chunks that may be in view
-				int fromRow = (int) cam.viewport.x() / Chunk.SIZE;
-				int toRow = (int) (cam.viewport.x() + cam.viewport.width() / cam.zoom()) / Chunk.SIZE;
-				int fromColumn = (int) cam.viewport.y() / Chunk.SIZE;
-				int toColumn = (int) (cam.viewport.y() + cam.viewport.height() / cam.zoom()) / Chunk.SIZE;
+				int fromRow = (int) cam.viewport.y() / Chunk.SIZE;
+				int toRow = (int) (cam.viewport.y() + cam.viewport.height() / cam.zoom()) / Chunk.SIZE;
+				int fromColumn = (int) cam.viewport.x() / Chunk.SIZE;
+				int toColumn = (int) (cam.viewport.x() + cam.viewport.width() / cam.zoom()) / Chunk.SIZE;
 
 				// Check all chunks are within bounds
 				for (Chunk next : c.viewableChunks()) {

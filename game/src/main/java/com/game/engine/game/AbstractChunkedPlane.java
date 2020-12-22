@@ -26,7 +26,7 @@ public abstract class AbstractChunkedPlane extends AbstractPlane {
 
 	/**
 	 * Construct an abstract plane
-	 * 
+	 *
 	 * @param width  - pixel width of the plane
 	 * @param height - pixel height of the plane
 	 */
@@ -44,7 +44,9 @@ public abstract class AbstractChunkedPlane extends AbstractPlane {
 		this.chunker.chunk(driver);
 
 		// Initialize all chunks
-		Stream.of(this.chunker.chunks).flatMap(Stream::of).forEach(chunk -> chunk.init(driver));
+		Stream.of(this.chunker.chunks)
+			.flatMap(Stream::of)
+			.forEach(chunk -> chunk.init(driver));
 
 		// Add memory listener if we are using OpenGL for dynamic memory handling
 		if (driver.getDisplay().isGL()) {
@@ -80,6 +82,7 @@ public abstract class AbstractChunkedPlane extends AbstractPlane {
 	public void stage(GameDriver driver, AbstractRenderer renderer) {
 		// Stage viewable chunks
 		for (Chunk chunk : this.chunker.viewableChunks()) {
+			PowerLogger.LOGGER.info("Staging chunk: r" + chunk.row + "c" + chunk.column);
 			chunk.stage(driver, renderer);
 		}
 	}
