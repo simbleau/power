@@ -65,7 +65,7 @@ public class ChunkAllegianceTestPlane extends GFXTestPlane {
 
 		// Display chunk co-ordinates
 		for (Chunk c : this.chunker.viewableChunks()) {
-			Label chunkLabel = new Label(DEMO_FONT, c.row + "," + c.column, OVERLAY_COLOR);
+			Label chunkLabel = new Label(DEMO_FONT, "r" + c.row + "c" + c.column, OVERLAY_COLOR);
 			LabelRequest chunkLabelRequest = new LabelRequest(
 					chunkLabel,
 					RenderLevel.WORLD_BACKGROUND,
