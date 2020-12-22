@@ -82,7 +82,6 @@ public abstract class AbstractChunkedPlane extends AbstractPlane {
 	public void stage(GameDriver driver, AbstractRenderer renderer) {
 		// Stage viewable chunks
 		for (Chunk chunk : this.chunker.viewableChunks()) {
-			PowerLogger.LOGGER.info("Staging chunk: r" + chunk.row + "c" + chunk.column);
 			chunk.stage(driver, renderer);
 		}
 	}
