@@ -7,7 +7,7 @@ import java.util.Random;
 import com.game.engine.camera.AbstractCamera;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractChunkedPlane;
-import com.game.engine.game.AbstractGameObject;
+import com.game.engine.game.AbstractMotionGameObject;
 import com.game.engine.game.Chunk;
 import com.game.engine.logger.PowerLogger;
 import com.game.engine.rendering.common.AbstractRenderer;
@@ -19,7 +19,7 @@ public class ChunkedTestPlane extends AbstractChunkedPlane {
 
 	static final int OBJ_SIZE = 3 * Chunk.SIZE / 5;
 
-	static final AbstractGameObject TEST_OBJ = new VerboseDemoUpdatingImage(OBJ_SIZE);
+	static final AbstractMotionGameObject TEST_OBJ = new VerboseDemoUpdatingImage(OBJ_SIZE);
 
 	static final int CHUNKS_WIDE = 3;
 
@@ -29,6 +29,9 @@ public class ChunkedTestPlane extends AbstractChunkedPlane {
 
 	public ChunkedTestPlane() {
 		super(Chunk.SIZE * 3, Chunk.SIZE * 3);
+
+		// Make the object motionless
+		TEST_OBJ.setSpeed(0);
 
 		// Add object to the map
 		this.levelObjects.add(TEST_OBJ);
