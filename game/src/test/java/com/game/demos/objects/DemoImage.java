@@ -4,8 +4,7 @@ import java.nio.file.Paths;
 import java.util.Random;
 
 import com.game.engine.driver.GameDriver;
-import com.game.engine.game.AbstractGameObject;
-import com.game.engine.game.AbstractPlane;
+import com.game.engine.game.AbstractMotionGameObject;
 import com.game.engine.graphics.common.Drawable;
 import com.game.engine.graphics.common.RenderRequest;
 import com.game.engine.graphics.obj.Image;
@@ -19,12 +18,12 @@ import com.jogamp.opengl.GL2;
  * @author Spencer Imbleau
  * @version December 2020
  */
-public class DemoImage extends AbstractGameObject {
+public class DemoImage extends AbstractMotionGameObject {
 
 	/**
-	 * The speed of the object
+	 * A default speed of the object
 	 */
-	private static int SPEED = 5;
+	private static double DEFAULT_SPEED = 0.05d;
 
 	/**
 	 * Some good ol' RNG.
@@ -42,6 +41,8 @@ public class DemoImage extends AbstractGameObject {
 	 * @param size - the size for the drawable
 	 */
 	public DemoImage(int size) {
+		this.speed = DEFAULT_SPEED;
+		this.direction = rng.nextDouble() * (2 * Math.PI);
 		this.width = size;
 		this.height = size;
 		this.drawable = null;
@@ -72,14 +73,13 @@ public class DemoImage extends AbstractGameObject {
 
 	@Override
 	public void update(GameDriver driver) {
-		AbstractPlane parent = driver.game.getPlane();
-
-		double dx = SPEED * rng.nextDouble() * ((rng.nextBoolean()) ? 1 : -1);
-		double dy = SPEED * rng.nextDouble() * ((rng.nextBoolean()) ? 1 : -1);
-
-		if (dx + dy != 0) {
-			this.move(driver, Math.max(0, Math.min(this.x() + dx, parent.width - this.width)),
-					Math.max(0, Math.min(this.y() + dy, parent.height - this.height)));
+		super.update(driver);
+		if (this.speed != 0) {
+			if (rng.nextBoolean()) {
+				this.turnCCW(Math.PI / driver.settings.getTicksPerSecond());
+			} else {
+				this.turnCW(Math.PI / driver.settings.getTicksPerSecond());
+			}
 		}
 	}
 

@@ -11,10 +11,10 @@ public class VerboseDemoUpdatingImage extends DemoUpdatingImage {
 
 	public VerboseDemoUpdatingImage(int size) {
 		super(size);
+		this.speed = 0;
 		int offsetX = (Chunk.SIZE / 2) - (this.width / 2);
 		int offsetY = (Chunk.SIZE / 2) - (this.width / 2);
 		this.position.set(Chunk.SIZE + offsetX, Chunk.SIZE + offsetY);
-		SPEED = 0;
 	}
 
 	@Override
