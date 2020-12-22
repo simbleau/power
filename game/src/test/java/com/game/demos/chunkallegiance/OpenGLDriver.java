@@ -1,5 +1,6 @@
 package com.game.demos.chunkallegiance;
 
+import com.game.demos.artifacts.DemoGame;
 import com.game.engine.cache.LRUCache;
 import com.game.engine.camera.DevCamera;
 import com.game.engine.display.DisplaySettingsFactory;
@@ -30,7 +31,7 @@ public class OpenGLDriver {
 		GameDriverFactory gdF = new GameDriverFactory();
 		gdF.setTps(tps);
 		gdF.setCache(new LRUCache(100));
-		gdF.setGame(new ChunkAllegianceTestGame(new ChunkAllegianceTestPlane()));
+		gdF.setGame(new DemoGame(new ChunkAllegianceTestPlane()));
 
 		// Setup the display settings
 		DisplaySettingsFactory dsF = new DisplaySettingsFactory();

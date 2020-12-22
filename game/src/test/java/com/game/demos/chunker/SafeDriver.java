@@ -1,5 +1,6 @@
 package com.game.demos.chunker;
 
+import com.game.demos.artifacts.DemoGame;
 import com.game.engine.cache.LRUCache;
 import com.game.engine.display.DisplaySettingsFactory;
 import com.game.engine.driver.GameDriver;
@@ -29,7 +30,7 @@ public class SafeDriver {
 		GameDriverFactory gdF = new GameDriverFactory();
 		gdF.setTps(tps);
 		gdF.setCache(new LRUCache(1));
-		gdF.setGame(new ChunkerTestGame(new ChunkedTestPlane()));
+		gdF.setGame(new DemoGame(new ChunkedTestPlane()));
 
 		// Setup the display settings
 		DisplaySettingsFactory dsF = new DisplaySettingsFactory();

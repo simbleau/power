@@ -1,5 +1,6 @@
 package com.game.demos.font;
 
+import com.game.demos.artifacts.DemoGame;
 import com.game.engine.cache.LRUCache;
 import com.game.engine.camera.StationaryCamera;
 import com.game.engine.display.DisplaySettingsFactory;
@@ -30,7 +31,7 @@ public class OpenGLDriver {
 		GameDriverFactory gdF = new GameDriverFactory();
 		gdF.setTps(tps);
 		gdF.setCache(new LRUCache(10));
-		gdF.setGame(new FontTestGame(new FontTestPlane()));
+		gdF.setGame(new DemoGame(new FontTestPlane()));
 
 		// Setup the display settings
 		DisplaySettingsFactory dsF = new DisplaySettingsFactory();

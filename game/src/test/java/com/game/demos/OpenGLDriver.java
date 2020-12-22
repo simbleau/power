@@ -2,7 +2,7 @@ package com.game.demos;
 
 import org.junit.Assert;
 
-import com.game.demos.gfxtest.GFXTestGame;
+import com.game.demos.artifacts.DemoGame;
 import com.game.demos.gfxtest.GFXTestPlane;
 import com.game.engine.cache.LRUCache;
 import com.game.engine.camera.DevCamera;
@@ -39,7 +39,7 @@ public class OpenGLDriver {
 			gdF.setFps(fps);
 		}
 		gdF.setCache(new LRUCache(1000));
-		gdF.setGame(new GFXTestGame(new GFXTestPlane()));
+		gdF.setGame(new DemoGame(new GFXTestPlane()));
 
 		// Setup the display settings
 		DisplaySettingsFactory dsF = new DisplaySettingsFactory();

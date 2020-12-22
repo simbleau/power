@@ -1,14 +1,24 @@
-package com.game.demos.font;
+package com.game.demos.artifacts;
 
 import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractGame;
 import com.game.engine.game.AbstractPlane;
 import com.game.engine.rendering.common.AbstractRenderer;
 
-@SuppressWarnings("javadoc")
-public class FontTestGame extends AbstractGame {
+/**
+ * A mock demo game
+ *
+ * @author Spencer Imbleau
+ * @version December 2020
+ */
+public class DemoGame extends AbstractGame {
 
-	public FontTestGame(AbstractPlane plane) {
+	/**
+	 * Construct a demo game
+	 *
+	 * @param plane - the plane for the game
+	 */
+	public DemoGame(AbstractPlane plane) {
 		super(480, 360, plane);
 	}
 
@@ -28,5 +38,5 @@ public class FontTestGame extends AbstractGame {
 	public void stage(GameDriver driver, AbstractRenderer renderer) {
 		super.stage(driver, renderer);
 	}
-
+	
 }
