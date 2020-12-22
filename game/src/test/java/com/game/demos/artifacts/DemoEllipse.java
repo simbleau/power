@@ -1,24 +1,23 @@
-package com.game.demos.objects;
+package com.game.demos.artifacts;
 
-import java.nio.file.Paths;
 import java.util.Random;
 
 import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractMotionGameObject;
 import com.game.engine.graphics.common.Drawable;
 import com.game.engine.graphics.common.RenderRequest;
-import com.game.engine.graphics.obj.Image;
+import com.game.engine.graphics.obj.Ellipse;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.common.RenderLevel;
 import com.jogamp.opengl.GL2;
 
 /**
- * A mock demo image
+ * A mock demo ellipse
  * 
  * @author Spencer Imbleau
  * @version December 2020
  */
-public class DemoImage extends AbstractMotionGameObject {
+public class DemoEllipse extends AbstractMotionGameObject {
 
 	/**
 	 * A default speed of the object
@@ -36,11 +35,11 @@ public class DemoImage extends AbstractMotionGameObject {
 	private Drawable drawable;
 
 	/**
-	 * Construct a demo image
+	 * Construct a demo ellipse
 	 * 
 	 * @param size - the size for the drawable
 	 */
-	public DemoImage(int size) {
+	public DemoEllipse(int size) {
 		this.speed = DEFAULT_SPEED;
 		this.direction = rng.nextDouble() * (2 * Math.PI);
 		this.width = size;
@@ -50,10 +49,7 @@ public class DemoImage extends AbstractMotionGameObject {
 
 	@Override
 	public void init(GameDriver driver) {
-		Image img = driver.cache.fetch(Paths.get("src", "test", "resources", "image.png").toString());
-		float sx = (float) this.width / img.getWidth();
-		float sy = (float) this.height / img.getHeight();
-		this.drawable = img.resize(sx, sy);
+		this.drawable = new Ellipse(this.width / 2, this.height / 2, 0xff000000 | rng.nextInt(0xffffff));
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package com.game.demos.chunker;
 
-import com.game.demos.objects.DemoUpdatingImage;
+import com.game.demos.artifacts.DemoUpdatingImage;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.game.Chunk;
 import com.game.engine.logger.PowerLogger;

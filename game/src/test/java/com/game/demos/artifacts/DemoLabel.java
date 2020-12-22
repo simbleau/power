@@ -1,4 +1,4 @@
-package com.game.demos.objects;
+package com.game.demos.artifacts;
 
 import java.util.Random;
 

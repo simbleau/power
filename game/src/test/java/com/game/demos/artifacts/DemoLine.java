@@ -1,4 +1,4 @@
-package com.game.demos.objects;
+package com.game.demos.artifacts;
 
 import java.util.Random;
 
@@ -6,18 +6,18 @@ import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractMotionGameObject;
 import com.game.engine.graphics.common.Drawable;
 import com.game.engine.graphics.common.RenderRequest;
-import com.game.engine.graphics.obj.Ellipse;
+import com.game.engine.graphics.obj.Line;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.common.RenderLevel;
 import com.jogamp.opengl.GL2;
 
 /**
- * A mock demo ellipse
+ * A mock demo line
  * 
  * @author Spencer Imbleau
  * @version December 2020
  */
-public class DemoEllipse extends AbstractMotionGameObject {
+public class DemoLine extends AbstractMotionGameObject {
 
 	/**
 	 * A default speed of the object
@@ -35,11 +35,11 @@ public class DemoEllipse extends AbstractMotionGameObject {
 	private Drawable drawable;
 
 	/**
-	 * Construct a demo ellipse
+	 * Construct a demo line
 	 * 
 	 * @param size - the size for the drawable
 	 */
-	public DemoEllipse(int size) {
+	public DemoLine(int size) {
 		this.speed = DEFAULT_SPEED;
 		this.direction = rng.nextDouble() * (2 * Math.PI);
 		this.width = size;
@@ -49,7 +49,7 @@ public class DemoEllipse extends AbstractMotionGameObject {
 
 	@Override
 	public void init(GameDriver driver) {
-		this.drawable = new Ellipse(this.width / 2, this.height / 2, 0xff000000 | rng.nextInt(0xffffff));
+		this.drawable = new Line(this.width, this.height, 0xff000000 | rng.nextInt(0xffffff));
 	}
 
 	@Override

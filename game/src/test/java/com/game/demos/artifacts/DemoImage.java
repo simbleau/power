@@ -1,23 +1,24 @@
-package com.game.demos.objects;
+package com.game.demos.artifacts;
 
+import java.nio.file.Paths;
 import java.util.Random;
 
 import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractMotionGameObject;
 import com.game.engine.graphics.common.Drawable;
 import com.game.engine.graphics.common.RenderRequest;
-import com.game.engine.graphics.obj.Rectangle;
+import com.game.engine.graphics.obj.Image;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.common.RenderLevel;
 import com.jogamp.opengl.GL2;
 
 /**
- * A mock demo rectangle
+ * A mock demo image
  * 
  * @author Spencer Imbleau
  * @version December 2020
  */
-public class DemoRectangle extends AbstractMotionGameObject {
+public class DemoImage extends AbstractMotionGameObject {
 
 	/**
 	 * A default speed of the object
@@ -35,11 +36,11 @@ public class DemoRectangle extends AbstractMotionGameObject {
 	private Drawable drawable;
 
 	/**
-	 * Construct a demo rectangle
+	 * Construct a demo image
 	 * 
 	 * @param size - the size for the drawable
 	 */
-	public DemoRectangle(int size) {
+	public DemoImage(int size) {
 		this.speed = DEFAULT_SPEED;
 		this.direction = rng.nextDouble() * (2 * Math.PI);
 		this.width = size;
@@ -49,7 +50,10 @@ public class DemoRectangle extends AbstractMotionGameObject {
 
 	@Override
 	public void init(GameDriver driver) {
-		this.drawable = new Rectangle(this.width, this.height, 0xff000000 | rng.nextInt(0xffffff));
+		Image img = driver.cache.fetch(Paths.get("src", "test", "resources", "image.png").toString());
+		float sx = (float) this.width / img.getWidth();
+		float sy = (float) this.height / img.getHeight();
+		this.drawable = img.resize(sx, sy);
 	}
 
 	@Override

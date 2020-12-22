@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.game.demos.objects.DemoLabel;
+import com.game.demos.artifacts.DemoLabel;
 import com.game.engine.camera.AbstractCamera;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractGameObject;

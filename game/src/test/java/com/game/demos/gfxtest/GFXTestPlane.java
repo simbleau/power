@@ -2,12 +2,12 @@ package com.game.demos.gfxtest;
 
 import java.util.Random;
 
-import com.game.demos.objects.DemoEllipse;
-import com.game.demos.objects.DemoImage;
-import com.game.demos.objects.DemoLabel;
-import com.game.demos.objects.DemoLine;
-import com.game.demos.objects.DemoRectangle;
-import com.game.demos.objects.DemoUpdatingImage;
+import com.game.demos.artifacts.DemoEllipse;
+import com.game.demos.artifacts.DemoImage;
+import com.game.demos.artifacts.DemoLabel;
+import com.game.demos.artifacts.DemoLine;
+import com.game.demos.artifacts.DemoRectangle;
+import com.game.demos.artifacts.DemoUpdatingImage;
 import com.game.engine.camera.AbstractCamera;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractChunkedPlane;
