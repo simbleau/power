@@ -7,9 +7,8 @@ import java.util.List;
 import com.game.demos.objects.DemoLabel;
 import com.game.engine.camera.AbstractCamera;
 import com.game.engine.driver.GameDriver;
-import com.game.engine.game.AbstractChunkedPlane;
 import com.game.engine.game.AbstractGameObject;
-import com.game.engine.game.Chunk;
+import com.game.engine.game.AbstractPlane;
 import com.game.engine.graphics.obj.Rectangle;
 import com.game.engine.graphics.obj.fonts.Glyph;
 import com.game.engine.input.MouseKeyboard;
@@ -17,26 +16,30 @@ import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.common.RenderLevel;
 
 @SuppressWarnings("javadoc")
-public class FontTestPlane extends AbstractChunkedPlane {
+public class FontTestPlane extends AbstractPlane {
 
-	static final int OBJ_SIZE = Chunk.SIZE;
+	private final DemoLabel characterLabel = new DemoLabel("?", 250);
+	private final DemoLabel keycodeLabel = new DemoLabel("Type something", 250);
 
-	private final DemoLabel characterLabel = new DemoLabel("?", OBJ_SIZE / 2);
-	private final DemoLabel keycodeLabel = new DemoLabel("Type something", OBJ_SIZE / 2);
+	private final DemoLabel ctrlLabel = new DemoLabel("CTRL", 100);
+	private final DemoLabel shiftLabel = new DemoLabel("SHIFT", 100);
+	private final DemoLabel altLabel = new DemoLabel("ALT", 100);
 
-	private final DemoLabel ctrlLabel = new DemoLabel("CTRL", OBJ_SIZE / 5);
-	private final DemoLabel shiftLabel = new DemoLabel("SHIFT", OBJ_SIZE / 5);
-	private final DemoLabel altLabel = new DemoLabel("ALT", OBJ_SIZE / 5);
-	
 	private boolean ctrlDown = false;
 	private boolean shiftDown = false;
 	private boolean altDown = false;
 
 	public FontTestPlane() {
 		super(500, 500);
+
+		this.characterLabel.setSpeed(0);
+		this.keycodeLabel.setSpeed(0);
+		this.ctrlLabel.setSpeed(0);
+		this.shiftLabel.setSpeed(0);
+		this.altLabel.setSpeed(0);
+
 		this.levelObjects.add(characterLabel);
 		this.levelObjects.add(keycodeLabel);
-
 		this.levelObjects.add(ctrlLabel);
 		this.levelObjects.add(shiftLabel);
 		this.levelObjects.add(altLabel);
@@ -55,7 +58,6 @@ public class FontTestPlane extends AbstractChunkedPlane {
 		this.shiftDown = false;
 		this.ctrlDown = false;
 		this.altDown = false;
-		
 
 		MouseKeyboard input = (MouseKeyboard) driver.getInput();
 		for (int i = 0; i < MouseKeyboard.NUM_KEYS; i++) {
@@ -67,7 +69,7 @@ public class FontTestPlane extends AbstractChunkedPlane {
 				break;
 			}
 		}
-		
+
 		if (driver.getInput().isKeyActive(KeyEvent.VK_SHIFT)) {
 			this.shiftDown = true;
 		}
@@ -126,7 +128,7 @@ public class FontTestPlane extends AbstractChunkedPlane {
 			yOffset += obj.height() + vPadding;
 			obj.move(driver, offsetX, offsetY);
 		}
-		
+
 		// Vertical objects
 		List<AbstractGameObject> hObjects = new ArrayList<>();
 		hObjects.add(this.ctrlLabel);
@@ -145,6 +147,6 @@ public class FontTestPlane extends AbstractChunkedPlane {
 			xOffset += obj.width() + vPadding;
 			obj.move(driver, offsetX, offsetY);
 		}
-		
+
 	}
 }
