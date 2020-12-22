@@ -52,14 +52,24 @@ public class GameDriver implements Runnable {
 	private Thread thread;
 
 	/**
-	 * The frames per second
-	 */
-	private int fps;
-
-	/**
 	 * Whether the game is running
 	 */
 	private boolean isRunning;
+
+	/**
+	 * The last instant the game updated.
+	 */
+	private Instant lastUpdate;
+
+	/**
+	 * The last instant a frame started to render.
+	 */
+	private Instant lastFrameStarted;
+
+	/**
+	 * The last duration a frame was on screen.
+	 */
+	private Duration lastFrameTime;
 
 	/**
 	 * Construct the game driver
@@ -76,7 +86,9 @@ public class GameDriver implements Runnable {
 		this.input = null;
 		this.thread = null;
 		this.isRunning = false;
-		this.fps = 0;
+		this.lastUpdate = Instant.MIN;
+		this.lastFrameStarted = Instant.MIN;
+		this.lastFrameTime = Duration.ZERO;
 	}
 
 	/**
@@ -144,10 +156,10 @@ public class GameDriver implements Runnable {
 		// The amount of time passed since the last frame rendered
 		Duration durationSinceLastRender = Duration.ZERO;
 
-		// Variables for tracking FPS
-		Duration frameTime = Duration.ZERO;
-		int frames = 0;
-		this.fps = 0;
+		// Reset variables for tracking frames
+		this.lastUpdate = Instant.now();
+		this.lastFrameStarted = Instant.now();
+		this.lastFrameTime = Duration.ZERO;
 
 		// Buffer for whether to render
 		boolean render = true;
@@ -167,8 +179,6 @@ public class GameDriver implements Runnable {
 					durationSinceLastRender = durationSinceLastRender.plus(durationPassed);
 					render = durationSinceLastRender.toNanos() >= settings.getFrameDuration().toNanos();
 				}
-				// Keep track of FPS
-				frameTime = frameTime.plus(durationPassed);
 
 				// Catch up on game ticks if behind
 				while (durationSinceLastUpdate.toNanos() >= settings.getTickDuration().toNanos()) {
@@ -177,22 +187,19 @@ public class GameDriver implements Runnable {
 					this.display.settings.getCamera().update(this);
 					this.game.update(this);
 					this.input.update();
-				}
-
-				// Check if we have surpassed a second of time for FPS measurement
-				if (frameTime.getSeconds() >= 1) {
-					this.fps = frames;
-					frameTime = Duration.ZERO;
-					frames = 0;
+					this.lastUpdate = Instant.now();
 				}
 
 				// Render if allowed
 				if (render || !settings.isFpsRestricted()) {
 					// Collect render requests
 					this.game.stage(this, this.display.getRenderer());
+					// Measure frame rendering
+					Instant now = Instant.now();
+					this.lastFrameTime = Duration.between(this.lastFrameStarted, now);
+					this.lastFrameStarted = now;
 					// Render the screen
 					this.display.getRenderer().render();
-					frames++;
 
 					// If FPS is restricted, keep track
 					if (settings.isFpsRestricted()) {
@@ -244,10 +251,17 @@ public class GameDriver implements Runnable {
 	}
 
 	/**
-	 * @return the frames per second
+	 * @return the duration the last frame was on screen
 	 */
-	public int getFps() {
-		return this.fps;
+	public Duration getFrameTime() {
+		return this.lastFrameTime;
+	}
+
+	/**
+	 * @return the current delta time between rendering and the last update
+	 */
+	public Duration getFrameDt() {
+		return Duration.between(this.lastUpdate, this.lastFrameStarted);
 	}
 
 	/**

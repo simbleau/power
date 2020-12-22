@@ -1,5 +1,7 @@
 package com.game.engine.driver;
 
+import java.time.Duration;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -136,11 +138,11 @@ public class TestGameDriver {
 	}
 
 	/**
-	 * Test {@link GameDriver#getFps()}.
+	 * Test {@link GameDriver#getFrameTime()}.
 	 */
 	@Test
-	public void testGetFps() {
-		Assert.assertEquals(0, d.getFps());
+	public void testGetFrameTime() {
+		Assert.assertEquals(0, d.getFrameTime().toMillis());
 		d.start(TEST_DISPLAY_SETTINGS);
 		try {
 			// Give an appropriate amount of time to determine an FPS count
@@ -152,11 +154,11 @@ public class TestGameDriver {
 
 		// Test we are near the target goal
 		if (d.settings.isFpsRestricted()) {
-			int delta = Math.abs(d.getFps() - d.settings.getFPSGoal()); // Deviation from fps goal to true fps
-			Assert.assertTrue(delta <= ACCEPTABLE_FRAME_DEVIATION);
+			Duration delta = d.getFrameTime().minus(d.settings.getFrameDuration()); // Deviation from fps goal to true fps
+			Assert.assertTrue(Math.abs(delta.toMillis()) <= ACCEPTABLE_FRAME_DEVIATION);
 		} else {
 			// Test frames were rendered
-			Assert.assertTrue(d.getFps() > 0);
+			Assert.assertTrue(d.getFrameTime().toMillis() > 0);
 		}
 	}
 

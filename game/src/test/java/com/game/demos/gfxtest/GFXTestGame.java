@@ -20,8 +20,8 @@ public class GFXTestGame extends AbstractGame {
 	@Override
 	public void update(GameDriver driver) {
 		super.update(driver);
-		driver.getDisplay()
-				.setFrameTitle(driver.getDisplay().settings.getRenderingMode() + " - FPS : " + driver.getFps());
+		driver.getDisplay().setFrameTitle(driver.getDisplay().settings.getRenderingMode() + " - FrameTime : "
+				+ driver.getFrameTime().toMillis() + "ms");
 	}
 
 	@Override
