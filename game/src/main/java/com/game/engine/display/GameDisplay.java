@@ -223,6 +223,6 @@ public class GameDisplay {
 	 * @return true if the renderer is a safe renderer, false otherwise
 	 */
 	public boolean isSafe() {
-		return this.settings.getRenderingMode() == RenderMode.OPENGL;
+		return this.settings.getRenderingMode() == RenderMode.SAFE;
 	}
 }
