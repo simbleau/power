@@ -18,11 +18,11 @@ public class EllipseRequest extends RenderRequest {
 	 *
 	 * @param ellipse - the ellipse to render
 	 * @param level   - the render level
-	 * @param cx      - The center x coordinate to render at
-	 * @param cy      - The centery coordinate to render at
+	 * @param x       - The x coordinate to render at
+	 * @param y       - The y coordinate to render at
 	 */
-	public EllipseRequest(Ellipse ellipse, RenderLevel level, int cx, int cy) {
-		super(ellipse, level, cy + ellipse.getRy() * 2, cx, cy);
+	public EllipseRequest(Ellipse ellipse, RenderLevel level, int x, int y) {
+		super(ellipse, level, y + ellipse.getRy() * 2, x, y);
 	}
 
 	/**
@@ -31,11 +31,11 @@ public class EllipseRequest extends RenderRequest {
 	 * @param ellipse - the ellipse to render
 	 * @param level   - the render level
 	 * @param depth   - a special depth
-	 * @param cx      - The center x coordinate to render at
-	 * @param cy      - The center y coordinate to render at
+	 * @param x       - The x coordinate to render at
+	 * @param y       - The y coordinate to render at
 	 */
-	public EllipseRequest(Ellipse ellipse, RenderLevel level, int depth, int cx, int cy) {
-		super(ellipse, level, depth, cx, cy);
+	public EllipseRequest(Ellipse ellipse, RenderLevel level, int depth, int x, int y) {
+		super(ellipse, level, depth, x, y);
 	}
 
 }

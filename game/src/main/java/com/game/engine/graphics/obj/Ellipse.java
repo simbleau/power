@@ -177,13 +177,13 @@ public class Ellipse implements Drawable {
 	}
 
 	@Override
-	public RenderRequest asRequest(RenderLevel level, int cx, int cy) {
-		return new EllipseRequest(this, level, cx, cy);
+	public RenderRequest asRequest(RenderLevel level, int x, int y) {
+		return new EllipseRequest(this, level, x, y);
 	}
 
 	@Override
-	public RenderRequest asRequest(RenderLevel level, int depth, int cx, int cy) {
-		return new EllipseRequest(this, level, depth, cx, cy);
+	public RenderRequest asRequest(RenderLevel level, int depth, int x, int y) {
+		return new EllipseRequest(this, level, depth, x, y);
 	}
 
 }
