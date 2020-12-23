@@ -22,14 +22,14 @@ public class GFXTestPlane extends AbstractChunkedPlane {
 
 	private static final int SIZE = 3 * Chunk.SIZE / 5;
 
-	private static final AbstractGameObject objects[] = { new DemoUpdatingImage(SIZE), new DemoImage(SIZE),
+	private static final AbstractGameObject OBJECTS[] = { new DemoUpdatingImage(SIZE), new DemoImage(SIZE),
 			new DemoEllipse(SIZE), new DemoRectangle(SIZE), new DemoLine(SIZE), new DemoLabel(SIZE) };
 
 	public GFXTestPlane() {
-		super(Chunk.SIZE * objects.length, Chunk.SIZE * objects.length);
+		super(Chunk.SIZE * OBJECTS.length, Chunk.SIZE * OBJECTS.length);
 
 		// Add graphic objects on the map
-		for (AbstractGameObject obj : objects) {
+		for (AbstractGameObject obj : OBJECTS) {
 			this.levelObjects.add(obj);
 		}
 	}
@@ -47,8 +47,8 @@ public class GFXTestPlane extends AbstractChunkedPlane {
 		cam.lookAt(this.width / 2, this.height / 2);
 
 		// Move all objects into diagonal position
-		for (int i = 0; i < objects.length; i++) {
-			AbstractGameObject obj = objects[i];
+		for (int i = 0; i < OBJECTS.length; i++) {
+			AbstractGameObject obj = OBJECTS[i];
 			int offsetX = (Chunk.SIZE / 2) - (obj.width() / 2);
 			int offsetY = (Chunk.SIZE / 2) - (obj.height() / 2);
 			obj.move(driver, (Chunk.SIZE * i) + offsetX, (Chunk.SIZE * i) + offsetY);
