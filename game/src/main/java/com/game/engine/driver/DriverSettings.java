@@ -115,8 +115,12 @@ public class DriverSettings {
 	 * Set the ticks per second
 	 *
 	 * @param tps - the ticks per second
+	 * @throws IllegalArgumentException if you provide a non-positive integer
 	 */
 	public void setTicksPerSecond(int tps) {
+		if (tps <= 0) {
+			throw new IllegalArgumentException("Ticks per second must be a positive integer");
+		}
 		this.ticksPerSecond = tps;
 		this.tickDuration = Duration.ofSeconds(1).dividedBy(tps);
 	}
