@@ -46,6 +46,7 @@ public class SafeDriver {
 
 		// Start the game
 		GameDriver driver = gdF.get();
-		driver.start(dsF.get());
+		driver.init(dsF.get());
+		driver.start();
 	}
 }

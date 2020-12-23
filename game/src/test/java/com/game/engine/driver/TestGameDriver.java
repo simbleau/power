@@ -133,7 +133,7 @@ public class TestGameDriver {
 	public void testGetDisplay() {
 		// Test
 		Assert.assertNull(d.getDisplay());
-		d.start(TEST_DISPLAY_SETTINGS);
+		d.init(TEST_DISPLAY_SETTINGS);
 		Assert.assertNotNull(d.getDisplay());
 	}
 
@@ -143,7 +143,8 @@ public class TestGameDriver {
 	@Test
 	public void testGetFrameTime() {
 		Assert.assertEquals(0, d.getFrameTime().toMillis());
-		d.start(TEST_DISPLAY_SETTINGS);
+		d.init(TEST_DISPLAY_SETTINGS);
+		d.start();
 		try {
 			// Give an appropriate amount of time to determine an FPS count
 			Thread.sleep(TEST_SECONDS * 1000);
@@ -169,7 +170,7 @@ public class TestGameDriver {
 	public void testGetInput() {
 		// Test
 		Assert.assertNull(d.getInput());
-		d.start(TEST_DISPLAY_SETTINGS);
+		d.init(TEST_DISPLAY_SETTINGS);
 		Assert.assertNotNull(d.getInput());
 	}
 
@@ -179,7 +180,9 @@ public class TestGameDriver {
 	@Test
 	public void testIsRunning() {
 		Assert.assertFalse(d.isRunning());
-		d.start(TEST_DISPLAY_SETTINGS);
+		d.init(TEST_DISPLAY_SETTINGS);
+		Assert.assertFalse(d.isRunning());
+		d.start();
 		Assert.assertTrue(d.isRunning());
 		d.stop();
 		Assert.assertFalse(d.isRunning());
@@ -190,7 +193,8 @@ public class TestGameDriver {
 	 */
 	@Test
 	public void testStart() {
-		d.start(TEST_DISPLAY_SETTINGS);
+		d.init(TEST_DISPLAY_SETTINGS);
+		d.start();
 		Assert.assertTrue(d.isRunning());
 		try {
 			Thread.sleep(TEST_SECONDS * 1000);
@@ -214,7 +218,8 @@ public class TestGameDriver {
 	 */
 	@Test
 	public void testStop() {
-		d.start(TEST_DISPLAY_SETTINGS);
+		d.init(TEST_DISPLAY_SETTINGS);
+		d.start();
 		d.stop();
 		Assert.assertFalse(d.isRunning());
 	}

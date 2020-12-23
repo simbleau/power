@@ -92,11 +92,11 @@ public class GameDriver implements Runnable {
 	}
 
 	/**
-	 * Start the game loop
+	 * Initializes the game driver.
 	 *
-	 * @param displaySettings - display settings for the game
+	 * @param displaySettings - display settings for the driver
 	 */
-	public void start(DisplaySettings displaySettings) {
+	public void init(DisplaySettings displaySettings) {
 		// Start the logger
 		PowerLogger.start();
 
@@ -109,22 +109,31 @@ public class GameDriver implements Runnable {
 
 		// Start input listening
 		this.input = new MouseKeyboard(this);
+	}
 
-		// Start the game
+	/**
+	 * Start the game loop on a new thread.
+	 *
+	 * @param displaySettings - display settings for the game
+	 */
+	public void start() {
+		this.isRunning = true;
+
+		// Thread the game loop
 		this.thread = new Thread(this);
 		this.thread.start();
-		this.isRunning = true;
 	}
 
 	/**
 	 * Stop the game loop.
 	 */
 	public void stop() {
-		// Stop the game
+		this.isRunning = false;
+
+		// Stop the game thread
 		if (this.thread != null) {
 			this.thread.interrupt();
 		}
-		this.isRunning = false;
 
 		// Dispose resources - This does not close the display.
 		if (this.display != null) {
@@ -136,15 +145,12 @@ public class GameDriver implements Runnable {
 	}
 
 	/**
-	 * Run the game loop. This should not be called by the developer, instead invoke
-	 * start, which spawns a thread to call this runnable.
-	 * 
+	 * Run the game loop on the called thread.
+	 *
 	 * @see GameDriver#start(DisplaySettings)
 	 */
 	@Override
 	public void run() {
-		this.isRunning = true;
-
 		// The buffer for our current time
 		Instant instant;
 		// The last time since the game loop ran

@@ -31,6 +31,7 @@ public class SafeDriver {
 	 */
 	public static void main(String[] args) {
 		GameDriver driver = DemoDriverSupport.getDefault(DEMO_GAME);
-		driver.start(DemoDisplaySupport.getDefaultSafe());
+		driver.init(DemoDisplaySupport.getDefaultSafe());
+		driver.start();
 	}
 }

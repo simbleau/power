@@ -26,6 +26,7 @@ public class OpenGLDriver {
 	 */
 	public static void main(String[] args) {
 		GameDriver driver = DemoDriverSupport.getDefault(DEMO_GAME);
-		driver.start(DemoDisplaySupport.getDefaultOpenGL());
+		driver.init(DemoDisplaySupport.getDefaultOpenGL());
+		driver.start();
 	}
 }

@@ -49,7 +49,8 @@ public class TestAbstractCamera {
 	 */
 	@BeforeClass
 	public static void setup() {
-		TEST_DRIVER.start(TEST_DISPLAY_SETTINGS);
+		TEST_DRIVER.init(TEST_DISPLAY_SETTINGS);
+		TEST_DRIVER.start();
 	}
 
 	/**
