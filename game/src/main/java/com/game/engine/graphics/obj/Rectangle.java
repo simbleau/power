@@ -123,6 +123,11 @@ public class Rectangle implements Drawable {
 		int width = (int) (this.width * sx);
 		int height = (int) (this.height * sy);
 
+		// Don't render anything with a width or height of 0
+		if (width == 0 || height == 0) {
+			return;
+		}
+
 		// Don't render off-screen rectangles
 		if (x < -width)
 			return;
@@ -147,10 +152,12 @@ public class Rectangle implements Drawable {
 
 		// Draw
 		for (int yi = yStart; yi < height; yi++) {
+			// Vertical bars
 			processor.setPixel(x, y + yi, this.argb);
 			processor.setPixel(x + (width - 1), y + yi, this.argb);
 		}
 		for (int xi = xStart; xi < width; xi++) {
+			// Horizontal bars
 			processor.setPixel(x + xi, y, this.argb);
 			processor.setPixel(x + xi, y + (height - 1), this.argb);
 		}
