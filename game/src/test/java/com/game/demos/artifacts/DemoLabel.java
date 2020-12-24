@@ -25,7 +25,7 @@ public class DemoLabel extends AbstractMotionGameObject {
 	/**
 	 * A demo font.
 	 */
-	private static final Font TEST_FONT = MockFonts.FONT_1;
+	private static final Font TEST_FONT = MockFonts.FONT_256;
 
 	/**
 	 * Some demo text to render.

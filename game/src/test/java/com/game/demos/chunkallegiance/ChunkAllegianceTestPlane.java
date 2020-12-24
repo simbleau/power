@@ -26,7 +26,7 @@ public class ChunkAllegianceTestPlane extends GFXTestPlane {
 	/**
 	 * The font to display text in this demo
 	 */
-	private static final Font DEMO_FONT = MockFonts.FONT_1;
+	private static final Font DEMO_FONT = MockFonts.FONT_256;
 
 	@Override
 	public void update(GameDriver driver) {

@@ -22,7 +22,7 @@ public class TestGlyphReader {
 	/**
 	 * A path to an arbitrary glyph sheet image.
 	 */
-	private static final String TEST_FONT_PATH = Paths.get("src", "test", "resources", "font.png").toString();
+	private static final String TEST_FONT_PATH = Paths.get("src", "test", "resources", "font_ascii.png").toString();
 
 	/**
 	 * A cache to retrieve the glyph sheet image.
