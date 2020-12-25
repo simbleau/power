@@ -25,7 +25,7 @@ public class TestGlyphSheet {
 	 * An arbitrary glyph sheet image.
 	 */
 	private static final BufferedImage TEST_GLYPHSHEET_IMAGE = new LRUCache(0)
-			.fetch(Paths.get("src", "test", "resources", "font.png").toString()).getBufferedImage();
+			.fetch(Paths.get("src", "test", "resources", "font_ascii.png").toString()).getBufferedImage();
 
 	/**
 	 * An arbitrary glyph sequence.
