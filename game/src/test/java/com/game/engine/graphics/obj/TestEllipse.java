@@ -37,7 +37,7 @@ public class TestEllipse {
 	 * The acceptable deviation, in pixels, for an drawable pixel to be from the
 	 * true intended position.
 	 */
-	private static final double ACCEPTABLE_DEVIANCE = 0.99d;
+	private static final double ACCEPTABLE_DEVIANCE = 1d; // Only allowed 1 pixel of error
 
 	/**
 	 * Tests {@link Ellipse#Ellipse(int, int, int)}.
@@ -113,10 +113,10 @@ public class TestEllipse {
 
 		// Collect the rendered pixels
 		List<GraphicTestUtil.PixelPosition> pixels = new ArrayList<>();
-		for (int x = 0; x < pixelMap.length; x++) {
-			for (int y = 0; y < pixelMap[x].length; y++) {
-				if (pixelMap[x][y]) {
-					pixels.add(new GraphicTestUtil.PixelPosition(x, y));
+		for (int row = 0; row < pixelMap.length; row++) {
+			for (int col = 0; col < pixelMap[row].length; col++) {
+				if (pixelMap[row][col]) {
+					pixels.add(new GraphicTestUtil.PixelPosition(col, row));
 				}
 			}
 		}
