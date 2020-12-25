@@ -42,8 +42,8 @@ public class DemoEllipse extends AbstractMotionGameObject {
 	public DemoEllipse(int size) {
 		this.speed = DEFAULT_SPEED;
 		this.direction = rng.nextDouble() * (2 * Math.PI);
-		this.width = size;
-		this.height = size;
+		this.width = size + 1; //+1 for the origin
+		this.height = size + 1; // +1 for the origin
 		this.drawable = null;
 	}
 
