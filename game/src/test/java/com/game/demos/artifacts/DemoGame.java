@@ -30,7 +30,7 @@ public class DemoGame extends AbstractGame {
 	@Override
 	public void update(GameDriver driver) {
 		super.update(driver);
-		driver.getDisplay().setFrameTitle(driver.getDisplay().settings.getRenderingMode() + " - FrameTime : "
+		driver.getDisplay().setFrameTitle(driver.getDisplay().getRenderer().getMode() + " - FrameTime : "
 				+ driver.getFrameTime().toMillis() + "ms");
 	}
 

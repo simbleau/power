@@ -3,9 +3,10 @@ package com.game.engine.rendering.cpu;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import com.game.engine.display.GameDisplay;
+import com.game.engine.camera.AbstractCamera;
 import com.game.engine.graphics.common.RenderRequest;
 import com.game.engine.rendering.common.AbstractRenderer;
+import com.game.engine.rendering.common.RenderMode;
 
 /**
  * A CPU based renderer which has no hardware acceleration. Used primarily for
@@ -29,10 +30,10 @@ public class CPURenderer extends AbstractRenderer {
 	/**
 	 * Initialize a CPU renderer
 	 *
-	 * @param display - the display to render for
+	 * @param camera - the camera used for rendering
 	 */
-	public CPURenderer(GameDisplay display) {
-		super(display);
+	public CPURenderer(AbstractCamera camera) {
+		super(camera);
 
 		// Initialize the graphics processor
 		this.processor = new CPUProcessor(this);
@@ -112,5 +113,10 @@ public class CPURenderer extends AbstractRenderer {
 	@Override
 	public CPUProcessor getProcessor() {
 		return this.processor;
+	}
+
+	@Override
+	public RenderMode getMode() {
+		return RenderMode.SAFE;
 	}
 }

@@ -56,13 +56,13 @@ public class GameDisplay {
 		this.frame = null;
 
 		// Select renderer
-		switch (this.settings.getRenderingMode()) {
+		switch (this.settings.getPreferredMode()) {
 		case OPENGL:
-			this.renderer = new JOGLRenderer(this);
+			this.renderer = new JOGLRenderer(this.settings.getPreferredCamera());
 			break;
 		case SAFE:
 		default:
-			this.renderer = new CPURenderer(this);
+			this.renderer = new CPURenderer(this.settings.getPreferredCamera());
 			break;
 		}
 	}
@@ -75,11 +75,10 @@ public class GameDisplay {
 		try {
 			this.renderer.init();
 		} catch (Exception e) {
-			PowerLogger.LOGGER.log(Level.WARNING, "Expected rendering context "
-					+ this.renderer.display.settings.getRenderingMode() + " could not be initialized", e);
+			PowerLogger.LOGGER.log(Level.WARNING, "Expected graphic mode '"
+					+ this.renderer.getMode() + "' could not be initialized", e);
 			// Default to safe mode
-			this.settings.setRenderingMode(RenderMode.SAFE);
-			this.renderer = new CPURenderer(this);
+			this.renderer = new CPURenderer(this.settings.getPreferredCamera());
 			try {
 				// There's no recovering from this if it fails
 				this.renderer.init();
@@ -213,16 +212,16 @@ public class GameDisplay {
 	}
 
 	/**
-	 * @return true if the renderer is an OpenGL renderer, false otherwise
+	 * @return true if the graphic renderer is an OpenGL renderer, false otherwise
 	 */
 	public boolean isGL() {
-		return this.settings.getRenderingMode() == RenderMode.OPENGL;
+		return this.getRenderer().getMode() == RenderMode.OPENGL;
 	}
 
 	/**
-	 * @return true if the renderer is a safe renderer, false otherwise
+	 * @return true if the graphic renderer is a safe renderer, false otherwise
 	 */
 	public boolean isSafe() {
-		return this.settings.getRenderingMode() == RenderMode.SAFE;
+		return this.getRenderer().getMode() == RenderMode.SAFE;
 	}
 }

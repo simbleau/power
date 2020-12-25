@@ -113,7 +113,7 @@ public class TestGameDisplay {
 	@Test
 	public void testGetRenderer() {
 		// Test render was correctly set
-		switch (TEST_DISPLAY_SETTINGS.getRenderingMode()) {
+		switch (TEST_DISPLAY_SETTINGS.getPreferredMode()) {
 		case OPENGL:
 			Assert.assertTrue(d.getRenderer() instanceof JOGLRenderer);
 			break;
@@ -121,7 +121,7 @@ public class TestGameDisplay {
 			Assert.assertTrue(d.getRenderer() instanceof CPURenderer);
 			break;
 		default:
-			Assert.fail("Unknown rendering mode for testing: " + TEST_DISPLAY_SETTINGS.getRenderingMode());
+			Assert.fail("Unknown graphic mode for testing: " + TEST_DISPLAY_SETTINGS.getPreferredMode());
 			break;
 		}
 	}

@@ -1,8 +1,9 @@
 package com.game.engine.rendering.opengl;
 
-import com.game.engine.display.GameDisplay;
+import com.game.engine.camera.AbstractCamera;
 import com.game.engine.graphics.common.RenderRequest;
 import com.game.engine.rendering.common.AbstractRenderer;
+import com.game.engine.rendering.common.RenderMode;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 
@@ -32,10 +33,12 @@ public class JOGLRenderer extends AbstractRenderer {
 	/**
 	 * Initialize an OpenGL renderer
 	 *
-	 * @param display - the display to render for
+	 * @param camera - the camera used for rendering
 	 */
-	public JOGLRenderer(GameDisplay display) {
-		super(display);
+	public JOGLRenderer(AbstractCamera camera) {
+		super(camera);
+
+		// Initialize the graphics processor
 		this.processor = new JOGLProcessor(this);
 	}
 
@@ -70,6 +73,11 @@ public class JOGLRenderer extends AbstractRenderer {
 	@Override
 	public JOGLProcessor getProcessor() {
 		return this.processor;
+	}
+
+	@Override
+	public RenderMode getMode() {
+		return RenderMode.OPENGL;
 	}
 
 }

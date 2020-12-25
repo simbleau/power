@@ -14,9 +14,9 @@ import com.game.engine.rendering.common.RenderMode;
 public class DisplaySettings {
 
 	/**
-	 * The rendering mode
+	 * The graphic mode
 	 */
-	private RenderMode mode;
+	private RenderMode preferredMode;
 
 	/**
 	 * The preferred resolution for the game canvas
@@ -32,29 +32,29 @@ public class DisplaySettings {
 	 * Construct display settings
 	 *
 	 * @param resolution - the preferred default resolution to use
-	 * @param mode       - the rendering mode to use
+	 * @param mode       - the graphic mode to use
 	 * @param camera     - the camera to use
 	 */
 	public DisplaySettings(RenderMode mode, Dimension resolution, AbstractCamera camera) {
-		this.mode = mode;
+		this.preferredMode = mode;
 		this.preferredResolution = resolution;
 		this.preferredCamera = camera;
 	}
 
 	/**
-	 * @return the rendering mode
+	 * @return the preferred graphic mode
 	 */
-	public RenderMode getRenderingMode() {
-		return this.mode;
+	public RenderMode getPreferredMode() {
+		return this.preferredMode;
 	}
 
 	/**
-	 * Set the rendering mode
+	 * Set the preferred graphic mode
 	 *
-	 * @param mode - the rendering mode for display
+	 * @param mode - a render mode
 	 */
-	public void setRenderingMode(RenderMode mode) {
-		this.mode = mode;
+	public void setPreferredMode(RenderMode mode) {
+		this.preferredMode = mode;
 	}
 
 	/**

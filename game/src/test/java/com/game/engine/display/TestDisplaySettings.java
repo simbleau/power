@@ -21,9 +21,9 @@ import com.game.engine.rendering.common.RenderMode;
 public class TestDisplaySettings {
 
 	/**
-	 * An arbitrary render mode for testing.
+	 * An arbitrary graphic mode for testing.
 	 */
-	private static final RenderMode TEST_RENDER_MODE = RenderMode.SAFE;
+	private static final RenderMode TEST_PREFERRED_MODE = RenderMode.SAFE;
 
 	/**
 	 * An arbitrary resolution for testing.
@@ -45,7 +45,7 @@ public class TestDisplaySettings {
 	 */
 	@Before
 	public void init() {
-		this.s = new DisplaySettings(TEST_RENDER_MODE, TEST_PREFERRED_RESOLUTION, TEST_PREFERRED_CAMERA);
+		this.s = new DisplaySettings(TEST_PREFERRED_MODE, TEST_PREFERRED_RESOLUTION, TEST_PREFERRED_CAMERA);
 	}
 
 	/**
@@ -55,7 +55,7 @@ public class TestDisplaySettings {
 	@Test
 	public void testCreate() {
 		// Test create
-		Assert.assertEquals(TEST_RENDER_MODE, s.getRenderingMode());
+		Assert.assertEquals(TEST_PREFERRED_MODE, s.getPreferredMode());
 		Assert.assertEquals(TEST_PREFERRED_RESOLUTION, s.getPreferredResolution());
 		Assert.assertEquals(TEST_PREFERRED_CAMERA, s.getPreferredCamera());
 	}
@@ -69,11 +69,11 @@ public class TestDisplaySettings {
 	}
 
 	/**
-	 * Test {@link DisplaySettings#getRenderingMode()}.
+	 * Test {@link DisplaySettings#getPreferredMode()}.
 	 */
 	@Test
-	public void testGetRenderingMode() {
-		Assert.assertEquals(TEST_RENDER_MODE, s.getRenderingMode());
+	public void testGetPreferredMode() {
+		Assert.assertEquals(TEST_PREFERRED_MODE, s.getPreferredMode());
 	}
 
 	/**
@@ -101,14 +101,14 @@ public class TestDisplaySettings {
 	}
 
 	/**
-	 * Test {@link DisplaySettings#setRenderingMode(RenderMode)}.
+	 * Test {@link DisplaySettings#setPreferredMode(RenderMode)}.
 	 */
 	@Test
-	public void testSetRenderingMode() {
+	public void testSetPreferredMode() {
 		// Test set
 		for (RenderMode mode : RenderMode.values()) {
-			s.setRenderingMode(mode);
-			Assert.assertEquals(mode, s.getRenderingMode());
+			s.setPreferredMode(mode);
+			Assert.assertEquals(mode, s.getPreferredMode());
 		}
 	}
 

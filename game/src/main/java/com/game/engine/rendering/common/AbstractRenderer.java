@@ -4,7 +4,6 @@ import java.awt.Canvas;
 import java.awt.image.BufferedImage;
 
 import com.game.engine.camera.AbstractCamera;
-import com.game.engine.display.GameDisplay;
 import com.game.engine.graphics.common.RenderRequest;
 
 /**
@@ -14,11 +13,6 @@ import com.game.engine.graphics.common.RenderRequest;
  * @version June 2020
  */
 public abstract class AbstractRenderer {
-
-	/**
-	 * The display to render for.
-	 */
-	public final GameDisplay display;
 
 	/**
 	 * The camera used to render.
@@ -40,11 +34,10 @@ public abstract class AbstractRenderer {
 	/**
 	 * Initialize the renderer
 	 *
-	 * @param display - the display to render for
+	 * @param camera - the camera used for rendering
 	 */
-	public AbstractRenderer(GameDisplay display) {
-		this.display = display;
-		this.camera = display.settings.getPreferredCamera();
+	public AbstractRenderer(AbstractCamera camera) {
+		this.camera = camera;
 	}
 
 	/**
@@ -76,6 +69,11 @@ public abstract class AbstractRenderer {
 	 * @return the renderer's processor
 	 */
 	public abstract AbstractProcessor getProcessor();
+
+	/**
+	 * @return the graphic mode this renderer is performing
+	 */
+	public abstract RenderMode getMode();
 
 	/**
 	 * Set the camera to be used for rendering.
