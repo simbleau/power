@@ -1,10 +1,7 @@
 package com.game.demos.chunker;
 
 import com.game.demos.artifacts.DemoGame;
-import com.game.demos.gfxtest.GFXTestPlane;
-import com.game.demos.util.DemoDisplaySupport;
 import com.game.demos.util.DemoDriverSupport;
-import com.game.engine.cache.LRUCache;
 import com.game.engine.display.DisplaySettingsFactory;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.driver.GameDriverFactory;

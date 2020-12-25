@@ -1,17 +1,12 @@
 package com.game.demos.font;
 
 import com.game.demos.artifacts.DemoGame;
-import com.game.demos.chunker.ChunkedTestPlane;
-import com.game.demos.gfxtest.GFXTestPlane;
-import com.game.demos.util.DemoDisplaySupport;
 import com.game.demos.util.DemoDriverSupport;
-import com.game.engine.cache.LRUCache;
 import com.game.engine.camera.StationaryCamera;
 import com.game.engine.display.DisplaySettingsFactory;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.driver.GameDriverFactory;
 import com.game.engine.game.AbstractGame;
-import com.game.engine.game.Chunk;
 import com.game.engine.rendering.common.RenderMode;
 
 /**
