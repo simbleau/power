@@ -31,12 +31,12 @@ public class GraphicTestUtil {
 	/**
 	 * The width of a drawable should be for graphic testing.
 	 */
-	public static final int DRAWABLE_MAX_WIDTH = 5;
+	public static final int DRAWABLE_MAX_WIDTH = 10;
 
 	/**
 	 * The height a drawable should be for graphic testing.
 	 */
-	public static final int DRAWABLE_MAX_HEIGHT = 5;
+	public static final int DRAWABLE_MAX_HEIGHT = 10;
 
 	/**
 	 * An arbitrary driver settings for testing.
