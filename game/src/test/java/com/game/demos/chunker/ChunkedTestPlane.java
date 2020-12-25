@@ -105,7 +105,7 @@ public class ChunkedTestPlane extends AbstractChunkedPlane {
 	}
 
 	private void lookAtPlane(GameDriver driver) {
-		AbstractCamera cam = driver.getDisplay().settings.getCamera();
+		AbstractCamera cam = driver.getDisplay().getRenderer().getCamera();
 		if (cam.viewport.width() > cam.viewport.height()) {
 			cam.setZoom((double) cam.viewport.height() / (this.height));
 		} else {
@@ -119,7 +119,7 @@ public class ChunkedTestPlane extends AbstractChunkedPlane {
 		int x = index % this.chunker.getRows();
 		int y = index / this.chunker.getRows();
 
-		AbstractCamera cam = driver.getDisplay().settings.getCamera();
+		AbstractCamera cam = driver.getDisplay().getRenderer().getCamera();
 		if (cam.viewport.width() > cam.viewport.height()) {
 			cam.setZoom((double) cam.viewport.height() / Chunk.SIZE);
 		} else {

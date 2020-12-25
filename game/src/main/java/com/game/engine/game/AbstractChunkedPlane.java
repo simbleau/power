@@ -72,7 +72,7 @@ public abstract class AbstractChunkedPlane extends AbstractPlane {
 		this.chunker.chunk(driver);
 
 		// Update viewable chunks
-		this.chunker.scan(driver, driver.getDisplay().settings.getCamera());
+		this.chunker.scan(driver, driver.getDisplay().getRenderer().getCamera());
 		for (Chunk chunk : this.chunker.viewableChunks()) {
 			chunk.update(driver);
 		}

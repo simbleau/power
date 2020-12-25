@@ -217,7 +217,7 @@ public class TestChunker {
 
 			for (AbstractCamera cam : cams) {
 				// Refresh visible chunks
-				DisplaySettings ds = new DisplaySettings(new Dimension(0, 0), RenderMode.SAFE, cam);
+				DisplaySettings ds = new DisplaySettings(RenderMode.SAFE, new Dimension(0, 0), cam);
 				TEST_DRIVER.init(ds);
 				TEST_DRIVER.start();
 				c.scan(TEST_DRIVER, cam);

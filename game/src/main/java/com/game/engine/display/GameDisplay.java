@@ -123,8 +123,8 @@ public class GameDisplay {
 		// Show frame
 		this.frame.setLocationRelativeTo(null); // Start center-screen
 
-		// Resize camera viewport to canvas
-		this.settings.getCamera().viewport.resize(this.renderer.getCanvas().getWidth(),
+		// Resize preferred camera viewport to canvas
+		this.renderer.getCamera().viewport.resize(this.renderer.getCanvas().getWidth(),
 				this.renderer.getCanvas().getHeight());
 
 		this.frame.setVisible(true);

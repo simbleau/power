@@ -1,7 +1,5 @@
 package com.game.engine.rendering.opengl;
 
-import java.awt.Canvas;
-
 import com.game.engine.display.GameDisplay;
 import com.game.engine.graphics.common.RenderRequest;
 import com.game.engine.rendering.common.AbstractRenderer;
@@ -60,13 +58,18 @@ public class JOGLRenderer extends AbstractRenderer {
 	}
 
 	@Override
-	public Canvas getCanvas() {
+	public void stage(RenderRequest request) {
+		this.processor.stage(request);
+	}
+
+	@Override
+	public JOGLCanvas getCanvas() {
 		return this.canvas;
 	}
 
 	@Override
-	public void stage(RenderRequest request) {
-		this.processor.stage(request);
+	public JOGLProcessor getProcessor() {
+		return this.processor;
 	}
 
 }

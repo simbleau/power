@@ -210,16 +210,16 @@ public class MouseKeyboard implements Input, KeyListener, MouseListener, MouseMo
 	public int planeX() {
 		return Math.max(0,
 				Math.min(this.driver.getDisplay().getRenderer().getCanvas().getWidth(),
-						(int) (this.driver.getDisplay().settings.getCamera().zoom() * this.x
-								+ this.driver.getDisplay().settings.getCamera().viewport.x())));
+						(int) (this.driver.getDisplay().getRenderer().getCamera().zoom() * this.x
+								+ this.driver.getDisplay().getRenderer().getCamera().viewport.x())));
 	}
 
 	@Override
 	public int planeY() {
 		return Math.max(0,
 				Math.min(this.driver.getDisplay().getRenderer().getCanvas().getHeight(),
-						(int) (this.driver.getDisplay().settings.getCamera().zoom() * this.y
-								+ this.driver.getDisplay().settings.getCamera().viewport.y())));
+						(int) (this.driver.getDisplay().getRenderer().getCamera().zoom() * this.y
+								+ this.driver.getDisplay().getRenderer().getCamera().viewport.y())));
 
 	}
 

@@ -190,7 +190,7 @@ public class GameDriver implements Runnable {
 				while (durationSinceLastUpdate.toNanos() >= settings.getTickDuration().toNanos()) {
 					durationSinceLastUpdate = durationSinceLastUpdate.minus(settings.getTickDuration());
 
-					this.display.settings.getCamera().update(this);
+					this.display.getRenderer().getCamera().update(this);
 					this.game.update(this);
 					this.input.update();
 					this.lastUpdate = Instant.now();

@@ -101,7 +101,7 @@ public class FontTestPlane extends AbstractPlane {
 	}
 
 	private void lookAtPlane(GameDriver driver) {
-		AbstractCamera cam = driver.getDisplay().settings.getCamera();
+		AbstractCamera cam = driver.getDisplay().getRenderer().getCamera();
 		if (cam.viewport.width() > cam.viewport.height()) {
 			cam.setZoom((double) cam.viewport.height() / (this.height));
 		} else {

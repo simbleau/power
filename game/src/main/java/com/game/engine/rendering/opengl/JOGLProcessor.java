@@ -25,6 +25,11 @@ public class JOGLProcessor extends AbstractProcessor {
 		super(renderer);
 	}
 
+	@Override
+	public JOGLRenderer getRenderer() {
+		return (JOGLRenderer) this.renderer;
+	}
+
 	/**
 	 * Draw an arbitrary request on the game scene
 	 *
@@ -32,7 +37,7 @@ public class JOGLProcessor extends AbstractProcessor {
 	 * @param request - the request to draw
 	 */
 	public void draw(GL2 gl, RenderRequest request) {
-		AbstractCamera camera = this.renderer.display.settings.getCamera();
+		AbstractCamera camera = this.renderer.getCamera();
 		CoordinateMatrix requestMatrix = CoordinateMatrix.create(request.x, request.y).transform(camera);
 
 		request.drawable.draw(this, gl, requestMatrix.x(), requestMatrix.y(), camera.zoom(), camera.zoom());
@@ -47,5 +52,4 @@ public class JOGLProcessor extends AbstractProcessor {
 	public void drawUI(GL2 gl, RenderRequest request) {
 		request.drawable.draw(this, gl, request.x, request.y, 1f, 1f);
 	}
-
 }

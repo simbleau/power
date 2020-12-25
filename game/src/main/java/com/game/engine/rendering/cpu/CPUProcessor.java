@@ -37,6 +37,11 @@ public class CPUProcessor extends AbstractProcessor {
 		super(renderer);
 	}
 
+	@Override
+	public CPURenderer getRenderer() {
+		return (CPURenderer) this.renderer;
+	}
+
 	/**
 	 * Resize the image used for rendering
 	 *
@@ -54,7 +59,7 @@ public class CPUProcessor extends AbstractProcessor {
 	 * @param request - the request to draw
 	 */
 	public void draw(RenderRequest request) {
-		AbstractCamera camera = this.renderer.display.settings.getCamera();
+		AbstractCamera camera = this.renderer.getCamera();
 		CoordinateMatrix requestMatrix = CoordinateMatrix.create(request.x, request.y).transform(camera);
 
 		request.drawable.draw(this, (int) requestMatrix.x(), (int) requestMatrix.y(), camera.zoom(), camera.zoom());

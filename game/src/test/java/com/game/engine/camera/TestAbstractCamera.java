@@ -69,7 +69,7 @@ public class TestAbstractCamera {
 		// Initialize values for tests
 		this.c = new AbstractCamera(0, 0, 100, 100, 1) {
 		};
-		TEST_DRIVER.getDisplay().settings.setCamera(this.c);
+		TEST_DRIVER.getDisplay().getRenderer().setCamera(this.c);
 	}
 
 	/**

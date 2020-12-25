@@ -14,19 +14,19 @@ import com.game.engine.rendering.common.RenderMode;
 public class DisplaySettings {
 
 	/**
-	 * The preferred resolution for the game canvas
-	 */
-	private Dimension preferredResolution;
-
-	/**
 	 * The rendering mode
 	 */
 	private RenderMode mode;
 
 	/**
+	 * The preferred resolution for the game canvas
+	 */
+	private Dimension preferredResolution;
+
+	/**
 	 * The camera used for rendering
 	 */
-	private AbstractCamera camera;
+	private AbstractCamera preferredCamera;
 
 	/**
 	 * Construct display settings
@@ -35,10 +35,26 @@ public class DisplaySettings {
 	 * @param mode       - the rendering mode to use
 	 * @param camera     - the camera to use
 	 */
-	public DisplaySettings(Dimension resolution, RenderMode mode, AbstractCamera camera) {
-		this.preferredResolution = resolution;
+	public DisplaySettings(RenderMode mode, Dimension resolution, AbstractCamera camera) {
 		this.mode = mode;
-		this.camera = camera;
+		this.preferredResolution = resolution;
+		this.preferredCamera = camera;
+	}
+
+	/**
+	 * @return the rendering mode
+	 */
+	public RenderMode getRenderingMode() {
+		return this.mode;
+	}
+
+	/**
+	 * Set the rendering mode
+	 *
+	 * @param mode - the rendering mode for display
+	 */
+	public void setRenderingMode(RenderMode mode) {
+		this.mode = mode;
 	}
 
 	/**
@@ -59,35 +75,19 @@ public class DisplaySettings {
 	}
 
 	/**
-	 * @return the rendering mode
+	 * @return the preferred camera
 	 */
-	public RenderMode getRenderingMode() {
-		return this.mode;
+	public AbstractCamera getPreferredCamera() {
+		return this.preferredCamera;
 	}
 
 	/**
-	 * Set the rendering mode
+	 * Sets the preferred camera
 	 *
-	 * @param mode - the rendering mode for display
+	 * @param camera - The camera to set as preferred
 	 */
-	public void setRenderingMode(RenderMode mode) {
-		this.mode = mode;
-	}
-
-	/**
-	 * @return the camera
-	 */
-	public AbstractCamera getCamera() {
-		return this.camera;
-	}
-
-	/**
-	 * Sets the camera
-	 *
-	 * @param camera - The camera to set
-	 */
-	public void setCamera(AbstractCamera camera) {
-		this.camera = camera;
+	public void setPreferredCamera(AbstractCamera camera) {
+		this.preferredCamera = camera;
 	}
 
 }

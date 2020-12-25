@@ -21,19 +21,19 @@ import com.game.engine.rendering.common.RenderMode;
 public class TestDisplaySettings {
 
 	/**
-	 * An arbitrary resolution for testing.
-	 */
-	private static final Dimension TEST_PREFERRED_RESOLUTION = new Dimension(480, 360);
-
-	/**
 	 * An arbitrary render mode for testing.
 	 */
 	private static final RenderMode TEST_RENDER_MODE = RenderMode.SAFE;
 
 	/**
+	 * An arbitrary resolution for testing.
+	 */
+	private static final Dimension TEST_PREFERRED_RESOLUTION = new Dimension(480, 360);
+
+	/**
 	 * An arbitrary camera for testing.
 	 */
-	private static final AbstractCamera TEST_CAMERA = new MockCamera(0, 0, 0, 0, 1);
+	private static final AbstractCamera TEST_PREFERRED_CAMERA = new MockCamera(0, 0, 0, 0, 1);
 
 	/**
 	 * A buffer {@link DisplaySettings} object for tests.
@@ -45,7 +45,7 @@ public class TestDisplaySettings {
 	 */
 	@Before
 	public void init() {
-		this.s = new DisplaySettings(TEST_PREFERRED_RESOLUTION, TEST_RENDER_MODE, TEST_CAMERA);
+		this.s = new DisplaySettings(TEST_RENDER_MODE, TEST_PREFERRED_RESOLUTION, TEST_PREFERRED_CAMERA);
 	}
 
 	/**
@@ -55,9 +55,9 @@ public class TestDisplaySettings {
 	@Test
 	public void testCreate() {
 		// Test create
-		Assert.assertEquals(TEST_PREFERRED_RESOLUTION, s.getPreferredResolution());
 		Assert.assertEquals(TEST_RENDER_MODE, s.getRenderingMode());
-		Assert.assertEquals(TEST_CAMERA, s.getCamera());
+		Assert.assertEquals(TEST_PREFERRED_RESOLUTION, s.getPreferredResolution());
+		Assert.assertEquals(TEST_PREFERRED_CAMERA, s.getPreferredCamera());
 	}
 
 	/**
@@ -77,11 +77,11 @@ public class TestDisplaySettings {
 	}
 
 	/**
-	 * Test {@link DisplaySettings#getCamera()}.
+	 * Test {@link DisplaySettings#getPreferredCamera()}.
 	 */
 	@Test
-	public void testGetCamera() {
-		Assert.assertEquals(TEST_CAMERA, s.getCamera());
+	public void testGetPreferredCamera() {
+		Assert.assertEquals(TEST_PREFERRED_CAMERA, s.getPreferredCamera());
 	}
 
 	/**
@@ -113,15 +113,15 @@ public class TestDisplaySettings {
 	}
 
 	/**
-	 * Test {@link DisplaySettings#setCamera(AbstractCamera)}.
+	 * Test {@link DisplaySettings#setPreferredCamera(AbstractCamera)}.
 	 */
 	@Test
-	public void testSetCamera() {
-		Assert.assertEquals(TEST_CAMERA, s.getCamera());
+	public void testSetPreferredCamera() {
+		Assert.assertEquals(TEST_PREFERRED_CAMERA, s.getPreferredCamera());
 
 		DevCamera testCam = new DevCamera(0, 0, 0, 0, 1);
-		s.setCamera(testCam);
+		s.setPreferredCamera(testCam);
 
-		Assert.assertEquals(testCam, s.getCamera());
+		Assert.assertEquals(testCam, s.getPreferredCamera());
 	}
 }

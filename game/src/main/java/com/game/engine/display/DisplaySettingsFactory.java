@@ -91,6 +91,6 @@ public class DisplaySettingsFactory {
 
 		// Setup the display settings
 		Dimension res = new Dimension(this.resWidth.get(), this.resHeight.get());
-		return new DisplaySettings(res, this.mode.get(), this.camera.get());
+		return new DisplaySettings(this.mode.get(), res, this.camera.get());
 	}
 }

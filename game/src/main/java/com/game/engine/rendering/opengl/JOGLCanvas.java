@@ -6,6 +6,7 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.awt.GLCanvas;
+import com.jogamp.opengl.util.awt.AWTGLReadBufferUtil;
 
 /**
  * A canvas handled by the {@link JOGLRenderer} for OpenGL rendering
@@ -67,7 +68,7 @@ public class JOGLCanvas extends GLCanvas implements GLEventListener {
 	}
 
 	@Override
-	public synchronized void display(GLAutoDrawable drawable) {
+	public void display(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
 
 		// Clear screen
@@ -94,6 +95,12 @@ public class JOGLCanvas extends GLCanvas implements GLEventListener {
 
 		// Clear requests
 		this.processor.reset();
+
+		// Take screenshot if requested
+		if (this.processor.getRenderer().isScreenshotRequested()) {
+			AWTGLReadBufferUtil glReadBufferUtil = new AWTGLReadBufferUtil(gl.getGLProfile(), false);
+			this.processor.getRenderer().setScreenshot(glReadBufferUtil.readPixelsToBufferedImage(gl, true));
+		}
 	}
 
 	@Override
@@ -105,5 +112,4 @@ public class JOGLCanvas extends GLCanvas implements GLEventListener {
 		gl.glOrtho(0, width, height, 0, -1, 1);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 	}
-
 }

@@ -1,7 +1,7 @@
 package com.game.engine.rendering.cpu;
 
-import java.awt.Canvas;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 
 import com.game.engine.display.GameDisplay;
 import com.game.engine.graphics.common.RenderRequest;
@@ -24,7 +24,7 @@ public class CPURenderer extends AbstractRenderer {
 	/**
 	 * The canvas rendered to
 	 */
-	private Canvas canvas;
+	private CPUCanvas canvas;
 
 	/**
 	 * Initialize a CPU renderer
@@ -86,15 +86,31 @@ public class CPURenderer extends AbstractRenderer {
 				this.canvas.getHeight(), // To Y
 				null);
 		this.canvas.getBufferStrategy().show();
-	}
 
-	@Override
-	public Canvas getCanvas() {
-		return this.canvas;
+		// Take screenshot if requested
+		if (this.processor.getRenderer().isScreenshotRequested()) {
+			// Take screenshot
+			BufferedImage copy = new BufferedImage(this.processor.image.getWidth(), this.processor.image.getHeight(),
+					this.processor.image.getType());
+			Graphics g = copy.getGraphics();
+			g.drawImage(this.processor.image, 0, 0, null);
+			g.dispose();
+			this.processor.getRenderer().setScreenshot(copy);
+		}
 	}
 
 	@Override
 	public void stage(RenderRequest request) {
 		this.processor.stage(request);
+	}
+
+	@Override
+	public CPUCanvas getCanvas() {
+		return this.canvas;
+	}
+
+	@Override
+	public CPUProcessor getProcessor() {
+		return this.processor;
 	}
 }

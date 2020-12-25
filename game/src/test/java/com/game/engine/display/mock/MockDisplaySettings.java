@@ -34,6 +34,6 @@ public class MockDisplaySettings extends DisplaySettings {
 	 * Construct arbitrary display settings.
 	 */
 	public MockDisplaySettings() {
-		super(RESOLUTION, MODE, CAMERA);
+		super(MODE, RESOLUTION, CAMERA);
 	}
 }
