@@ -125,12 +125,19 @@ public class Ellipse implements Drawable {
 		double srx = this.rx * sx;
 		double sry = this.ry * sy;
 
+		// Do not draw objects with a radius of 0
+		if (srx < 1 || sry < 1) {
+			return;
+		}
+
 		// Calculate the amount of vertices needed using the delta angle between
 		// adjacent vertices
 		double da = Math.acos(2 * (1 - ACCEPTABLE_ERROR / srx) * (1 - ACCEPTABLE_ERROR / sry) - 1);
 		int vertices = (int) Math.ceil(2 * Math.PI / da);
 
 		// Draw lines between all vertices
+		// Rounding could be applied to make it a more proportional ellipse. Being
+		// left-heavy is fine currently since (int) conversion truncates integers.
 		int xi = (int) (srx * Math.cos(0) + x + srx);
 		int yi = (int) (sry * Math.sin(0) + y + sry);
 		double vertexRadian = 2 * Math.PI / vertices;
