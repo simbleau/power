@@ -77,6 +77,18 @@ public class Viewport {
 	}
 
 	/**
+	 * Set the origin of the viewport.
+	 *
+	 * @param x - an x co-ordinate
+	 * @param y - a y co-ordinate
+	 */
+	public void setOrigin(double x, double y) {
+		this.origin.set(x, y);
+	}
+
+	/**
+	 * Resize the viewport dimensions.
+	 *
 	 * @param width  - a new width for the viewport
 	 * @param height - a new height for the viewport
 	 */
