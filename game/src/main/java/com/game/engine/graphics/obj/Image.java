@@ -65,9 +65,15 @@ public class Image implements Drawable {
 	public Image(BufferedImage buf) {
 		// Standard
 		this.buf = buf;
-		this.width = buf.getWidth();
-		this.height = buf.getHeight();
-		this.pbo = IntBuffer.wrap(buf.getRGB(0, 0, width, height, null, 0, width));
+		if (this.buf != null) {
+			this.width = buf.getWidth();
+			this.height = buf.getHeight();
+			this.pbo = IntBuffer.wrap(buf.getRGB(0, 0, this.width, this.height, null, 0, this.width));
+		} else {
+			this.width = 0;
+			this.height = 0;
+			this.pbo = null;
+		}
 
 		// OpenGL
 		this.texId = 0;
@@ -88,7 +94,7 @@ public class Image implements Drawable {
 	 * @param width - the width to set
 	 */
 	public void setWidth(int width) {
-		//TODO implement this
+		// TODO implement this
 		throw new UnsupportedOperationException("This is not implemented yet");
 	}
 
@@ -105,7 +111,7 @@ public class Image implements Drawable {
 	 * @param height - the height to set
 	 */
 	public void setHeight(int height) {
-		//TODO implement this
+		// TODO implement this
 		throw new UnsupportedOperationException("This is not implemented yet");
 	}
 
@@ -115,14 +121,14 @@ public class Image implements Drawable {
 	 * {@link #flagGLRefresh()} after, or the pixels will not update properly on
 	 * OpenGL. Pixels are stored in 0xAARRGGBB format.
 	 *
-	 * @return the pixel buffer object of this image
+	 * @return the pixel buffer object of this image, or null, if no pixels exist
 	 */
 	public IntBuffer getPBO() {
 		return this.pbo;
 	}
 
 	/**
-	 * @return the buffered image
+	 * @return the buffered image, or null, if no pixels exist
 	 */
 	public BufferedImage getBufferedImage() {
 		return this.buf;
@@ -134,8 +140,10 @@ public class Image implements Drawable {
 	 * @param buf - a buffered image
 	 */
 	public void setBufferedImage(BufferedImage buf) {
-		//TODO implement this
-		throw new UnsupportedOperationException("This is not implemented yet");
+		this.width = buf.getWidth();
+		this.height = buf.getHeight();
+		this.pbo = IntBuffer.wrap(buf.getRGB(0, 0, this.width, this.height, null, 0, this.width));
+		this.flagGLRefresh();
 	}
 
 	/**
@@ -146,6 +154,11 @@ public class Image implements Drawable {
 	public Image resize(double sx, double sy) {
 		int sWidth = (int) (this.width * sx);
 		int sHeight = (int) (this.height * sy);
+
+		if (sWidth == 0 || sHeight == 0) {
+			return new Image(null);
+		}
+
 		BufferedImage buf = new BufferedImage(sWidth, sHeight, BufferedImage.TYPE_INT_ARGB);
 		int[] sPixels = ((DataBufferInt) buf.getRaster().getDataBuffer()).getData();
 
@@ -178,9 +191,11 @@ public class Image implements Drawable {
 			gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_S, GL2.GL_CLAMP);
 			gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_WRAP_T, GL2.GL_CLAMP);
 
-			// Bind texture to PBO
-			gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA8, this.buf.getWidth(), this.buf.getHeight(), 0,
-					GL2.GL_BGRA, GL2.GL_UNSIGNED_INT_8_8_8_8_REV, this.pbo);
+			if (this.pbo != null) {
+				// Bind texture to PBO
+				gl.glTexImage2D(GL2.GL_TEXTURE_2D, 0, GL2.GL_RGBA8, this.buf.getWidth(), this.buf.getHeight(), 0,
+						GL2.GL_BGRA, GL2.GL_UNSIGNED_INT_8_8_8_8_REV, this.pbo);
+			}
 
 			// Unbind texture object
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
@@ -190,10 +205,12 @@ public class Image implements Drawable {
 			gl.glGenBuffers(1, pboIds, 0);
 			this.pboId = pboIds[0];
 
-			// This chunk seems unnecessary?
-			gl.glBindBuffer(GL2.GL_PIXEL_UNPACK_BUFFER, this.pboId); // Bind the buffer object
-			long size = this.buf.getWidth() * this.buf.getHeight() * Buffers.SIZEOF_INT;
-			gl.glBufferData(GL2.GL_PIXEL_UNPACK_BUFFER, size, this.pbo, GL2.GL_STREAM_DRAW); // Bind PBO to texture
+			// Bind PBO for texture data
+			if (this.pbo != null) {
+				gl.glBindBuffer(GL2.GL_PIXEL_UNPACK_BUFFER, this.pboId); // Bind the buffer object
+				long size = this.buf.getWidth() * this.buf.getHeight() * Buffers.SIZEOF_INT;
+				gl.glBufferData(GL2.GL_PIXEL_UNPACK_BUFFER, size, this.pbo, GL2.GL_STREAM_DRAW); // Bind PBO to texture
+			}
 
 			// Unbind
 			gl.glBindBuffer(GL2.GL_PIXEL_UNPACK_BUFFER, 0);
@@ -218,8 +235,10 @@ public class Image implements Drawable {
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, this.texId);
 
 			// Update the texture if there was a change
-			gl.glTexSubImage2D(GL2.GL_TEXTURE_2D, 0, 0, 0, this.buf.getWidth(), this.buf.getHeight(), GL2.GL_BGRA,
-					GL2.GL_UNSIGNED_INT_8_8_8_8_REV, this.pbo);
+			if (this.pbo != null) {
+				gl.glTexSubImage2D(GL2.GL_TEXTURE_2D, 0, 0, 0, this.buf.getWidth(), this.buf.getHeight(), GL2.GL_BGRA,
+						GL2.GL_UNSIGNED_INT_8_8_8_8_REV, this.pbo);
+			}
 
 			// Unbind texture
 			gl.glDisable(GL2.GL_TEXTURE_2D);
@@ -247,6 +266,11 @@ public class Image implements Drawable {
 	public void draw(CPUProcessor processor, int x, int y, double sx, double sy) {
 		int width = (int) (this.width * sx);
 		int height = (int) (this.height * sy);
+
+		// Don't render images that are 0px wide or high
+		if (width == 0 || height == 0) {
+			return;
+		}
 
 		// Don't render off-screen images
 		if (x < -width)
