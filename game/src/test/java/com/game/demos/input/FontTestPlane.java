@@ -1,4 +1,4 @@
-package com.game.demos.font;
+package com.game.demos.input;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;

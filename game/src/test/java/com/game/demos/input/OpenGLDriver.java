@@ -1,4 +1,4 @@
-package com.game.demos.font;
+package com.game.demos.input;
 
 import com.game.demos.artifacts.DemoGame;
 import com.game.demos.util.DemoDriverSupport;
@@ -15,7 +15,7 @@ import com.game.engine.rendering.common.RenderMode;
  * @author Spencer Imbleau
  * @version December 2020
  */
-public class SafeDriver {
+public class OpenGLDriver {
 
 	/**
 	 * The game for this demo.
@@ -23,7 +23,7 @@ public class SafeDriver {
 	private static final AbstractGame DEMO_GAME = new DemoGame(new FontTestPlane());
 
 	/**
-	 * Start a Safe-Mode demo
+	 * Start a OpenGL-Mode demo
 	 *
 	 * @param args - CLI args
 	 */
@@ -36,7 +36,7 @@ public class SafeDriver {
 
 		// Setup the display settings
 		DisplaySettingsFactory dsF = new DisplaySettingsFactory();
-		dsF.setMode(RenderMode.SAFE);
+		dsF.setMode(RenderMode.OPENGL);
 		dsF.setResolutionWidth(500);
 		dsF.setResolutionHeight(500);
 		dsF.setCamera(new StationaryCamera(0, 0, 500, 500, 1));
