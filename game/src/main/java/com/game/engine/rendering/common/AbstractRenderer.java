@@ -76,11 +76,28 @@ public abstract class AbstractRenderer {
 	public abstract RenderMode getMode();
 
 	/**
-	 * Set the camera to be used for rendering.
+	 * Set the camera to be used for rendering. This is an unchecked swap. If you
+	 * want all meta data of this camera to transfer to the other camera, use
+	 * {@link #transferCamera(AbstractCamera)}.
 	 *
 	 * @param camera - a camera to render with
 	 */
 	public void setCamera(AbstractCamera camera) {
+		this.camera = camera;
+	}
+
+	/**
+	 * Transfer the current camera meta data to a given camera and swap cameras.
+	 * This swaps cameras seamlessly.
+	 *
+	 * @param camera - a new camera
+	 */
+	public void transferCamera(AbstractCamera camera) {
+		// Transfer meta data to given camera
+		camera.viewport.setOrigin(this.camera.viewport.x(), this.camera.viewport.y());
+		camera.viewport.resize(this.camera.viewport.width(), this.camera.viewport.height());
+		camera.setZoom(this.camera.zoom());
+
 		this.camera = camera;
 	}
 
