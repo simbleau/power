@@ -64,10 +64,11 @@ public class Font {
 
 	/**
 	 * Bakes an image of the keycodes provided.
-	 * 
+	 *
 	 * @param keycodeSequence - a sequence of keycodes to bake into an image
 	 * @param argb            - an ARGB formatted color for the glyph colors
-	 * @return A new image of the keycode sequence provided
+	 * @return A new image of the keycode sequence provided, or null, if no keycodes
+	 *         are provided
 	 */
 	public BufferedImage bakeImage(int[] keycodeSequence, int argb) {
 		// Calculate the width this image will be
@@ -75,7 +76,7 @@ public class Font {
 
 		// Check if there's any keycodes to render
 		if (keycodeSequence.length == 0) {
-			return new BufferedImage(imgWidth, this.size, BufferedImage.TYPE_INT_ARGB);
+			return null;
 		}
 
 		// Calculate the image width
