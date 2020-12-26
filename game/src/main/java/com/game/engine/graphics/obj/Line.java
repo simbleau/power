@@ -139,7 +139,6 @@ public class Line implements Drawable {
 		int dy = (int) (this.dy * sy);
 
 		if (dx == 0 && dy == 0) {
-			processor.setPixel(x, y, this.argb);
 			return;
 		}
 
@@ -151,7 +150,7 @@ public class Line implements Drawable {
 
 		int dxi = 0;
 		int dyi = 0;
-		while (Math.abs(dxi) <= Math.max(1, Math.abs(dx)) && Math.abs(dyi) <= Math.max(1, Math.abs(dy))) {
+		while (Math.abs(dxi) <= Math.max(0, Math.abs(dx)) && Math.abs(dyi) <= Math.max(0, Math.abs(dy))) {
 			int nextX = x + dxi;
 			int nextY = y + dyi;
 
