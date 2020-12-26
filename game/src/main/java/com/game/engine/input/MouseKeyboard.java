@@ -102,6 +102,7 @@ public class MouseKeyboard implements Input, KeyListener, MouseListener, MouseMo
 	 * The position Y coordinate of our mouse
 	 */
 	private int y;
+
 	/**
 	 * The scroll direction
 	 */
@@ -209,16 +210,16 @@ public class MouseKeyboard implements Input, KeyListener, MouseListener, MouseMo
 	@Override
 	public int planeX() {
 		return Math.max(0,
-				Math.min(this.driver.getDisplay().getRenderer().getCanvas().getWidth(),
-						(int) (this.driver.getDisplay().getRenderer().getCamera().zoom() * this.x
+				Math.min(this.driver.game.getPlane().width,
+						(int) (this.x / this.driver.getDisplay().getRenderer().getCamera().zoom()
 								+ this.driver.getDisplay().getRenderer().getCamera().viewport.x())));
 	}
 
 	@Override
 	public int planeY() {
 		return Math.max(0,
-				Math.min(this.driver.getDisplay().getRenderer().getCanvas().getHeight(),
-						(int) (this.driver.getDisplay().getRenderer().getCamera().zoom() * this.y
+				Math.min(this.driver.game.getPlane().height,
+						(int) (this.y / this.driver.getDisplay().getRenderer().getCamera().zoom()
 								+ this.driver.getDisplay().getRenderer().getCamera().viewport.y())));
 
 	}
