@@ -59,7 +59,7 @@ public class DemoRectangle extends AbstractMotionGameObject {
 
 	@Override
 	public void refresh(GL2 gl) {
-		// Do nothing
+		this.drawable.refresh(gl);
 	}
 
 	@Override

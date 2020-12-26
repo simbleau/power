@@ -36,7 +36,7 @@ public class DemoLine extends AbstractMotionGameObject {
 
 	/**
 	 * Construct a demo line
-	 * 
+	 *
 	 * @param size - the size for the drawable
 	 */
 	public DemoLine(int size) {
@@ -49,7 +49,9 @@ public class DemoLine extends AbstractMotionGameObject {
 
 	@Override
 	public void init(GameDriver driver) {
-		this.drawable = new Line(this.width, this.height, 0xff000000 | rng.nextInt(0xffffff));
+		int dx = this.width - 1; // -1 for the origin
+		int dy = this.height - 1; // -1 for the origin
+		this.drawable = new Line(dx, dy, 0xff000000 | rng.nextInt(0xffffff));
 	}
 
 	@Override
@@ -59,7 +61,7 @@ public class DemoLine extends AbstractMotionGameObject {
 
 	@Override
 	public void refresh(GL2 gl) {
-		// Do nothing
+		this.drawable.refresh(gl);
 	}
 
 	@Override
