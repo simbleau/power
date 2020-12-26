@@ -122,8 +122,8 @@ public class Ellipse implements Drawable {
 	@Override
 	public void draw(CPUProcessor processor, int x, int y, double sx, double sy) {
 		// The scaled radii
-		double srx = this.rx * sx;
-		double sry = this.ry * sy;
+		int srx = (int) (this.rx * sx);
+		int sry = (int) (this.ry * sy);
 
 		// Do not draw objects with a radius of 0
 		if (srx < 1 || sry < 1) {
@@ -136,13 +136,13 @@ public class Ellipse implements Drawable {
 		int vertices = (int) Math.ceil(2 * Math.PI / da);
 
 		// Draw lines between all vertices
-		int xi = (int) Math.round(srx * Math.cos(0) + x + srx);
-		int yi = (int) Math.round(sry * Math.sin(0) + y + sry);
+		int xi = (int) (srx * Math.cos(0) + x + srx);
+		int yi = (int) (sry * Math.sin(0) + y + sry);
 		double vertexRadian = 2 * Math.PI / vertices;
 		for (int i = 1; i <= vertices; i++) {
 			double theta = vertexRadian * i;
-			int xi2 = (int) Math.round(srx * Math.cos(theta) + x + srx);
-			int yi2 = (int) Math.round(sry * Math.sin(theta) + y + sry);
+			int xi2 = (int) (srx * Math.cos(theta) + x + srx);
+			int yi2 = (int) (sry * Math.sin(theta) + y + sry);
 			int dx = xi2 - xi;
 			int dy = yi2 - yi;
 			Line l = new Line(dx, dy, this.argb);
