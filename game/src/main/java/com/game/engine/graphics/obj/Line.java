@@ -133,44 +133,46 @@ public class Line implements Drawable {
 		// TODO Dispose of retained OpenGL memory
 	}
 
+	/**
+	 * Helper algorithm to plot a line using the bresenham algorithm. Found in
+	 * chapter 1.7 of <i>A Rasterizing Algorithm for Drawing Curves</i> (Wein,
+	 * 2012).
+	 *
+	 * @param processor - the CPU processor
+	 * @param x0        - starting x co-ordinate
+	 * @param y0        - starting y co-ordinate
+	 * @param x1        - ending x co-ordinate
+	 * @param y1        - ending y co-ordinate
+	 * @see <a href="http://members.chello.at/easyfilter/bresenham.pdf">A
+	 *      Rasterizing Algorithm for Drawing Curves</a>
+	 */
+	private void plotLine(CPUProcessor processor, int x0, int y0, int x1, int y1) {
+		int dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+		int dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+		int err = dx + dy, e2; // error value e_xy
+		while (true) {
+			processor.setPixel(x0, y0, this.argb);
+			e2 = 2 * err;
+			if (e2 >= dy) { // e_xy+e_x > 0
+				if (x0 == x1)
+					break;
+				err += dy;
+				x0 += sx;
+			}
+			if (e2 <= dx) { // e_xy+e_y < 0
+				if (y0 == y1)
+					break;
+				err += dx;
+				y0 += sy;
+			}
+		}
+	}
+
 	@Override
 	public void draw(CPUProcessor processor, int x, int y, double sx, double sy) {
-		int dx = (int) (this.dx * sx);
-		int dy = (int) (this.dy * sy);
-
-		if (dx == 0 && dy == 0) {
-			return;
-		}
-
-		int xDirection = dx > 0 ? 1 : -1;
-		int yDirection = dy > 0 ? 1 : -1;
-
-		int err = Math.abs(dx) - Math.abs(dy);
-		int err2;
-
-		int dxi = 0;
-		int dyi = 0;
-		while (Math.abs(dxi) <= Math.max(0, Math.abs(dx)) && Math.abs(dyi) <= Math.max(0, Math.abs(dy))) {
-			int nextX = x + dxi;
-			int nextY = y + dyi;
-
-			// Set pixel
-			processor.setPixel(nextX, nextY, this.argb);
-
-			// Move towards the end of our line
-			// (Uses int operations which are cheaper computationally)
-			err2 = err * 2;
-
-			if (err2 > -1 * Math.abs(dy)) {
-				err -= Math.abs(dy);
-				dxi += xDirection;
-			}
-
-			if (err2 < Math.abs(dx)) {
-				err += Math.abs(dx);
-				dyi += yDirection;
-			}
-		}
+		int sdx = (int) (this.dx * sx); // scaled dx
+		int sdy = (int) (this.dy * sy); // scaled dy
+		plotLine(processor, x, y, x + sdx, y + sdy);
 	}
 
 	@Override
