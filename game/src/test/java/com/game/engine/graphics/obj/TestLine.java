@@ -145,7 +145,7 @@ public class TestLine {
 		}
 		System.out.println();
 
-		// Check that the drawable is a closed entity
+		// Check that the drawable is a gap-less entity
 		System.out.println("Trace gap test");
 		Assert.assertTrue(GraphicTestUtil.doGapsExist(pixels));
 	}
