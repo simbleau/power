@@ -133,7 +133,7 @@ public class TestLine {
 		PixelPosition p1 = new PixelPosition(0, 0); // Origin
 		PixelPosition p2 = new PixelPosition(p1.x + line.getDx(), p1.y + line.getDy());
 		System.out
-				.println("Deviation of pixel (x,y) from line (" + p1.x + "," + p1.y + ")->(" + p2.x + "," + p2.y + ")");
+				.println("Deviation of pixel (x,y) to line (" + p1.x + "," + p1.y + ")->(" + p2.x + "," + p2.y + ")");
 
 		for (GraphicTestUtil.PixelPosition pixel : pixels) {
 			// Assert the pixel is valid
