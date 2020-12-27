@@ -63,7 +63,9 @@ public class TestLine {
 				System.out.println("Line Slope: " + drawable.getDx() + "x" + drawable.getDy());
 
 				// Retrieve render
-				BufferedImage render = GraphicTestUtil.getSafeRender(drawable, dx, dy);
+				int width = drawable.getDx() + 1;
+				int height = drawable.getDy() + 1;
+				BufferedImage render = GraphicTestUtil.getSafeRender(drawable, width, height);
 
 				// Run tests on the result
 				testRender(render, drawable);
@@ -84,7 +86,9 @@ public class TestLine {
 				System.out.println("Line Slope: " + drawable.getDx() + "x" + drawable.getDy());
 
 				// Retrieve render
-				BufferedImage render = GraphicTestUtil.getOpenGLRender(drawable, dx, dy);
+				int width = drawable.getDx() + 1;
+				int height = drawable.getDy() + 1;
+				BufferedImage render = GraphicTestUtil.getOpenGLRender(drawable, width, height);
 
 				// Run tests on the result
 				testRender(render, drawable);
@@ -103,7 +107,7 @@ public class TestLine {
 		boolean[][] pixelMap = GraphicTestUtil.mapPixels(render, TEST_COLOR);
 
 		// Print pixel map
-		System.out.println("Pixel Map");
+		System.out.println("Pixel map");
 		System.out.println(GraphicTestUtil.mapToString(pixelMap));
 
 		// Collect the rendered pixels
@@ -119,58 +123,65 @@ public class TestLine {
 		// Make sure the correct bound of pixels were drawn
 		System.out.println("Assertion of drawing");
 		System.out.println("[" + line.getDx() + "/" + line.getDy() + "]->" + pixels.size() + "px");
-		if (line.getDx() > 0 && line.getDy() > 0) {
-			Assert.assertTrue(pixels.size() == Math.max(line.getDx(), line.getDy()));
-		} else {
-			Assert.assertTrue(pixels.size() == 0);
-		}
+		int lineWidth = line.getDx() + 1;
+		int lineHeight = line.getDy() + 1;
+		Assert.assertTrue(pixels.size() == Math.max(lineWidth, lineHeight));
 		System.out.println();
 
 		// Analyse the rendered pixels for accuracy
 		// Check all pixels are on the perimeter of a line
-		if (line.getDx() > 0 && line.getDy() > 0) {
-			System.out.println("Point Checking");
-			for (GraphicTestUtil.PixelPosition pixel : pixels) {
-				// Assert the pixel is valid
-				double deviance = lineDeviation(pixel, line);
-				System.out.println("(" + pixel.x + ", " + pixel.y + ")->" + deviance);
-				// Too close inside of the ellipse
-				Assert.assertTrue(deviance >= 1.0d - ACCEPTABLE_DEVIANCE);
-				// Too far out of the ellipse
-				Assert.assertTrue(deviance <= 1.0d + ACCEPTABLE_DEVIANCE);
-			}
-			System.out.println();
+		PixelPosition p1 = new PixelPosition(0, 0); // Origin
+		PixelPosition p2 = new PixelPosition(p1.x + line.getDx(), p1.y + line.getDy());
+		System.out
+				.println("Deviation of pixel (x,y) from line (" + p1.x + "," + p1.y + ")->(" + p2.x + "," + p2.y + ")");
+
+		for (GraphicTestUtil.PixelPosition pixel : pixels) {
+			// Assert the pixel is valid
+			double deviance = pixelDeviation(pixel, p1, p2);
+			System.out.println("\td(" + pixel.x + ", " + pixel.y + ")=" + deviance);
+			// Too far from the line
+			Assert.assertTrue(deviance >= -ACCEPTABLE_DEVIANCE);
+			Assert.assertTrue(deviance <= ACCEPTABLE_DEVIANCE);
 		}
+		System.out.println();
 
 		// Check that the drawable is a closed entity
-		System.out.println("Object closedness");
-		Assert.assertTrue(GraphicTestUtil.isTraceClosed(pixels));
+		System.out.println("Trace gap test");
+		Assert.assertTrue(GraphicTestUtil.doGapsExist(pixels));
 	}
 
 	/**
-	 * Helper method to determine the deviation (distance) from a pixel and the
-	 * line.
+	 * Helper method to determine the deviation (distance) from a pixel p and a line
+	 * (p1->p2).
 	 *
 	 * @param p0 - the pixel
-	 * @param l  - the line
+	 * @param p1 - the start of a line
+	 * @param p2 - the end of a line
 	 * @return the distance from a pixel and a line
 	 */
-	private static double lineDeviation(PixelPosition p0, Line l) {
-		PixelPosition p1 = new PixelPosition(0, 0);
-		PixelPosition p2 = new PixelPosition(l.getDx(), l.getDy());
-		int x0 = p0.x;
-		int y0 = p0.y;
+	private static double pixelDeviation(PixelPosition p, PixelPosition p1, PixelPosition p2) {
+		int x = p.x;
+		int y = p.y;
 		int x1 = p1.x;
 		int y1 = p1.y;
 		int x2 = p2.x;
 		int y2 = p2.y;
-		// Distance formula using line normal
-		//
-		// |(x2-x1)(y1-y0)-(x1-x0)(y2-y1)|
-		// -------------------------------
-		// sqrt((x2-x1)^2+(y2-y1)^2)
-		double distance = Math.abs((x2 - x1) * (y1 - y0) - (x1 - x0) * (y2 - y1))
-				/ Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-		return distance;
+		if (p1.equals(p2)) {
+			// Dx=dy=0, so distance is calculated using the distance formula
+			//
+			// sqrt((x-x1)^2+(y-y1)^2)
+			double distance = Math.sqrt(Math.pow(x - x1, 2) + Math.pow(y - y1, 2));
+			return distance;
+		} else {
+			// Distance formula using line normal
+			//
+			// |(x2-x1)(y1-y)-(x1-x)(y2-y1)|
+			// -----------------------------
+			// sqrt((x2-x1)^2+(y2-y1)^2)
+			double distance = Math.abs((x2 - x1) * (y1 - y) - (x1 - x) * (y2 - y1))
+					/ Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+			return distance;
+
+		}
 	}
 }

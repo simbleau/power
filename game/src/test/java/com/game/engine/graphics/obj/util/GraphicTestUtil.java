@@ -61,21 +61,20 @@ public class GraphicTestUtil {
 		int pW = Math.max(1, width); // Plane Width
 		int pH = Math.max(1, height); // Plane Height
 
-		/* A method in progress, but the frame buffer needs to capable of this.
-		CPURenderer renderer = new CPURenderer(new StationaryCamera(0, 0, pW, pH, 1));
-		renderer.init();
-		// Resize buffer
-		renderer.getProcessor().resize(pW, pH);
-		// Request the screenshot be made at the next render
-		renderer.requestScreenshot();
-		// Stage and render
-		RenderRequest request = drawable.asRequest(RenderLevel.WORLD_OBJECTS, 0, 0);
-		renderer.stage(request);
-		renderer.render();
-		// Retrieve screenshot
-		Assert.assertTrue(renderer.hasScreenshot());
-		BufferedImage buf = renderer.getScreenshot();
-		*/
+		/* A method in progress, but the frame buffer needs to capable of this. */
+//		CPURenderer renderer = new CPURenderer(new StationaryCamera(0, 0, pW, pH, 1));
+//		renderer.init();
+//		// Resize buffer
+//		renderer.getProcessor().resize(pW, pH);
+//		// Request the screenshot be made at the next render
+//		renderer.requestScreenshot();
+//		// Stage and render
+//		RenderRequest request = drawable.asRequest(RenderLevel.WORLD_OBJECTS, 0, 0);
+//		renderer.stage(request);
+//		renderer.render();
+//		// Retrieve screenshot
+//		Assert.assertTrue(renderer.hasScreenshot());
+//		BufferedImage buf = renderer.getScreenshot();
 
 		// Initialize driver
 		AbstractPlane plane = new AbstractPlane(pW, pH) {
@@ -125,21 +124,20 @@ public class GraphicTestUtil {
 		int pW = Math.max(1, width); // Plane Width
 		int pH = Math.max(1, height); // Plane Height
 
-		/* A method in progress, but the frame buffer needs to capable of this.
-		JOGLRenderer renderer = new JOGLRenderer(new StationaryCamera(0, 0, pW, pH, 1));
-		renderer.init();
-		// Resize buffer
-		renderer.getCanvas().setSize(pW, pH);
-		// Request the screenshot be made at the next render
-		renderer.requestScreenshot();
-		// Stage and render
-		RenderRequest request = drawable.asRequest(RenderLevel.WORLD_OBJECTS, 0, 0);
-		renderer.stage(request);
-		renderer.render();
-		// Retrieve screenshot
-		Assert.assertTrue(renderer.hasScreenshot());
-		BufferedImage buf = renderer.getScreenshot();
-		*/
+		/* A method in progress, but the frame buffer needs to capable of this. */
+//		JOGLRenderer renderer = new JOGLRenderer(new StationaryCamera(0, 0, pW, pH, 1));
+//		renderer.init();
+//		// Resize buffer
+//		renderer.getCanvas().setSize(pW, pH);
+//		// Request the screenshot be made at the next render
+//		renderer.requestScreenshot();
+//		// Stage and render
+//		RenderRequest request = drawable.asRequest(RenderLevel.WORLD_OBJECTS, 0, 0);
+//		renderer.stage(request);
+//		renderer.render();
+//		// Retrieve screenshot
+//		Assert.assertTrue(renderer.hasScreenshot());
+//		BufferedImage buf = renderer.getScreenshot();
 
 		// Initialize driver
 		AbstractPlane plane = new AbstractPlane(pW, pH) {
@@ -223,13 +221,12 @@ public class GraphicTestUtil {
 	}
 
 	/**
-	 * Return whether an iterable list of pixel positions is a closed object.
+	 * Return whether an list of pixel positions is has gaps.
 	 *
-	 * @param trace - the list of pixel positions
-	 * @return true if the breadcrumb is an adjacent list of points which can
-	 *         connect to the start of the list
+	 * @param trace - a list of pixel positions
+	 * @return true if the trace is a comprehensive set of pixels with no gaps
 	 */
-	public static boolean isTraceClosed(List<PixelPosition> trace) {
+	public static boolean doGapsExist(List<PixelPosition> trace) {
 		if (trace.size() <= 1) {
 			return true;
 		}
@@ -297,6 +294,16 @@ public class GraphicTestUtil {
 		public boolean neighbors(PixelPosition p) {
 			double distanceToStart = Math.sqrt(Math.pow(p.x - this.x, 2) + Math.pow(p.y - this.y, 2));
 			return distanceToStart <= Math.sqrt(2);
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (obj instanceof PixelPosition) {
+				PixelPosition p2 = (PixelPosition) obj;
+				return this.x == p2.x && this.y == p2.y;
+			} else {
+				return false;
+			}
 		}
 
 	}
