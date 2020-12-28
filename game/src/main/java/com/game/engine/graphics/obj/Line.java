@@ -134,6 +134,20 @@ public class Line implements Drawable {
 	}
 
 	/**
+	 * Helper method to calculate the alpha of a pixel with
+	 *
+	 * @param argb
+	 * @param error
+	 * @return
+	 */
+	int aaColor(float error) {
+		int alpha = 0xff - (int) (0xff * error);
+		int a = this.argb >> 24 & alpha;
+		int rgb = this.argb & 0x00ffffff;
+		return (int) a << 24 | rgb;
+	}
+
+	/**
 	 * Helper algorithm to plot a line using the bresenham algorithm. Found in
 	 * chapter 1.7 of <i>A Rasterizing Algorithm for Drawing Curves</i> (Wein,
 	 * 2012).
@@ -162,6 +176,52 @@ public class Line implements Drawable {
 			if (e2 <= dx) { // e_xy+e_y < 0
 				if (y0 == y1)
 					break;
+				err += dx;
+				y0 += sy;
+			}
+		}
+	}
+
+	/**
+	 * Helper algorithm to plot a line using the bresenham algorithm and
+	 * anti-aliasing. Found in chapter 7.1 of <i>A Rasterizing Algorithm for Drawing
+	 * Curves</i> (Wein, 2012).
+	 *
+	 * @param processor - the CPU processor
+	 * @param x0        - starting x co-ordinate
+	 * @param y0        - starting y co-ordinate
+	 * @param x1        - ending x co-ordinate
+	 * @param y1        - ending y co-ordinate
+	 * @see <a href="http://members.chello.at/easyfilter/bresenham.pdf">A
+	 *      Rasterizing Algorithm for Drawing Curves</a>
+	 */
+	void plotLineAA(CPUProcessor processor, int x0, int y0, int x1, int y1) {
+		int dx = Math.abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+		int dy = -Math.abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+		int err = dx + dy, e2, x2; // error value e_xy
+		float ed = (dx - dy == 0) ? 1 : (float) Math.sqrt(dx * dx + dy * dy);
+
+		while (true) { /* pixel loop */
+			processor.setPixel(x0, y0, aaColor(Math.abs(err - dx - dy) / ed));
+			e2 = err;
+			x2 = x0;
+			if (2 * e2 + dx >= 0) { /* x step */
+				if (x0 == x1) {
+					break;
+				}
+				if (e2 - dy < ed) {
+					processor.setPixel(x0, y0 + sy, aaColor((e2 - dy) / ed));
+				}
+				err += dy;
+				x0 += sx;
+			}
+			if (2 * e2 + dy <= 0) { /* y step */
+				if (y0 == y1) {
+					break;
+				}
+				if (dx - e2 < ed) {
+					processor.setPixel(x2 + sx, y0 + sy, aaColor((dx - e2) / ed));
+				}
 				err += dx;
 				y0 += sy;
 			}
