@@ -122,7 +122,7 @@ public class TestLine {
 
 		// Make sure the correct bound of pixels were drawn
 		System.out.println("Assertion of drawing");
-		System.out.println("[" + line.getDx() + "/" + line.getDy() + "]->" + pixels.size() + "px");
+		System.out.println("\t[" + line.getDx() + "/" + line.getDy() + "]->" + pixels.size() + "px");
 		int lineWidth = line.getDx() + 1;
 		int lineHeight = line.getDy() + 1;
 		Assert.assertTrue(pixels.size() == Math.max(lineWidth, lineHeight));

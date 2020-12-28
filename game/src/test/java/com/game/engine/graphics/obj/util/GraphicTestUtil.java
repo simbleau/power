@@ -212,6 +212,7 @@ public class GraphicTestUtil {
 
 		// Print result in ASCII
 		for (int row = 0; row < map.length; row++) {
+			sb.append('\t');
 			for (int col = 0; col < map[row].length; col++) {
 				sb.append(map[row][col] ? "X" : "-");
 			}
@@ -235,7 +236,7 @@ public class GraphicTestUtil {
 		// Works by ensuring every pixel in the trace has a neighbor.
 		// If any pixels do not have neighbors, they are isolated and a gap exists.
 		for (PixelPosition p1 : trace) {
-			System.out.print("Finding neighbor for (" + p1.x + "," + p1.y + ")...");
+			System.out.print("\tFinding neighbor for (" + p1.x + "," + p1.y + ")...");
 			boolean foundNeighbor = false;
 			for (PixelPosition p2 : trace) {
 				if (p1 == p2) {
