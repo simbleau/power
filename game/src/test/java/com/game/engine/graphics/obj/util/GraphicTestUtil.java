@@ -18,6 +18,8 @@ import com.game.engine.graphics.common.Drawable;
 import com.game.engine.graphics.common.RenderRequest;
 import com.game.engine.rendering.common.RenderLevel;
 import com.game.engine.rendering.common.RenderMode;
+import com.game.engine.rendering.cpu.CPURenderer;
+import com.game.engine.rendering.opengl.JOGLRenderer;
 
 /**
  * A utility class for retrieving a rendered {@link Drawable} to analyze in
@@ -61,53 +63,11 @@ public class GraphicTestUtil {
 		int pW = Math.max(1, width); // Plane Width
 		int pH = Math.max(1, height); // Plane Height
 
-		/* A method in progress, but the frame buffer needs to capable of this. */
-//		CPURenderer renderer = new CPURenderer(new StationaryCamera(0, 0, pW, pH, 1));
-//		renderer.init();
-//		// Resize buffer
-//		renderer.getProcessor().resize(pW, pH);
-//		// Request the screenshot be made at the next render
-//		renderer.requestScreenshot();
-//		// Stage and render
-//		RenderRequest request = drawable.asRequest(RenderLevel.WORLD_OBJECTS, 0, 0);
-//		renderer.stage(request);
-//		renderer.render();
-//		// Retrieve screenshot
-//		Assert.assertTrue(renderer.hasScreenshot());
-//		BufferedImage buf = renderer.getScreenshot();
-
-		// Initialize driver
-		AbstractPlane plane = new AbstractPlane(pW, pH) {
-		};
-		AbstractGame game = new AbstractGame(pW, pH, plane) {
-		};
-		GameDriver driver = new GameDriver(TEST_DRIVER_SETTINGS, TEST_CACHE, game);
-		DisplaySettings ds = new DisplaySettings(RenderMode.SAFE, new Dimension(pW, pH),
-				new StationaryCamera(0, 0, pW, pH, 1));
-		driver.init(ds);
-
-		// Ensure renderer initialized properly
-		if (!driver.getDisplay().isSafe()) {
-			Assert.fail("The renderer is not in SAFE mode, instead it is in '"
-					+ driver.getDisplay().getRenderer().getMode() + "' mode");
-		}
-
-		// Request the screenshot be made at the next render
-		driver.getDisplay().getRenderer().requestScreenshot();
-
-		// Stage and render
-		RenderRequest request = drawable.asRequest(RenderLevel.WORLD_OBJECTS, 0, 0);
-		driver.getDisplay().getRenderer().stage(request);
-		driver.getDisplay().getRenderer().render();
-
-		// Ensure screenshot was made
-		Assert.assertTrue(driver.getDisplay().getRenderer().hasScreenshot());
-
-		// Receive screenshot
-		BufferedImage buf = driver.getDisplay().getRenderer().getScreenshot();
-
-		// Return buf
-		driver.stop();
+		CPURenderer renderer = new CPURenderer(new StationaryCamera(0, 0, pW, pH, 1));
+		renderer.init();
+		renderer.getProcessor().resize(pW, pH);
+		drawable.draw(renderer.getProcessor(), 0, 0, 1, 1);
+		BufferedImage buf = renderer.getProcessor().getImage();
 		return buf;
 	}
 
@@ -124,53 +84,19 @@ public class GraphicTestUtil {
 		int pW = Math.max(1, width); // Plane Width
 		int pH = Math.max(1, height); // Plane Height
 
-		/* A method in progress, but the frame buffer needs to capable of this. */
-//		JOGLRenderer renderer = new JOGLRenderer(new StationaryCamera(0, 0, pW, pH, 1));
-//		renderer.init();
-//		// Resize buffer
-//		renderer.getCanvas().setSize(pW, pH);
-//		// Request the screenshot be made at the next render
-//		renderer.requestScreenshot();
-//		// Stage and render
-//		RenderRequest request = drawable.asRequest(RenderLevel.WORLD_OBJECTS, 0, 0);
-//		renderer.stage(request);
-//		renderer.render();
-//		// Retrieve screenshot
-//		Assert.assertTrue(renderer.hasScreenshot());
-//		BufferedImage buf = renderer.getScreenshot();
-
-		// Initialize driver
-		AbstractPlane plane = new AbstractPlane(pW, pH) {
-		};
-		AbstractGame game = new AbstractGame(pW, pH, plane) {
-		};
-		GameDriver driver = new GameDriver(TEST_DRIVER_SETTINGS, TEST_CACHE, game);
-		DisplaySettings ds = new DisplaySettings(RenderMode.OPENGL, new Dimension(pW, pH),
-				new StationaryCamera(0, 0, pW, pH, 1));
-		driver.init(ds);
-
-		// Ensure renderer initialized properly
-		if (!driver.getDisplay().isGL()) {
-			Assert.fail("The renderer is not in OPENGL mode, instead it is in '"
-					+ driver.getDisplay().getRenderer().getMode() + "' mode");
-		}
-
+		JOGLRenderer renderer = new JOGLRenderer(new StationaryCamera(0, 0, pW, pH, 1));
+		renderer.init();
+		// Resize buffer
+		renderer.getCanvas().reshape(0, 0, pW, pH);
 		// Request the screenshot be made at the next render
-		driver.getDisplay().getRenderer().requestScreenshot();
-
+		renderer.requestScreenshot();
 		// Stage and render
 		RenderRequest request = drawable.asRequest(RenderLevel.WORLD_OBJECTS, 0, 0);
-		driver.getDisplay().getRenderer().stage(request);
-		driver.getDisplay().getRenderer().render();
-
-		// Ensure screenshot was made
-		Assert.assertTrue(driver.getDisplay().getRenderer().hasScreenshot());
-
-		// Receive screenshot
-		BufferedImage buf = driver.getDisplay().getRenderer().getScreenshot();
-
-		// Return buf
-		driver.stop();
+		renderer.stage(request);
+		renderer.render();
+		// Retrieve screenshot
+		Assert.assertTrue(renderer.hasScreenshot());
+		BufferedImage buf = renderer.getScreenshot();
 		return buf;
 	}
 
