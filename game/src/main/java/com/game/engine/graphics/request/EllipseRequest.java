@@ -22,7 +22,7 @@ public class EllipseRequest extends RenderRequest {
 	 * @param y       - The y coordinate to render at
 	 */
 	public EllipseRequest(Ellipse ellipse, RenderLevel level, int x, int y) {
-		super(ellipse, level, y + ellipse.getRy() * 2, x, y);
+		super(ellipse, level, y + ellipse.getHeight(), x, y);
 	}
 
 	/**

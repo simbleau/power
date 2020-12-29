@@ -35,16 +35,6 @@ public class DemoEllipse extends AbstractMotionGameObject {
 	private Drawable drawable;
 
 	/**
-	 * Horizontal radius of the ellipse.
-	 */
-	private int xRadius;
-
-	/**
-	 * Vertical radius of the ellipse.
-	 */
-	private int yRadius;
-
-	/**
 	 * Construct a demo ellipse
 	 * 
 	 * @param size - the size for the drawable
@@ -52,15 +42,14 @@ public class DemoEllipse extends AbstractMotionGameObject {
 	public DemoEllipse(int size) {
 		this.speed = DEFAULT_SPEED;
 		this.direction = rng.nextDouble() * (2 * Math.PI);
-		this.xRadius = this.yRadius = (size - 1) / 2; // -1 for the origin
-		this.width = this.xRadius * 2 + 1; // +1 for the origin
-		this.height = this.yRadius * 2 + 1; // +1 for the origin
+		this.width = size;
+		this.height = size;
 		this.drawable = null;
 	}
 
 	@Override
 	public void init(GameDriver driver) {
-		this.drawable = new Ellipse(this.xRadius, this.yRadius, 0xff000000 | rng.nextInt(0xffffff));
+		this.drawable = new Ellipse(width, height, 0xff000000 | rng.nextInt(0xffffff));
 	}
 
 	@Override

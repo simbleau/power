@@ -9,7 +9,8 @@ import com.game.engine.rendering.opengl.JOGLProcessor;
 import com.jogamp.opengl.GL2;
 
 /**
- * An graphics object which contains information describing an ellipse
+ * An graphics object which contains information describing an ellipse inside a
+ * rectangle.
  *
  * @version December 2020
  * @author Spencer Imbleau
@@ -22,14 +23,14 @@ public class Ellipse implements Drawable {
 	private static final double ACCEPTABLE_ERROR = 0.33;
 
 	/**
-	 * The x-radius.
+	 * The width of the ellipse.
 	 */
-	private int rx;
+	private int width;
 
 	/**
-	 * The y-radius.
+	 * The height of the ellipse.
 	 */
-	private int ry;
+	private int height;
 
 	/**
 	 * The color of the ellipse.
@@ -39,42 +40,42 @@ public class Ellipse implements Drawable {
 	/**
 	 * Initialize an ellipse.
 	 *
-	 * @param rx   - the x-radius
-	 * @param ry   - the y-radius
-	 * @param argb - the argb color of the ellipse
+	 * @param width  - the width
+	 * @param height - the height
+	 * @param argb   - the argb color of the ellipse
 	 */
-	public Ellipse(int rx, int ry, int argb) {
-		this.rx = rx;
-		this.ry = ry;
+	public Ellipse(int width, int height, int argb) {
+		this.width = width;
+		this.height = height;
 		this.argb = argb;
 	}
 
 	/**
-	 * @return the x-radius
+	 * @return the width
 	 */
-	public int getRx() {
-		return this.rx;
+	public int getWidth() {
+		return this.width;
 	}
 
 	/**
-	 * @param rx - a new x-radius
+	 * @param width - a new width
 	 */
-	public void setRx(int rx) {
-		this.rx = rx;
+	public void setWidth(int width) {
+		this.width = width;
 	}
 
 	/**
-	 * @return the y-radius
+	 * @return the height
 	 */
-	public int getRy() {
-		return this.ry;
+	public int getHeight() {
+		return this.height;
 	}
 
 	/**
-	 * @param ry - a new y-radius
+	 * @param height - a new height
 	 */
-	public void setRy(int ry) {
-		this.ry = ry;
+	public void setHeight(int height) {
+		this.height = height;
 	}
 
 	/**
@@ -119,37 +120,65 @@ public class Ellipse implements Drawable {
 		// TODO Dispose of retained OpenGL memory
 	}
 
+	/**
+	 * Helper algorithm to plot a ellipse bounded by a rectangle using the bresenham
+	 * algorithm. Found in chapter 2.5 of <i>A Rasterizing Algorithm for Drawing
+	 * Curves</i> (Wein, 2012).
+	 *
+	 * @param processor - the CPU processor
+	 * @param x0        - starting x co-ordinate
+	 * @param y0        - starting y co-ordinate
+	 * @param x1        - ending x co-ordinate
+	 * @param y1        - ending y co-ordinate
+	 * @see <a href="http://members.chello.at/easyfilter/bresenham.pdf">A
+	 *      Rasterizing Algorithm for Drawing Curves</a>
+	 */
+	private void plotEllipseRect(CPUProcessor processor, int x0, int y0, int x1, int y1) {
+		int a = Math.abs(x1 - x0), b = Math.abs(y1 - y0), b1 = b & 1; // diameter
+		double dx = 4 * (1.0 - a) * b * b, dy = 4 * (b1 + 1) * a * a; // error increment
+		double err = dx + dy + b1 * a * a, e2; // error of 1.step
+		if (x0 > x1) {
+			x0 = x1;
+			x1 += a;
+		} // if called with swapped points
+		if (y0 > y1) { // exchange them
+			y0 = y1;
+		}
+		y0 += (b + 1) / 2;
+		y1 = y0 - b1; // starting pixel
+		a = 8 * a * a;
+		b1 = 8 * b * b;
+		do {
+			processor.setPixel(x1, y0, this.argb); // I. Quadrant
+			processor.setPixel(x0, y0, this.argb); // II. Quadrant
+			processor.setPixel(x0, y1, this.argb); // III. Quadrant
+			processor.setPixel(x1, y1, this.argb); // IV. Quadrant
+			e2 = 2 * err;
+			if (e2 <= dy) {
+				y0++;
+				y1--;
+				err += dy += a;
+			} // y step
+			if (e2 >= dx || 2 * err > dy) {
+				x0++;
+				x1--;
+				err += dx += b1;
+			} // x
+		} while (x0 <= x1);
+		while (y0 - y1 <= b) { // to early stop of flat ellipses a=1
+			processor.setPixel(x0 - 1, y0, this.argb); // finish tip of ellipse
+			processor.setPixel(x1 + 1, y0++, this.argb);
+			processor.setPixel(x0 - 1, y1, this.argb);
+			processor.setPixel(x1 + 1, y1--, this.argb);
+		}
+	}
+
 	@Override
 	public void draw(CPUProcessor processor, int x, int y, double sx, double sy) {
-		// The scaled radii
-		int srx = (int) (this.rx * sx);
-		int sry = (int) (this.ry * sy);
-
-		// Do not draw objects with a radius of 0
-		if (srx < 1 || sry < 1) {
-			return;
-		}
-
-		// Calculate the amount of vertices needed using the delta angle between
-		// adjacent vertices
-		double da = Math.acos(2 * (1 - ACCEPTABLE_ERROR / srx) * (1 - ACCEPTABLE_ERROR / sry) - 1);
-		int vertices = (int) Math.ceil(2 * Math.PI / da);
-
-		// Draw lines between all vertices
-		int xi = (int) (srx * Math.cos(0) + x + srx);
-		int yi = (int) (sry * Math.sin(0) + y + sry);
-		double vertexRadian = 2 * Math.PI / vertices;
-		for (int i = 1; i <= vertices; i++) {
-			double theta = vertexRadian * i;
-			int xi2 = (int) (srx * Math.cos(theta) + x + srx);
-			int yi2 = (int) (sry * Math.sin(theta) + y + sry);
-			int dx = xi2 - xi;
-			int dy = yi2 - yi;
-			Line l = new Line(dx, dy, this.argb);
-			l.draw(processor, xi, yi, 1, 1);
-			xi = xi2;
-			yi = yi2;
-		}
+		// The scaled dimensions
+		int sw = (int) (this.width * sx);
+		int sh = (int) (this.height * sy);
+		plotEllipseRect(processor, x, y, Math.max(x, x + sw - 1), Math.max(y, y + sh - 1));
 	}
 
 	@Override
@@ -162,8 +191,8 @@ public class Ellipse implements Drawable {
 		gl.glColor4f(r, g, b, a);
 
 		// The scaled radii
-		double srx = this.rx * sx;
-		double sry = this.ry * sy;
+		double srx = (this.width / 2d) * sx;
+		double sry = (this.height / 2d) * sy;
 
 		// Calculate the amount of vertices needed using the delta angle between
 		// adjacent vertices
