@@ -75,8 +75,8 @@ public class GameDisplay {
 		try {
 			this.renderer.init();
 		} catch (Exception e) {
-			PowerLogger.LOGGER.log(Level.WARNING, "Expected graphic mode '"
-					+ this.renderer.getMode() + "' could not be initialized", e);
+			PowerLogger.LOGGER.log(Level.WARNING,
+					"Expected graphic mode '" + this.renderer.getMode() + "' could not be initialized", e);
 			// Default to safe mode
 			this.renderer = new CPURenderer(this.settings.getPreferredCamera());
 			try {
