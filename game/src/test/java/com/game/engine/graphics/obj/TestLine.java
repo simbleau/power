@@ -60,7 +60,8 @@ public class TestLine {
 			for (int dy = 0; dy < GraphicTestUtil.DRAWABLE_MAX_HEIGHT; dy++) {
 				// Get drawable
 				Line drawable = new Line(dx, dy, TEST_COLOR);
-				System.out.println("Line Slope: " + drawable.getDx() + "x" + drawable.getDy());
+				System.out.println("Line slope: " + drawable.getDx() + "x" + drawable.getDy());
+				System.out.println(new String(new char[80]).replace("\0", "-"));
 
 				// Retrieve render
 				int width = drawable.getDx() + 1;
@@ -83,7 +84,8 @@ public class TestLine {
 			for (int dy = 0; dy < GraphicTestUtil.DRAWABLE_MAX_HEIGHT; dy++) {
 				// Get drawable
 				Line drawable = new Line(dx, dy, TEST_COLOR);
-				System.out.println("Line Slope: " + drawable.getDx() + "x" + drawable.getDy());
+				System.out.println("Line slope: " + drawable.getDx() + "x" + drawable.getDy());
+				System.out.println(new String(new char[80]).replace("\0", "-"));
 
 				// Retrieve render
 				int width = drawable.getDx() + 1;
@@ -132,8 +134,7 @@ public class TestLine {
 		// Check all pixels are on the perimeter of a line
 		PixelPosition p1 = new PixelPosition(0, 0); // Origin
 		PixelPosition p2 = new PixelPosition(p1.x + line.getDx(), p1.y + line.getDy());
-		System.out
-				.println("Deviation of pixel (x,y) to line (" + p1.x + "," + p1.y + ")->(" + p2.x + "," + p2.y + ")");
+		System.out.println("Deviation of pixel (x,y) to line (" + p1.x + "," + p1.y + ")->(" + p2.x + "," + p2.y + ")");
 
 		for (GraphicTestUtil.PixelPosition pixel : pixels) {
 			// Assert the pixel is valid
@@ -148,6 +149,7 @@ public class TestLine {
 		// Check that the drawable is a gap-less entity
 		System.out.println("Trace gap test");
 		Assert.assertTrue(GraphicTestUtil.doGapsExist(pixels));
+		System.out.println();
 	}
 
 	/**
