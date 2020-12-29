@@ -125,7 +125,7 @@ public class TestEllipse {
 
 		// Make sure the correct bound of pixels were drawn
 		System.out.println("Assertion of drawing");
-		System.out.println("[" + width + "x" + height + "]->" + pixels.size() + "px");
+		System.out.println("\t[" + width + "x" + height + "]->" + pixels.size() + "px");
 		Assert.assertTrue(pixels.size() > 0);
 		System.out.println();
 
@@ -151,6 +151,7 @@ public class TestEllipse {
 		// Check that the drawable is a gap-less entity
 		System.out.println("Trace gap test");
 		Assert.assertTrue(GraphicTestUtil.doGapsExist(pixels));
+		System.out.println();
 	}
 
 	/**
