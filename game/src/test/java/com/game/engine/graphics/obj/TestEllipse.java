@@ -131,14 +131,12 @@ public class TestEllipse {
 		double k = 0 + ry; // y-focus
 		System.out.println("Deviation of pixel (x,y) to ellipse with focus(" + h + "," + k + ")");
 		pixels.forEach(pixel -> {
-			if (rx != 0 && ry != 0) {
-				double deviance = pixelDeviation(pixel.x, pixel.y, h, k, rx, ry);
-				System.out.println("\td(" + pixel.x + ", " + pixel.y + ")=" + deviance);
-				// Too close inside of the ellipse
-				Assert.assertTrue(deviance >= -ACCEPTABLE_DEVIANCE);
-				// Too far out of the ellipse
-				Assert.assertTrue(deviance <= ACCEPTABLE_DEVIANCE);
-			}
+			double deviance = pixelDeviation(pixel.x, pixel.y, h, k, rx, ry);
+			System.out.println("\td(" + pixel.x + ", " + pixel.y + ")=" + deviance);
+			// Too close inside of the ellipse
+			Assert.assertTrue(deviance >= -ACCEPTABLE_DEVIANCE);
+			// Too far out of the ellipse
+			Assert.assertTrue(deviance <= ACCEPTABLE_DEVIANCE);
 		});
 		System.out.println();
 
@@ -160,9 +158,25 @@ public class TestEllipse {
 	 * @return the deviation magnitude from a point to its ellipse
 	 */
 	private static double pixelDeviation(int x, int y, double h, double k, double rx, double ry) {
-		// TODO implement this for better testing
-		// Example:
-		// https://www.quora.com/What-is-a-good-method-to-determine-the-shortest-distance-from-a-point-to-an-ellipse
-		return 0;
+		if (rx == 0) {
+			if (y < k) { // y is above cy
+				return Math.max(0, (k - ry) - y);
+			} else { // y is below cy
+				return Math.max(0, y - (k + ry));
+			}
+		} else if (ry == 0) {
+			if (x < h) { // x is left of cx
+				return Math.max(0, (h - rx) - x);
+			} else { // x is right of cx
+				return Math.max(0, x - (h + rx));
+			}
+		} else {
+			// (x-h)^2/rx^2 + (y-k)^2/ry^2 <= 1
+			// If in the inequation, results comes less than 1 then the point lies within,
+			// else if it comes exact 1 then the point lies on the ellipse, and if the
+			// inequation is unsatisfied then point lies outside of the ellipse.
+			double d = (Math.pow((x - h), 2) / Math.pow(rx, 2)) + (Math.pow((y - k), 2) / Math.pow(ry, 2));
+			return 1 - d;
+		}
 	}
 }
