@@ -85,7 +85,7 @@ public class Rectangle implements Drawable {
 
 	/**
 	 * Set the color of the rectangle
-	 * 
+	 *
 	 * @param argb - the ARGB color to set
 	 */
 	public void setColor(int argb) {
@@ -118,49 +118,55 @@ public class Rectangle implements Drawable {
 		// TODO Dispose of retained OpenGL memory
 	}
 
-	@Override
-	public void draw(CPUProcessor processor, int x, int y, double sx, double sy) {
-		int width = (int) (this.width * sx);
-		int height = (int) (this.height * sy);
+	/**
+	 * Helper algorithm to plot a rectangle.
+	 *
+	 * @param processor - the CPU processor
+	 * @param x0        - starting x co-ordinate
+	 * @param y0        - starting y co-ordinate
+	 * @param x1        - ending x co-ordinate
+	 * @param y1        - ending y co-ordinate
+	 */
+	private void plotRect(CPUProcessor processor, int x0, int y0, int x1, int y1) {
+		// Plot first pixel
+		processor.setPixel(x0, y0, this.argb);
 
-		// Don't render anything with a width or height of 0
-		if (width == 0 || height == 0) {
+		// If the width & height are <= 1, it's just a pixel, so return
+		if (x0 == x1 && y0 == y1) {
 			return;
 		}
-
-		// Don't render off-screen rectangles
-		if (x < -width)
-			return;
-		if (x > processor.getImage().getWidth())
-			return;
-		if (y < -height)
-			return;
-		if (y > processor.getImage().getHeight())
-			return;
-
-		// In the next steps we specify the bounds which are visible on screen
-		int xStart = 0;
-		int yStart = 0;
-		if (x < 0)
-			xStart -= x;
-		if (y < 0)
-			yStart -= y;
-		if (width + x > processor.getImage().getWidth())
-			width -= width + x - processor.getImage().getWidth();
-		if (height + y > processor.getImage().getHeight())
-			height -= height + y - processor.getImage().getHeight();
 
 		// Draw
-		for (int yi = yStart; yi < height; yi++) {
-			// Vertical bars
-			processor.setPixel(x, y + yi, this.argb);
-			processor.setPixel(x + (width - 1), y + yi, this.argb);
+		int sx = x0 < x1 ? 1 : -1;
+		int sy = y0 < y1 ? 1 : -1;
+
+		// Vertical bars
+		int y = y0;
+		while (true) {
+			if (y == y1) {
+				break;
+			}
+			y += sy;
+			processor.setPixel(x0, y, this.argb);
+			processor.setPixel(x1, y, this.argb);
 		}
-		for (int xi = xStart; xi < width; xi++) {
-			// Horizontal bars
-			processor.setPixel(x + xi, y, this.argb);
-			processor.setPixel(x + xi, y + (height - 1), this.argb);
+		// Horizontal bars
+		int x = x0;
+		while (true) {
+			if (x == x1) {
+				break;
+			}
+			x += sx;
+			processor.setPixel(x, y0, this.argb);
+			processor.setPixel(x, y1, this.argb);
 		}
+	}
+
+	@Override
+	public void draw(CPUProcessor processor, int x, int y, double sx, double sy) {
+		int sw = (int) (this.width * sx);
+		int sh = (int) (this.height * sy);
+		plotRect(processor, x, y, Math.max(x, x + sw - 1), Math.max(y, y + sh - 1));
 	}
 
 	@Override

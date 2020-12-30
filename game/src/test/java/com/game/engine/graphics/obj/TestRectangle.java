@@ -46,8 +46,6 @@ public class TestRectangle {
 	/**
 	 * Tests the pixel accuracy of all drawables being rendered in
 	 * {@link RenderMode#SAFE} mode.
-	 *
-	 * @see #r
 	 */
 	@Test
 	public void testSafeRender() {
@@ -55,7 +53,8 @@ public class TestRectangle {
 			for (int h = 0; h < GraphicTestUtil.DRAWABLE_MAX_HEIGHT; h++) {
 				// Get drawable
 				Rectangle drawable = new Rectangle(w, h, TEST_COLOR);
-				System.out.println("Rectangle Dimensions: " + drawable.getWidth() + "x" + drawable.getHeight());
+				System.out.println("Rectangle dimensions: " + drawable.getWidth() + "x" + drawable.getHeight());
+				System.out.println(new String(new char[80]).replace("\0", "-"));
 
 				// Retrieve render
 				BufferedImage render = GraphicTestUtil.getSafeRender(drawable, w, h);
@@ -69,8 +68,6 @@ public class TestRectangle {
 	/**
 	 * Tests the pixel accuracy of all drawables being rendered in
 	 * {@link RenderMode#OPENGL} mode.
-	 *
-	 * @see #r
 	 */
 	@Test
 	public void testOpenGLRender() {
@@ -78,7 +75,8 @@ public class TestRectangle {
 			for (int h = 0; h < GraphicTestUtil.DRAWABLE_MAX_HEIGHT; h++) {
 				// Get drawable
 				Rectangle drawable = new Rectangle(w, h, TEST_COLOR);
-				System.out.println("Drawable: " + drawable.getWidth() + "x" + drawable.getHeight());
+				System.out.println("Rectangle dimensions: " + drawable.getWidth() + "x" + drawable.getHeight());
+				System.out.println(new String(new char[80]).replace("\0", "-"));
 
 				// Retrieve render
 				BufferedImage render = GraphicTestUtil.getOpenGLRender(drawable, w, h);
@@ -100,7 +98,7 @@ public class TestRectangle {
 		boolean[][] pixelMap = GraphicTestUtil.mapPixels(render, TEST_COLOR);
 
 		// Print pixel map
-		System.out.println("Pixel Map");
+		System.out.println("Pixel map");
 		System.out.println(GraphicTestUtil.mapToString(pixelMap));
 
 		// Collect the rendered pixels
@@ -116,41 +114,36 @@ public class TestRectangle {
 		// Make sure the correct bound of pixels were drawn
 		System.out.println("Assertion of drawing");
 		System.out.println("[" + dW + "x" + dH + "]->" + pixels.size() + "px");
-		if (dW > 0 && dH > 0) {
-			Assert.assertTrue(pixels.size() > 0);
-		} else {
-			Assert.assertTrue(pixels.size() == 0);
-		}
+		Assert.assertTrue(pixels.size() > 0);
 		System.out.println();
 
 		// Analyse the rendered pixels for accuracy
 		// Check all pixels are on the perimeter of a rectangle
-		if (dW > 0 && dH > 0) {
-			System.out.println("Point Checking");
-			for (GraphicTestUtil.PixelPosition pixel : pixels) {
-				boolean shouldBeRendered = false;
-				// Assert the pixel is valid
-				if (pixel.y == 0 || pixel.y == dH - 1) {
-					shouldBeRendered = true;
-				} else if (pixel.x == 0 || pixel.x == dW - 1) {
-					shouldBeRendered = true;
-				} else {
-					shouldBeRendered = false;
-				}
-
-				System.out.println("(" + pixel.x + ", " + pixel.y + ")->" + shouldBeRendered);
-				if (shouldBeRendered) {
-					Assert.assertTrue(pixelMap[pixel.y][pixel.x]);
-				} else {
-					Assert.assertFalse(pixelMap[pixel.y][pixel.x]);
-				}
+		System.out.println("Pixel verification");
+		for (GraphicTestUtil.PixelPosition pixel : pixels) {
+			boolean shouldBeRendered = false;
+			// Assert the pixel is valid
+			if (pixel.y == 0 || pixel.y == dH - 1) {
+				shouldBeRendered = true;
+			} else if (pixel.x == 0 || pixel.x == dW - 1) {
+				shouldBeRendered = true;
+			} else {
+				shouldBeRendered = false;
 			}
-			System.out.println();
+
+			System.out.println("(" + pixel.x + ", " + pixel.y + ")->" + shouldBeRendered);
+			if (shouldBeRendered) {
+				Assert.assertTrue(pixelMap[pixel.y][pixel.x]);
+			} else {
+				Assert.assertFalse(pixelMap[pixel.y][pixel.x]);
+			}
 		}
+		System.out.println();
 
 		// Check that the drawable is a closed entity
-		System.out.println("Object closedness");
-		Assert.assertTrue(GraphicTestUtil.isTraceClosed(pixels));
+		System.out.println("Trace gap test");
+		Assert.assertTrue(GraphicTestUtil.doGapsExist(pixels));
+		System.out.println();
 	}
 
 }
