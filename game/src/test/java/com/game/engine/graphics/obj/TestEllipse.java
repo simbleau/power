@@ -52,12 +52,9 @@ public class TestEllipse {
 	/**
 	 * Tests the pixel accuracy of all drawables being rendered in
 	 * {@link RenderMode#SAFE} mode.
-	 *
-	 * @see #e
 	 */
 	@Test
 	public void testSafeRender() {
-		// Get drawable
 		for (int w = 0; w < GraphicTestUtil.DRAWABLE_MAX_WIDTH; w++) {
 			for (int h = 0; h < GraphicTestUtil.DRAWABLE_MAX_HEIGHT; h++) {
 				// Get drawable
@@ -77,12 +74,9 @@ public class TestEllipse {
 	/**
 	 * Tests the pixel accuracy of all drawables being rendered in
 	 * {@link RenderMode#OPENGL} mode.
-	 *
-	 * @see #e
 	 */
 	@Test
 	public void testOpenGLRender() {
-		// Get drawable
 		for (int w = 0; w < GraphicTestUtil.DRAWABLE_MAX_WIDTH; w++) {
 			for (int h = 0; h < GraphicTestUtil.DRAWABLE_MAX_HEIGHT; h++) {
 				// Get drawable
