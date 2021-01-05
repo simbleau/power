@@ -102,10 +102,10 @@ public abstract class AbstractMotionGameObject extends AbstractGameObject {
 		double dx = this.dx(uDt);
 		double dy = this.dy(uDt);
 
-		if (dx + dy != 0) {
+		if (dx != 0 && dy != 0) {
 			// TODO Collision check here instead
-			this.move(driver, Math.max(0, Math.min(this.x() + dx, parent.width - this.width)),
-					Math.max(0, Math.min(this.y() + dy, parent.height - this.height)));
+			this.move(driver, Math.max(0, Math.min(this.position.x() + dx, parent.width - this.width)),
+					Math.max(0, Math.min(this.position.y() + dy, parent.height - this.height)));
 		}
 	}
 

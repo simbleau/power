@@ -38,11 +38,11 @@ public class FontTestPlane extends AbstractPlane {
 		this.shiftLabel.setSpeed(0);
 		this.altLabel.setSpeed(0);
 
-		this.levelObjects.add(characterLabel);
-		this.levelObjects.add(keycodeLabel);
-		this.levelObjects.add(ctrlLabel);
-		this.levelObjects.add(shiftLabel);
-		this.levelObjects.add(altLabel);
+		this.objects.add(characterLabel);
+		this.objects.add(keycodeLabel);
+		this.objects.add(ctrlLabel);
+		this.objects.add(shiftLabel);
+		this.objects.add(altLabel);
 	}
 
 	@Override
@@ -88,15 +88,15 @@ public class FontTestPlane extends AbstractPlane {
 
 		if (this.shiftDown) {
 			renderer.stage(new Rectangle(shiftLabel.width(), shiftLabel.height(), 0xffff0000)
-					.asRequest(RenderLevel.VOID, (int) shiftLabel.x(), (int) shiftLabel.y()));
+					.asRequest(RenderLevel.VOID, shiftLabel.position.x.asInt(), shiftLabel.position.y.asInt()));
 		}
 		if (this.ctrlDown) {
 			renderer.stage(new Rectangle(ctrlLabel.width(), ctrlLabel.height(), 0xffff0000)
-					.asRequest(RenderLevel.VOID, (int) ctrlLabel.x(), (int) ctrlLabel.y()));
+					.asRequest(RenderLevel.VOID, ctrlLabel.position.x.asInt(), ctrlLabel.position.y.asInt()));
 		}
 		if (this.altDown) {
 			renderer.stage(new Rectangle(altLabel.width(), altLabel.height(), 0xffff0000)
-					.asRequest(RenderLevel.VOID, (int) altLabel.x(), (int) altLabel.y()));
+					.asRequest(RenderLevel.VOID, altLabel.position.x.asInt(), altLabel.position.y.asInt()));
 		}
 	}
 

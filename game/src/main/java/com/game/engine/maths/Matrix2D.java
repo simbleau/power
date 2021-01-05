@@ -1,4 +1,8 @@
-package com.game.engine.coordinates;
+package com.game.engine.maths;
+
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Arrays;
 
 import com.game.engine.camera.AbstractCamera;
 
@@ -8,14 +12,14 @@ import com.game.engine.camera.AbstractCamera;
  * @author Spencer Imbleau
  * @version July 2020
  */
-public class CoordinateMatrix extends Matrix {
+public class Matrix2D extends Matrix {
 
 	/**
 	 * Construct a 2D coordinate matrix.
 	 * 
 	 * @param matrix - the matrix data
 	 */
-	private CoordinateMatrix(double[][] matrix) {
+	private Matrix2D(double[][] matrix) {
 		super(matrix, 1, 2);
 	}
 
@@ -26,14 +30,14 @@ public class CoordinateMatrix extends Matrix {
 	 * @param y - the y coordinate
 	 * @return a coordinate matrix with the given coordinates
 	 */
-	public static CoordinateMatrix create(double x, double y) {
+	public static Matrix2D create(double x, double y) {
 		double[][] matrix = { { x, y } };
-		return new CoordinateMatrix(matrix);
+		return new Matrix2D(matrix);
 	}
 
 	/**
 	 * Helper method which creates a rotation matrix which multiplies with a
-	 * {@link CoordinateMatrix}
+	 * {@link Matrix2D}
 	 *
 	 * @param theta - the angle of rotation (in radians)
 	 * @return a rotation matrix
@@ -45,7 +49,7 @@ public class CoordinateMatrix extends Matrix {
 
 	/**
 	 * Helper method which creates a scaling matrix which multiplies with a
-	 * {@link CoordinateMatrix}
+	 * {@link Matrix2D}
 	 *
 	 * @param sx - the scale factor for the X axis
 	 * @param sy - the scale factor for the Y axis
@@ -54,6 +58,27 @@ public class CoordinateMatrix extends Matrix {
 	private static Matrix scaleMatrix(double sx, double sy) {
 		double[][] scaleMatrix = { { sx, 0 }, { 0, sy } };
 		return new Matrix(scaleMatrix, 2, 2);
+	}
+
+	@Override
+	public String toString() {
+		NumberFormat formatter = new DecimalFormat("000.0");
+		StringBuilder sb = new StringBuilder();
+		sb.append('[');
+		sb.append(formatter.format(this.matrix[0][0]));
+		sb.append(", ");
+		sb.append(formatter.format(this.matrix[0][1]));
+		sb.append(']');
+		return sb.toString();
+	}
+
+	@Override
+	public Matrix2D clone() {
+		double[][] copyMatrix = null;
+		if (this.getArray() != null) {
+			copyMatrix = Arrays.stream(this.matrix).map(double[]::clone).toArray(double[][]::new);
+		}
+		return new Matrix2D(copyMatrix);
 	}
 
 	/**
@@ -92,9 +117,9 @@ public class CoordinateMatrix extends Matrix {
 	 * @param ty - translational delta y
 	 * @return A new matrix equaling this matrix translated by given constants.
 	 */
-	public CoordinateMatrix translate(double tx, double ty) {
+	public Matrix2D translate(double tx, double ty) {
 		double[][] translateData = { { this.matrix[0][0] + tx, this.matrix[0][1] + ty } };
-		return new CoordinateMatrix(translateData);
+		return new Matrix2D(translateData);
 	}
 
 	/**
@@ -104,7 +129,7 @@ public class CoordinateMatrix extends Matrix {
 	 * @param ty - translational delta y
 	 * @return this matrix equaling translated by given constants.
 	 */
-	public CoordinateMatrix translateEquals(double tx, double ty) {
+	public Matrix2D translateEquals(double tx, double ty) {
 		this.matrix[0][0] = this.matrix[0][0] + tx;
 		this.matrix[0][1] = this.matrix[0][1] + ty;
 		return this;
@@ -117,9 +142,9 @@ public class CoordinateMatrix extends Matrix {
 	 * @return A new matrix equaling this matrix translated on the X axis by a given
 	 *         constant.
 	 */
-	public CoordinateMatrix translateX(double tx) {
+	public Matrix2D translateX(double tx) {
 		double[][] translateData = { { this.matrix[0][0] + tx, this.matrix[0][1] } };
-		return new CoordinateMatrix(translateData);
+		return new Matrix2D(translateData);
 	}
 
 	/**
@@ -128,7 +153,7 @@ public class CoordinateMatrix extends Matrix {
 	 * @param tx - translational delta x
 	 * @return this matrix equaling translated on the X axis by given constant.
 	 */
-	public CoordinateMatrix translateXEquals(double tx) {
+	public Matrix2D translateXEquals(double tx) {
 		this.matrix[0][0] = this.matrix[0][0] + tx;
 		return this;
 	}
@@ -140,9 +165,9 @@ public class CoordinateMatrix extends Matrix {
 	 * @return A new matrix equaling this matrix translated on the Y axis by a given
 	 *         constant.
 	 */
-	public CoordinateMatrix translateY(double ty) {
+	public Matrix2D translateY(double ty) {
 		double[][] translateData = { { this.matrix[0][0], this.matrix[0][1] + ty } };
-		return new CoordinateMatrix(translateData);
+		return new Matrix2D(translateData);
 	}
 
 	/**
@@ -151,7 +176,7 @@ public class CoordinateMatrix extends Matrix {
 	 * @param ty - translational delta y
 	 * @return this matrix equaling translated on the Y axis by given constant.
 	 */
-	public CoordinateMatrix translateYEquals(double ty) {
+	public Matrix2D translateYEquals(double ty) {
 		this.matrix[0][1] = this.matrix[0][1] + ty;
 		return this;
 	}
@@ -162,9 +187,9 @@ public class CoordinateMatrix extends Matrix {
 	 * @param theta - the angle of rotation (in radians)
 	 * @return A new matrix equaling this matrix rotated by a given theta.
 	 */
-	public CoordinateMatrix rotate(double theta) {
+	public Matrix2D rotate(double theta) {
 		Matrix buf = this.times(rotationMatrix(theta));
-		return CoordinateMatrix.create(buf.matrix[0][0], buf.matrix[0][1]);
+		return Matrix2D.create(buf.matrix[0][0], buf.matrix[0][1]);
 	}
 
 	/**
@@ -173,8 +198,8 @@ public class CoordinateMatrix extends Matrix {
 	 * @param theta - the angle of rotation (in radians)
 	 * @return This matrix equaling rotated by a given theta.
 	 */
-	public CoordinateMatrix rotateEquals(double theta) {
-		return (CoordinateMatrix) this.timesEquals(rotationMatrix(theta));
+	public Matrix2D rotateEquals(double theta) {
+		return (Matrix2D) this.timesEquals(rotationMatrix(theta));
 	}
 
 	/**
@@ -186,7 +211,7 @@ public class CoordinateMatrix extends Matrix {
 	 * @return A new matrix equaling this matrix rotated by a given theta around an
 	 *         anchor point.
 	 */
-	public CoordinateMatrix rotate(double theta, double x, double y) {
+	public Matrix2D rotate(double theta, double x, double y) {
 		return this.translate(-x, -y).rotateEquals(theta).translateEquals(x, y);
 	}
 
@@ -198,7 +223,7 @@ public class CoordinateMatrix extends Matrix {
 	 * @param y     - anchor point y to rotate around
 	 * @return This matrix equaling rotated by a given theta around an anchor point.
 	 */
-	public CoordinateMatrix rotateEquals(double theta, double x, double y) {
+	public Matrix2D rotateEquals(double theta, double x, double y) {
 		return this.translateEquals(-x, -y).rotateEquals(theta).translateEquals(x, y);
 	}
 
@@ -209,9 +234,9 @@ public class CoordinateMatrix extends Matrix {
 	 * @param sy - the scale factor for the Y axis
 	 * @return A new matrix equaling this matrix scaled by the given scalars.
 	 */
-	public CoordinateMatrix scale(double sx, double sy) {
+	public Matrix2D scale(double sx, double sy) {
 		Matrix buf = this.times(scaleMatrix(sx, sy));
-		return CoordinateMatrix.create(buf.matrix[0][0], buf.matrix[0][1]);
+		return Matrix2D.create(buf.matrix[0][0], buf.matrix[0][1]);
 	}
 
 	/**
@@ -221,8 +246,8 @@ public class CoordinateMatrix extends Matrix {
 	 * @param sy - the scale factor for the Y axis
 	 * @return This matrix scaled by the given scalars.
 	 */
-	public CoordinateMatrix scaleEquals(double sx, double sy) {
-		return (CoordinateMatrix) this.timesEquals(scaleMatrix(sx, sy));
+	public Matrix2D scaleEquals(double sx, double sy) {
+		return (Matrix2D) this.timesEquals(scaleMatrix(sx, sy));
 	}
 
 	/**
@@ -231,9 +256,9 @@ public class CoordinateMatrix extends Matrix {
 	 * @param s - the scale factor
 	 * @return A new matrix equaling this matrix scaled by the constant scalar.
 	 */
-	public CoordinateMatrix scale(double s) {
+	public Matrix2D scale(double s) {
 		Matrix buf = this.times(s);
-		return CoordinateMatrix.create(buf.matrix[0][0], buf.matrix[0][1]);
+		return Matrix2D.create(buf.matrix[0][0], buf.matrix[0][1]);
 	}
 
 	/**
@@ -242,8 +267,8 @@ public class CoordinateMatrix extends Matrix {
 	 * @param s - the scale factor
 	 * @return This matrix scaled by the constant scalar.
 	 */
-	public CoordinateMatrix scaleEquals(double s) {
-		return (CoordinateMatrix) this.timesEquals(s);
+	public Matrix2D scaleEquals(double s) {
+		return (Matrix2D) this.timesEquals(s);
 	}
 
 	/**
@@ -252,7 +277,7 @@ public class CoordinateMatrix extends Matrix {
 	 * @param camera - a camera
 	 * @return A new matrix equaling this matrix transformed by a given camera.
 	 */
-	public CoordinateMatrix transform(AbstractCamera camera) {
+	public Matrix2D transform(AbstractCamera camera) {
 		return this.translate(-camera.viewport.x(), -camera.viewport.y()).scaleEquals(camera.zoom());
 	}
 
@@ -262,8 +287,16 @@ public class CoordinateMatrix extends Matrix {
 	 * @param camera - a camera
 	 * @return This matrix transformed by a given camera.
 	 */
-	public CoordinateMatrix transformEquals(AbstractCamera camera) {
+	public Matrix2D transformEquals(AbstractCamera camera) {
 		return this.translateEquals(-camera.viewport.x(), -camera.viewport.y()).scaleEquals(camera.zoom());
+	}
+	
+	public double dot(Matrix2D m) {
+		return this.x() * m.x() + this.y() * m.y();
+	}
+
+	public double cross(Matrix2D m) {
+		return this.x() * m.y() - this.y() * m.x();
 	}
 
 	/**
@@ -279,4 +312,6 @@ public class CoordinateMatrix extends Matrix {
 	public double y() {
 		return this.matrix[0][1];
 	}
+	
+	
 }

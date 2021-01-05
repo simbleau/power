@@ -34,7 +34,7 @@ public class ChunkedTestPlane extends AbstractChunkedPlane {
 		TEST_OBJ.setSpeed(0);
 
 		// Add object to the map
-		this.levelObjects.add(TEST_OBJ);
+		this.objects.add(TEST_OBJ);
 	}
 
 	@Override

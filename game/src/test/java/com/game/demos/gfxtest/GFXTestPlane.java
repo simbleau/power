@@ -30,7 +30,7 @@ public class GFXTestPlane extends AbstractChunkedPlane {
 
 		// Add graphic objects on the map
 		for (AbstractGameObject obj : OBJECTS) {
-			this.levelObjects.add(obj);
+			this.objects.add(obj);
 		}
 	}
 

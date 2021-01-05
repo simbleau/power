@@ -40,23 +40,23 @@ public class ChunkAllegianceTestPlane extends GFXTestPlane {
 		// Display attachments between objects and chunks
 		for (Chunk c : this.chunker.viewableChunks()) {
 			for (AbstractGameObject obj : c.objects()) {
-				int dx = (obj.chunkColumn() * Chunk.SIZE) + (Chunk.SIZE / 2) - (int) obj.x();
-				int dy = (obj.chunkRow() * Chunk.SIZE) + (Chunk.SIZE / 2) - (int) obj.y();
+				int dx = (obj.position.chunkColumn() * Chunk.SIZE) + (Chunk.SIZE / 2) - obj.position.x.asInt();
+				int dy = (obj.position.chunkRow() * Chunk.SIZE) + (Chunk.SIZE / 2) - obj.position.y.asInt();
 				LineRequest allegianceLineReq = new LineRequest(
 						new Line(dx, dy, OVERLAY_COLOR),
 						RenderLevel.WORLD_OVERLAY,
 						Integer.MAX_VALUE,
-						(int) obj.x(), (int) obj.y());
+						obj.position.x.asInt(), obj.position.y.asInt());
 				RectangleRequest boundingBoxReq = new RectangleRequest(
 						new Rectangle(obj.width(), obj.height(), OVERLAY_COLOR),
 						RenderLevel.WORLD_OVERLAY,
 						Integer.MAX_VALUE,
-						(int) obj.x(), (int) obj.y());
+						obj.position.x.asInt(), obj.position.y.asInt());
 				RectangleRequest originPointBoxReq = new RectangleRequest(
 						new Rectangle(20, 20, OVERLAY_COLOR),
 						RenderLevel.WORLD_OVERLAY,
 						Integer.MAX_VALUE,
-						(int) obj.x() - 10, (int) obj.y() - 10);
+						obj.position.x.asInt() - 10, obj.position.y.asInt() - 10);
 				renderer.stage(allegianceLineReq);
 				renderer.stage(boundingBoxReq);
 				renderer.stage(originPointBoxReq);

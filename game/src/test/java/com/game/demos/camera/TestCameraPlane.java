@@ -97,7 +97,7 @@ public class TestCameraPlane extends AbstractChunkedPlane {
 	 */
 	public TestCameraPlane() {
 		super(PLANE_WIDTH, PLANE_HEIGHT);
-		this.levelObjects.add(TEST_OBJECT);
+		this.objects.add(TEST_OBJECT);
 	}
 
 	@Override

@@ -6,6 +6,8 @@ import java.util.Random;
 import org.junit.Assert;
 import org.junit.Test;
 
+import com.game.engine.maths.Matrix;
+
 /**
  * Tests a {@link Matrix}
  * 
@@ -183,11 +185,7 @@ public class TestMatrix {
 		// Initialize values
 		Matrix m1 = new Matrix(TEST_DATA_2D);
 		Matrix m2 = null;
-		try {
-			m2 = (Matrix) m1.clone();
-		} catch (CloneNotSupportedException e) {
-			Assert.fail("Cannot test Matrix.equals() without a clone.");
-		}
+		m2 = m1.clone();
 		Matrix m3 = new Matrix(m1.times(-1d).getArray(), TEST_ROWS, TEST_COLUMNS);
 		Matrix m4 = new Matrix(m1.getArray(), TEST_ROWS - 1, TEST_COLUMNS);
 		Matrix m5 = new Matrix(m1.getArray(), TEST_ROWS, TEST_COLUMNS - 1);
@@ -205,11 +203,7 @@ public class TestMatrix {
 	@Test
 	public void testClone() {
 		Matrix m = new Matrix(TEST_DATA_2D);
-		try {
-			Assert.assertEquals(m, m.clone());
-		} catch (CloneNotSupportedException e) {
-			Assert.fail("Matrix should be cloneable.");
-		}
+		Assert.assertEquals(m, m.clone());
 	}
 
 	/**

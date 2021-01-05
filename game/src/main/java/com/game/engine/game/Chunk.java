@@ -125,7 +125,12 @@ public class Chunk implements Updateable, Renderable {
 	@Override
 	public void update(GameDriver driver) {
 		// Update all chunk objects
-		this.chunkObjects.forEach(obj -> obj.update(driver));
+		this.chunkObjects.forEach(obj -> {
+			obj.update(driver);
+			if (obj.hasPhysics()) {
+				obj.getPhysics().update(driver);
+			}
+		});
 	}
 
 	@Override

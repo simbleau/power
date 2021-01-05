@@ -1,8 +1,8 @@
 package com.game.engine.camera;
 
-import com.game.engine.coordinates.Position;
 import com.game.engine.game.AbstractGameObject;
 import com.game.engine.game.Chunk;
+import com.game.engine.game.Position2D;
 
 /**
  * The user's visible area.
@@ -20,7 +20,7 @@ public class Viewport {
 	/**
 	 * The origin of the camera, also the top-left point of the camera.
 	 */
-	protected Position origin;
+	protected Position2D origin;
 
 	/**
 	 * The width of the viewport.
@@ -43,7 +43,7 @@ public class Viewport {
 	 */
 	public Viewport(AbstractCamera camera, double x, double y, int width, int height) {
 		this.camera = camera;
-		this.origin = new Position(x, y);
+		this.origin = new Position2D(x, y);
 		this.width = width;
 		this.height = height;
 	}
@@ -127,7 +127,7 @@ public class Viewport {
 	 * @return true if the viewport can see the given object, false otherwise
 	 */
 	public boolean canSee(AbstractGameObject obj) {
-		return this.canSee(obj.x(), obj.y());
+		return this.canSee(obj.position.x(), obj.position.y());
 	}
 
 	/**

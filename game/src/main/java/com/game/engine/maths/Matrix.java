@@ -1,4 +1,4 @@
-package com.game.engine.coordinates;
+package com.game.engine.maths;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -117,7 +117,7 @@ public class Matrix implements Cloneable {
 	public String toString() {
 		NumberFormat formatter = new DecimalFormat("000.0");
 		StringBuilder sb = new StringBuilder();
-		sb.append('{');
+		sb.append('[');
 		for (int row = 0; row < this.rows; row++) {
 			if (row != 0) {
 				sb.append(", ");
@@ -131,15 +131,12 @@ public class Matrix implements Cloneable {
 			}
 			sb.append('}');
 		}
-		sb.append('}');
+		sb.append(']');
 		return sb.toString();
 	}
 
-	/**
-	 * Clone the Matrix object.
-	 */
 	@Override
-	public Object clone() throws CloneNotSupportedException {
+	public Matrix clone() {
 		double[][] copyMatrix = null;
 		if (this.getArray() != null) {
 			copyMatrix = Arrays.stream(this.matrix).map(double[]::clone).toArray(double[][]::new);

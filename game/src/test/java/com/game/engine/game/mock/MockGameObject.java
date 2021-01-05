@@ -3,6 +3,7 @@ package com.game.engine.game.mock;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractGameObject;
 import com.game.engine.graphics.obj.Rectangle;
+import com.game.engine.physics2D.Collision;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.common.RenderLevel;
 import com.jogamp.opengl.GL2;
@@ -68,7 +69,7 @@ public class MockGameObject extends AbstractGameObject {
 	@Override
 	public void stage(GameDriver driver, AbstractRenderer renderer) {
 		// Stage a red bounding box at the x,y position
-		renderer.stage(r.asRequest(RenderLevel.WORLD_OBJECTS, (int) this.x(), (int) this.y()));
+		renderer.stage(r.asRequest(RenderLevel.WORLD_OBJECTS, this.position.x.asInt(), this.position.y.asInt()));
 	}
 
 	@Override

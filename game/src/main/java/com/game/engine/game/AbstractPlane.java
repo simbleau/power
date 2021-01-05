@@ -24,11 +24,18 @@ import com.jogamp.opengl.GLEventListener;
 public abstract class AbstractPlane implements Updateable, Renderable {
 
 	/**
-	 * Contains the game objects in this level
+	 * Contains the game objects in this plane
 	 *
 	 * @see AbstractGameObject
 	 */
-	protected List<AbstractGameObject> levelObjects;
+	protected List<AbstractGameObject> objects;
+
+	/**
+	 * Contains additional components to extend the functionality of this plane.
+	 *
+	 * @see AbstractComponent
+	 */
+	protected List<AbstractComponent> components;
 
 	/**
 	 * The pixel width of the plane.
@@ -55,7 +62,8 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 		// Standard
 		this.width = width;
 		this.height = height;
-		this.levelObjects = new ArrayList<AbstractGameObject>();
+		this.objects = new ArrayList<AbstractGameObject>();
+		this.components = new ArrayList<AbstractComponent>();
 
 		// OpenGL
 		this.glListeners = new Stack<GLEventListener>();
@@ -68,7 +76,7 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 	 */
 	public void init(GameDriver driver) {
 		// Initialize all level objects
-		this.levelObjects.forEach(obj -> obj.init(driver));
+		this.objects.forEach(obj -> obj.init(driver));
 
 		// OpenGL plane listener
 		if (driver.getDisplay().isGL()) {
@@ -114,7 +122,15 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 	@Override
 	public void update(GameDriver driver) {
 		// Update all level objects
-		this.levelObjects.forEach(obj -> obj.update(driver));
+		this.objects.forEach(obj -> {
+			obj.update(driver);
+			if (obj.hasPhysics()) {
+				obj.getPhysics().update(driver);
+			}
+		});
+
+		// Update all components
+		this.components.forEach(component -> component.update(driver));
 	}
 
 	@Override
@@ -125,14 +141,17 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 		renderer.stage(request);
 
 		// Stage all level objects
-		this.levelObjects.forEach(obj -> obj.stage(driver, renderer));
+		this.objects.forEach(obj -> obj.stage(driver, renderer));
+
+		// Stage all components
+		this.components.forEach(component -> component.stage(driver, renderer));
 	}
 
 	/**
 	 * @return an iterator for the level objects
 	 */
 	public Iterable<AbstractGameObject> objects() {
-		return this.levelObjects;
+		return this.objects;
 	}
 
 	/**
@@ -141,7 +160,7 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 	 * @param obj - The object to add to the level.
 	 */
 	public void addGameObject(AbstractGameObject obj) {
-		this.levelObjects.add(obj);
+		this.objects.add(obj);
 	}
 
 	/**
@@ -150,7 +169,7 @@ public abstract class AbstractPlane implements Updateable, Renderable {
 	 * @param obj - The object to remove from the level.
 	 */
 	public void removeGameObject(AbstractGameObject obj) {
-		this.levelObjects.remove(obj);
+		this.objects.remove(obj);
 	}
 
 	/**

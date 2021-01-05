@@ -184,10 +184,9 @@ public class TestChunker {
 			c.init(TEST_DRIVER);
 			c.chunk(TEST_DRIVER);
 
-			for (AbstractGameObject obj : c.plane.levelObjects) {
-				int chunkRow = obj.chunkRow();
-				int chunkColumn = obj.chunkColumn();
-				Assert.assertTrue(c.chunks[chunkRow][chunkColumn].chunkObjects.contains(obj));
+			for (AbstractGameObject obj : c.plane.objects) {
+				Assert.assertTrue(
+						c.chunks[obj.position.chunkRow()][obj.position.chunkColumn()].chunkObjects.contains(obj));
 			}
 		}
 	}

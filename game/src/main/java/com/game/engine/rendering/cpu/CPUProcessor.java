@@ -4,8 +4,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
 import com.game.engine.camera.AbstractCamera;
-import com.game.engine.coordinates.CoordinateMatrix;
 import com.game.engine.graphics.common.RenderRequest;
+import com.game.engine.maths.Matrix2D;
 import com.game.engine.rendering.common.AbstractProcessor;
 import com.game.engine.rendering.common.AbstractRenderer;
 
@@ -60,7 +60,7 @@ public class CPUProcessor extends AbstractProcessor {
 	 */
 	public void draw(RenderRequest request) {
 		AbstractCamera camera = this.renderer.getCamera();
-		CoordinateMatrix requestMatrix = CoordinateMatrix.create(request.x, request.y).transform(camera);
+		Matrix2D requestMatrix = Matrix2D.create(request.x, request.y).transform(camera);
 
 		request.drawable.draw(this, (int) requestMatrix.x(), (int) requestMatrix.y(), camera.zoom(), camera.zoom());
 	}

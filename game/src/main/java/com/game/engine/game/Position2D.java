@@ -1,6 +1,6 @@
-package com.game.engine.coordinates;
+package com.game.engine.game;
 
-import com.game.engine.game.Chunk;
+import com.game.engine.maths.Matrix2D;
 
 /**
  * A position class which gives insights into positional data in different
@@ -9,12 +9,12 @@ import com.game.engine.game.Chunk;
  * @author Spencer Imbleau
  * @version December 2020
  */
-public class Position {
+public class Position2D {
 
 	/**
-	 * The position coordinate matrix.
+	 * The backing coordinate matrix.
 	 */
-	protected final CoordinateMatrix position;
+	protected final Matrix2D position;
 
 	/**
 	 * The x co-ordinate accessor methods.
@@ -32,8 +32,8 @@ public class Position {
 	 * @param x - the x co-ordinate
 	 * @param y - the y co-ordinate
 	 */
-	public Position(double x, double y) {
-		this.position = CoordinateMatrix.create(x, y);
+	public Position2D(double x, double y) {
+		this.position = Matrix2D.create(x, y);
 		this.x = new X();
 		this.y = new Y();
 	}
@@ -53,6 +53,20 @@ public class Position {
 	}
 
 	/**
+	 * @return the chunk row index of this object
+	 */
+	public int chunkRow() {
+		return this.y.asChunkIndex();
+	}
+
+	/**
+	 * @return the chunk column index of this object
+	 */
+	public int chunkColumn() {
+		return this.x.asChunkIndex();
+	}
+
+	/**
 	 * Overwrite the positional co-ordinates with new co-ordinates.
 	 * 
 	 * @param x - the x co-ordinate
@@ -67,7 +81,7 @@ public class Position {
 	 * 
 	 * @param p - a position
 	 */
-	public void set(Position p) {
+	public void set(Position2D p) {
 		this.set(p.x(), p.y());
 	}
 

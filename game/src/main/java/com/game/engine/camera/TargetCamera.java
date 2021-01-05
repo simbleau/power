@@ -2,10 +2,11 @@ package com.game.engine.camera;
 
 import java.awt.event.KeyEvent;
 
-import com.game.engine.coordinates.CoordinateMatrix;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractGameObject;
+import com.game.engine.game.Position2D;
 import com.game.engine.input.MouseKeyboard;
+import com.game.engine.maths.Matrix2D;
 
 /**
  * A camera which follows an object at an exponential rate.
@@ -90,12 +91,12 @@ public class TargetCamera extends AbstractCamera {
 		}
 
 		if (driver.getInput().isKeyActive(KeyEvent.VK_UP)) {
-			CoordinateMatrix focus = this.focus();
+			Position2D focus = this.focus();
 			this.magnify(ZOOM_SPEED);
 			this.lookAt(focus.x(), focus.y());
 		}
 		if (driver.getInput().isKeyActive(KeyEvent.VK_DOWN)) {
-			CoordinateMatrix focus = this.focus();
+			Position2D focus = this.focus();
 			this.magnify(-ZOOM_SPEED);
 			this.lookAt(focus.x(), focus.y());
 		}
@@ -105,7 +106,7 @@ public class TargetCamera extends AbstractCamera {
 		}
 
 		// Declare target focus
-		CoordinateMatrix focus = CoordinateMatrix.create(this.target.x(), this.target.y());
+		Matrix2D focus = Matrix2D.create(this.target.position.x(), this.target.position.y());
 		// Center the focus on the screen
 		focus.translateEquals(-(this.viewport.width / this.zoom / 2), -(this.viewport.height / this.zoom / 2));
 		// Springarm bounds

@@ -1,8 +1,8 @@
 package com.game.engine.rendering.opengl;
 
 import com.game.engine.camera.AbstractCamera;
-import com.game.engine.coordinates.CoordinateMatrix;
 import com.game.engine.graphics.common.RenderRequest;
+import com.game.engine.maths.Matrix2D;
 import com.game.engine.rendering.common.AbstractProcessor;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.jogamp.opengl.GL2;
@@ -38,7 +38,7 @@ public class JOGLProcessor extends AbstractProcessor {
 	 */
 	public void draw(GL2 gl, RenderRequest request) {
 		AbstractCamera camera = this.renderer.getCamera();
-		CoordinateMatrix requestMatrix = CoordinateMatrix.create(request.x, request.y).transform(camera);
+		Matrix2D requestMatrix = Matrix2D.create(request.x, request.y).transform(camera);
 
 		request.drawable.draw(this, gl, requestMatrix.x(), requestMatrix.y(), camera.zoom(), camera.zoom());
 	}

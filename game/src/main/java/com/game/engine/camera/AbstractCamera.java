@@ -2,10 +2,11 @@ package com.game.engine.camera;
 
 import java.awt.Canvas;
 
-import com.game.engine.coordinates.CoordinateMatrix;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractGameObject;
+import com.game.engine.game.Position2D;
 import com.game.engine.game.Updateable;
+import com.game.engine.maths.Matrix2D;
 
 /**
  * An abstract camera
@@ -47,8 +48,8 @@ public abstract class AbstractCamera implements Updateable {
 	/**
 	 * @return the camera's focus point (the center of the screen)
 	 */
-	public CoordinateMatrix focus() {
-		return CoordinateMatrix.create(this.viewport.origin.x() + this.viewport.width / this.zoom / 2,
+	public Position2D focus() {
+		return new Position2D(this.viewport.origin.x() + this.viewport.width / this.zoom / 2,
 				this.viewport.origin.y() + this.viewport.height / this.zoom / 2);
 	}
 
@@ -68,7 +69,7 @@ public abstract class AbstractCamera implements Updateable {
 	 * @param obj - the object to look at
 	 */
 	public void lookAt(AbstractGameObject obj) {
-		lookAt(obj.x(), obj.y());
+		lookAt(obj.position.x(), obj.position.y());
 	}
 
 	/**

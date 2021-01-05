@@ -3,6 +3,7 @@ package com.game.demos.artifacts;
 import java.util.Random;
 
 import com.game.engine.driver.GameDriver;
+import com.game.engine.game.AbstractGameObject;
 import com.game.engine.game.AbstractMotionGameObject;
 import com.game.engine.graphics.common.Drawable;
 import com.game.engine.graphics.common.RenderRequest;
@@ -10,6 +11,7 @@ import com.game.engine.graphics.obj.Image;
 import com.game.engine.graphics.obj.Label;
 import com.game.engine.graphics.obj.fonts.Font;
 import com.game.engine.graphics.obj.fonts.mock.MockFonts;
+import com.game.engine.physics2D.Collision;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.common.RenderLevel;
 import com.jogamp.opengl.GL2;
@@ -130,7 +132,8 @@ public class DemoLabel extends AbstractMotionGameObject {
 
 	@Override
 	public void stage(GameDriver driver, AbstractRenderer renderer) {
-		RenderRequest request = this.drawable.asRequest(RenderLevel.WORLD_OBJECTS, (int) this.x(), (int) this.y());
+		RenderRequest request = this.drawable.asRequest(RenderLevel.WORLD_OBJECTS, this.position.x.asInt(),
+				this.position.y.asInt());
 		renderer.stage(request);
 	}
 
