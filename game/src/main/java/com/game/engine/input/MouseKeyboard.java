@@ -104,6 +104,16 @@ public class MouseKeyboard implements Input, KeyListener, MouseListener, MouseMo
 	private int y;
 
 	/**
+	 * The position X coordinate of our mouse relative to the plane.
+	 */
+	private int planeX;
+
+	/**
+	 * The position Y coordinate of our mouse relative to the plane.
+	 */
+	private int planeY;
+
+	/**
 	 * The scroll direction
 	 */
 	private int scroll;
@@ -138,6 +148,8 @@ public class MouseKeyboard implements Input, KeyListener, MouseListener, MouseMo
 
 		this.x = 0;
 		this.y = 0;
+		this.planeX = 0;
+		this.planeY = 0;
 		this.scroll = 0;
 
 		// Key listeners
@@ -209,19 +221,12 @@ public class MouseKeyboard implements Input, KeyListener, MouseListener, MouseMo
 
 	@Override
 	public int planeX() {
-		return Math.max(0,
-				Math.min(this.driver.game.getPlane().width,
-						(int) (this.x / this.driver.getDisplay().getRenderer().getCamera().zoom()
-								+ this.driver.getDisplay().getRenderer().getCamera().viewport.x())));
+		return this.planeX;
 	}
 
 	@Override
 	public int planeY() {
-		return Math.max(0,
-				Math.min(this.driver.game.getPlane().height,
-						(int) (this.y / this.driver.getDisplay().getRenderer().getCamera().zoom()
-								+ this.driver.getDisplay().getRenderer().getCamera().viewport.y())));
-
+		return this.planeY;
 	}
 
 	@Override
@@ -247,6 +252,14 @@ public class MouseKeyboard implements Input, KeyListener, MouseListener, MouseMo
 	public void mouseMoved(MouseEvent e) {
 		this.x = e.getX();
 		this.y = e.getY();
+		this.planeX = Math.max(0,
+				Math.min(this.driver.game.getPlane().width,
+						(int) (this.x / this.driver.getDisplay().getRenderer().getCamera().zoom()
+								+ this.driver.getDisplay().getRenderer().getCamera().viewport.x())));
+		this.planeY = Math.max(0,
+				Math.min(this.driver.game.getPlane().height,
+						(int) (this.y / this.driver.getDisplay().getRenderer().getCamera().zoom()
+								+ this.driver.getDisplay().getRenderer().getCamera().viewport.y())));
 	}
 
 	@Override
