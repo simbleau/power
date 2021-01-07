@@ -10,6 +10,13 @@ import com.game.engine.game.AbstractGameObject;
 import com.game.engine.physics2D.common.Collidable;
 import com.game.engine.rendering.common.AbstractRenderer;
 
+/**
+ * TODO: Document
+ *
+ * @author Spencer Imbleau
+ * @version January 2021
+ */
+@SuppressWarnings("javadoc")
 public class PhysicsComponent extends AbstractComponent {
 
 	public final AbstractGameObject parent;

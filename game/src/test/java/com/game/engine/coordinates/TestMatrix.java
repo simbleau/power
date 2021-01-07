@@ -121,21 +121,15 @@ public class TestMatrix {
 	}
 
 	/**
-	 * Test {@link Matrix#Matrix(double[][] matrix, int rows, int columns)}.
+	 * Test {@link Matrix#Matrix(double[][] matrix)}.
 	 */
 	@Test
 	public void testConstructor4() {
 		// Test good data
-		Matrix m = new Matrix(TEST_DATA_2D, TEST_ROWS, TEST_COLUMNS);
+		Matrix m = new Matrix(TEST_DATA_2D);
 		Assert.assertArrayEquals(TEST_DATA_2D, m.getArray());
 		Assert.assertEquals(TEST_ROWS, m.getNumRows());
 		Assert.assertEquals(TEST_COLUMNS, m.getNumCols());
-
-		// Test bad data - Remember this constructor doesn't check passed arguments!
-		m = new Matrix(null, -1, -1);
-		Assert.assertNull(m.getArray());
-		Assert.assertEquals(-1, m.getNumRows());
-		Assert.assertEquals(-1, m.getNumCols());
 	}
 
 	/**
@@ -150,7 +144,7 @@ public class TestMatrix {
 		Matrix m = new Matrix(TEST_DATA_2D);
 		Matrix identity = Matrix.identity(TEST_COLUMNS, TEST_COLUMNS);
 		try {
-			Matrix result = m.times(identity);
+			Matrix result = m.clone().times(identity);
 			// Any matrix times an identity matrix should result in the original matrix
 			Assert.assertTrue(m.equals(result));
 		} catch (UnsupportedOperationException e) {
@@ -184,17 +178,12 @@ public class TestMatrix {
 	public void testEquals() {
 		// Initialize values
 		Matrix m1 = new Matrix(TEST_DATA_2D);
-		Matrix m2 = null;
-		m2 = m1.clone();
-		Matrix m3 = new Matrix(m1.times(-1d).getArray(), TEST_ROWS, TEST_COLUMNS);
-		Matrix m4 = new Matrix(m1.getArray(), TEST_ROWS - 1, TEST_COLUMNS);
-		Matrix m5 = new Matrix(m1.getArray(), TEST_ROWS, TEST_COLUMNS - 1);
+		Matrix m2 = m1.clone();
+		Matrix m3 = new Matrix(m1.clone().times(-1d).getArray());
 
 		// Test equals
 		Assert.assertTrue(m1.equals(m2));
 		Assert.assertFalse(m1.equals(m3));
-		Assert.assertFalse(m1.equals(m4));
-		Assert.assertFalse(m1.equals(m5));
 	}
 
 	/**
@@ -266,29 +255,29 @@ public class TestMatrix {
 
 		// Test for error with too small indices
 		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> m0.getMatrix(-1, 0, 0, 0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> m0.getMatrix(0, -1, 0, 0));
 		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> m0.getMatrix(0, 0, -1, 0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> m0.getMatrix(0, -1, 0, 0));
 		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> m0.getMatrix(0, 0, 0, -1));
 
 		// Test for error with too large indices
 		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> m0.getMatrix(3, 0, 0, 0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> m0.getMatrix(0, 3, 0, 0));
 		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> m0.getMatrix(0, 0, 3, 0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> m0.getMatrix(0, 3, 0, 0));
 		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> m0.getMatrix(0, 0, 0, 3));
 
 		// Test for error with starting larger than ending
 		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> m0.getMatrix(2, 0, 0, 1));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> m0.getMatrix(0, 1, 2, 0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> m0.getMatrix(0, 2, 1, 0));
 
 		// Test slice 1
 		double[][] a1 = { { 1, 2 }, { 4, 5 } };
 		Matrix m1 = new Matrix(a1);
-		Assert.assertEquals(m1, m0.getMatrix(0, 1, 0, 1));
+		Assert.assertEquals(m1, m0.getMatrix(0, 0, 1, 1));
 
 		// Test slice 2
 		double[][] a2 = { { 5, 6 }, { 8, 9 } };
 		Matrix m2 = new Matrix(a2);
-		Assert.assertEquals(m2, m0.getMatrix(1, 2, 1, 2));
+		Assert.assertEquals(m2, m0.getMatrix(1, 1, 2, 2));
 
 		// Test slice 3
 		double[][] a3 = { { 1 } };
@@ -463,7 +452,7 @@ public class TestMatrix {
 	}
 
 	/**
-	 * Test {@link Matrix#setMatrix(int, int, int, int, Matrix)}.
+	 * Test {@link Matrix#setMatrix(Matrix, int, int, int, int)}.
 	 */
 	@Test
 	public void testSetMatrix1() {
@@ -473,40 +462,40 @@ public class TestMatrix {
 		Matrix buf = new Matrix(0, 0);
 
 		// Test for error on too small bounds
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(-1, 0, 0, 0, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(0, -1, 0, 0, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(0, 0, -1, 0, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(0, 0, 0, -1, m0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, -1, 0, 0, 0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, 0, 0, -1, 0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, 0, -1, 0, 0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, 0, 0, 0, -1));
 
 		// Test for error on too large bounds
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(3, 0, 0, 0, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(0, 3, 0, 0, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(0, 0, 3, 0, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(0, 0, 0, 3, m0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, 3, 0, 0, 0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, 0, 0, 3, 0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, 0, 3, 0, 0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, 0, 0, 0, 3));
 
 		// Test for error on bounds starting larger than ending
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(1, 0, 0, 0, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(0, 0, 1, 0, m0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, 1, 0, 0, 0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, 0, 1, 0, 0));
 
 		// Test set
 		double[][] a1 = { { 1, 2 }, { 4, 5 } };
 		Matrix m1 = new Matrix(a1);
-		buf.setMatrix(0, 1, 0, 1, m0);
+		buf.setMatrix(m0, 0, 0, 1, 1);
 		Assert.assertTrue(m1.equals(buf));
 
 		double[][] a2 = { { 5, 6 }, { 8, 9 } };
 		Matrix m2 = new Matrix(a2);
-		buf.setMatrix(1, 2, 1, 2, m0);
+		buf.setMatrix(m0, 1, 1, 2, 2);
 		Assert.assertTrue(m2.equals(buf));
 
 		double[][] a3 = { { 1 } };
 		Matrix m3 = new Matrix(a3);
-		buf.setMatrix(0, 0, 0, 0, m0);
+		buf.setMatrix(m0, 0, 0, 0, 0);
 		Assert.assertTrue(m3.equals(buf));
 	}
 
 	/**
-	 * Test {@link Matrix#setMatrix(int[], int, int, Matrix)}.
+	 * Test {@link Matrix#setMatrix(Matrix, int[], int, int)}.
 	 */
 	@Test
 	public void testSetMatrix2() {
@@ -519,47 +508,47 @@ public class TestMatrix {
 		int[] highR = { 3 };
 
 		// Test for error on too small bounds
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(lowR, 0, 0, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(acceptableR, -1, 0, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(acceptableR, 0, -1, m0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, lowR, 0, 0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, acceptableR, -1, 0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, acceptableR, 0, -1));
 
 		// Test for error on too large bounds
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(highR, 0, 0, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(acceptableR, 3, 0, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(acceptableR, 0, 3, m0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, highR, 0, 0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, acceptableR, 3, 0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, acceptableR, 0, 3));
 
 		// Test for error on bounds starting larger than ending
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(acceptableR, 1, 0, m0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, acceptableR, 1, 0));
 
 		// Test set
 		int[] r1 = { 0, 1 };
 		double[][] a1 = { { 1, 2 }, { 4, 5 } };
 		Matrix m1 = new Matrix(a1);
-		buf.setMatrix(r1, 0, 1, m0);
+		buf.setMatrix(m0, r1, 0, 1);
 		Assert.assertTrue(m1.equals(buf));
 
 		int[] r2 = { 1, 2 };
 		double[][] a2 = { { 5, 6 }, { 8, 9 } };
 		Matrix m2 = new Matrix(a2);
-		buf.setMatrix(r2, 1, 2, m0);
+		buf.setMatrix(m0, r2, 1, 2);
 		Assert.assertTrue(m2.equals(buf));
 
 		int[] r3 = { 0 };
 		double[][] a3 = { { 1 } };
 		Matrix m3 = new Matrix(a3);
-		buf.setMatrix(r3, 0, 0, m0);
+		buf.setMatrix(m0, r3, 0, 0);
 		Assert.assertTrue(m3.equals(buf));
 
 		// Weird
 		int[] r4 = { 0, 0, 0, 0 };
 		double[][] a4 = { { 1 }, { 1 }, { 1 }, { 1 } };
 		Matrix m4 = new Matrix(a4);
-		buf.setMatrix(r4, 0, 0, m0);
+		buf.setMatrix(m0, r4, 0, 0);
 		Assert.assertTrue(m4.equals(buf));
 	}
 
 	/**
-	 * Test {@link Matrix#setMatrix(int, int, int[], Matrix)}.
+	 * Test {@link Matrix#setMatrix(Matrix, int, int, int[])}.
 	 */
 	@Test
 	public void testSetMatrix3() {
@@ -572,46 +561,46 @@ public class TestMatrix {
 		int[] highC = { 3 };
 
 		// Test for error on too small bounds
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(0, 0, lowC, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(-1, 0, acceptableC, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(0, -1, acceptableC, m0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, 0, 0, lowC));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, -1, 0, acceptableC));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, 0, -1, acceptableC));
 
 		// Test for error on too large bounds
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(0, 0, highC, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(3, 0, acceptableC, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(0, 3, acceptableC, m0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, 0, 0, highC));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, 3, 0, acceptableC));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, 0, 3, acceptableC));
 
 		// Test for error on bounds starting larger than ending
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(1, 0, acceptableC, m0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, 1, 0, acceptableC));
 
 		// Test set
 		int[] c1 = { 0, 1 };
 		double[][] a1 = { { 1, 2 }, { 4, 5 } };
 		Matrix m1 = new Matrix(a1);
-		buf.setMatrix(0, 1, c1, m0);
+		buf.setMatrix(m0, 0, 1, c1);
 		Assert.assertTrue(m1.equals(buf));
 
 		int[] c2 = { 1, 2 };
 		double[][] a2 = { { 5, 6 }, { 8, 9 } };
 		Matrix m2 = new Matrix(a2);
-		buf.setMatrix(1, 2, c2, m0);
+		buf.setMatrix(m0, 1, 2, c2);
 		Assert.assertTrue(m2.equals(buf));
 
 		int[] c3 = { 0 };
 		double[][] a3 = { { 1 } };
 		Matrix m3 = new Matrix(a3);
-		buf.setMatrix(0, 0, c3, m0);
+		buf.setMatrix(m0, 0, 0, c3);
 		Assert.assertTrue(m3.equals(buf));
 
 		int[] c4 = { 0, 0, 0, 0 };
 		double[][] a4 = { { 1, 1, 1, 1 } };
 		Matrix m4 = new Matrix(a4);
-		buf.setMatrix(0, 0, c4, m0);
+		buf.setMatrix(m0, 0, 0, c4);
 		Assert.assertTrue(m4.equals(buf));
 	}
 
 	/**
-	 * Test {@link Matrix#setMatrix(int[], int[], Matrix)}.
+	 * Test {@link Matrix#setMatrix(Matrix, int[], int[])}.
 	 */
 	@Test
 	public void testSetMatrix4() {
@@ -625,45 +614,45 @@ public class TestMatrix {
 		int[] high = { 3 };
 
 		// Test for error on too small bounds
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(low, acceptableC, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(acceptableR, low, m0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, low, acceptableC));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, acceptableR, low));
 
 		// Test for error on too large bounds
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(high, acceptableC, m0));
-		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(acceptableR, high, m0));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, high, acceptableC));
+		Assert.assertThrows(ArrayIndexOutOfBoundsException.class, () -> buf.setMatrix(m0, acceptableR, high));
 
 		// Test set
 		int[] r1 = { 0, 1 };
 		int[] c1 = { 0, 1 };
 		double[][] a1 = { { 1, 2 }, { 4, 5 } };
 		Matrix m1 = new Matrix(a1);
-		buf.setMatrix(r1, c1, m0);
+		buf.setMatrix(m0, r1, c1);
 		Assert.assertTrue(m1.equals(buf));
 
 		int[] r2 = { 1, 2 };
 		int[] c2 = { 1, 0 };
 		double[][] a2 = { { 5, 4 }, { 8, 7 } };
 		Matrix m2 = new Matrix(a2);
-		buf.setMatrix(r2, c2, m0);
+		buf.setMatrix(m0, r2, c2);
 		Assert.assertTrue(m2.equals(buf));
 
 		int[] r3 = { 0 };
 		int[] c3 = { 0 };
 		double[][] a3 = { { 1 } };
 		Matrix m3 = new Matrix(a3);
-		buf.setMatrix(r3, c3, m0);
+		buf.setMatrix(m0, r3, c3);
 		Assert.assertTrue(m3.equals(buf));
 
 		int[] r4 = { 0 };
 		int[] c4 = { 0, 0, 0, 0 };
 		double[][] a4 = { { 1, 1, 1, 1 } };
 		Matrix m4 = new Matrix(a4);
-		buf.setMatrix(r4, c4, m0);
+		buf.setMatrix(m0, r4, c4);
 		Assert.assertTrue(m4.equals(buf));
 	}
 
 	/**
-	 * Test {@link Matrix#times(Matrix)} and {@link Matrix#timesEquals(Matrix)}.
+	 * Test {@link Matrix#times(Matrix)} and {@link Matrix#times(Matrix)}.
 	 */
 	@Test
 	public void testTimesMatrix() {
@@ -681,15 +670,13 @@ public class TestMatrix {
 
 		// Test for error when dimensions are invalid
 		Assert.assertThrows(UnsupportedOperationException.class, () -> m3.times(m1));
-		Assert.assertThrows(UnsupportedOperationException.class, () -> m3.timesEquals(m1));
 
 		// Test for correct multiplication
 		Assert.assertEquals(m1m2, m1.times(m2));
-		Assert.assertEquals(m1m2, m1.timesEquals(m2));
 	}
 
 	/**
-	 * Test {@link Matrix#times(double)} and {@link Matrix#timesEquals(double)}.
+	 * Test {@link Matrix#times(double)} and {@link Matrix#times(double)}.
 	 */
 	@Test
 	public void testTimesScalar() {
@@ -703,11 +690,10 @@ public class TestMatrix {
 
 		// Test for correct scalar multiplication
 		Assert.assertEquals(m1s, m1.times(s));
-		Assert.assertEquals(m1s, m1.timesEquals(s));
 	}
 
 	/**
-	 * Test {@link Matrix#divide(double)} and {@link Matrix#divideEquals(double)}.
+	 * Test {@link Matrix#divide(double)} and {@link Matrix#divide(double)}.
 	 */
 	@Test
 	public void testDivide() {
@@ -721,11 +707,10 @@ public class TestMatrix {
 
 		// Test for correct scalar division
 		Assert.assertEquals(m1s, m1.divide(s));
-		Assert.assertEquals(m1s, m1.divideEquals(s));
 	}
 
 	/**
-	 * Test {@link Matrix#plus(double)} and {@link Matrix#plusEquals(double)}.
+	 * Test {@link Matrix#plus(double)} and {@link Matrix#plus(double)}.
 	 */
 	@Test
 	public void testPlus() {
@@ -739,11 +724,10 @@ public class TestMatrix {
 
 		// Test for correct addition
 		Assert.assertEquals(m1dx, m1.plus(dx));
-		Assert.assertEquals(m1dx, m1.plusEquals(dx));
 	}
 
 	/**
-	 * Test {@link Matrix#minus(double)} and {@link Matrix#minusEquals(double)}.
+	 * Test {@link Matrix#minus(double)} and {@link Matrix#minus(double)}.
 	 */
 	@Test
 	public void testMinus() {
@@ -757,6 +741,5 @@ public class TestMatrix {
 
 		// Test for correct addition
 		Assert.assertEquals(m1dx, m1.minus(dx));
-		Assert.assertEquals(m1dx, m1.minusEquals(dx));
 	}
 }

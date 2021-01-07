@@ -6,7 +6,6 @@ import com.game.engine.driver.GameDriver;
 import com.game.engine.game.AbstractGameObject;
 import com.game.engine.game.Position2D;
 import com.game.engine.game.Updateable;
-import com.game.engine.maths.Matrix2D;
 
 /**
  * An abstract camera

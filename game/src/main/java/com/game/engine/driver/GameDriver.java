@@ -113,8 +113,6 @@ public class GameDriver implements Runnable {
 
 	/**
 	 * Start the game loop on a new thread.
-	 *
-	 * @param displaySettings - display settings for the game
 	 */
 	public void start() {
 		this.isRunning = true;
@@ -147,7 +145,7 @@ public class GameDriver implements Runnable {
 	/**
 	 * Run the game loop on the called thread.
 	 *
-	 * @see GameDriver#start(DisplaySettings)
+	 * @see GameDriver#start()
 	 */
 	@Override
 	public void run() {

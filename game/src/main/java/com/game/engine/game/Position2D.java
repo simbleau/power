@@ -12,9 +12,9 @@ import com.game.engine.maths.Matrix2D;
 public class Position2D {
 
 	/**
-	 * The backing coordinate matrix.
+	 * The backing coordinate matrix which holds position data.
 	 */
-	protected final Matrix2D position;
+	protected final Matrix2D pMatrix;
 
 	/**
 	 * The x co-ordinate accessor methods.
@@ -33,7 +33,7 @@ public class Position2D {
 	 * @param y - the y co-ordinate
 	 */
 	public Position2D(double x, double y) {
-		this.position = Matrix2D.create(x, y);
+		this.pMatrix = new Matrix2D(x, y);
 		this.x = new X();
 		this.y = new Y();
 	}
@@ -42,14 +42,14 @@ public class Position2D {
 	 * @return the x co-ordinate of this position
 	 */
 	public double x() {
-		return this.position.x();
+		return this.pMatrix.x();
 	}
 
 	/**
 	 * @return the y co-ordinate of this position
 	 */
 	public double y() {
-		return this.position.y();
+		return this.pMatrix.y();
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class Position2D {
 	 * @param y - the y co-ordinate
 	 */
 	public void set(double x, double y) {
-		this.position.set(x, y);
+		this.pMatrix.set(x, y);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class Position2D {
 	 * @param ty - a scalar to translate this position's y co-ordinate
 	 */
 	public void translate(double tx, double ty) {
-		position.translateEquals(tx, ty);
+		pMatrix.translate(tx, ty);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class Position2D {
 		 * @param tx - a scalar to translate this position's x co-ordinate
 		 */
 		public void translate(double tx) {
-			position.translateXEquals(tx);
+			pMatrix.translateX(tx);
 		}
 
 		/**
@@ -118,21 +118,21 @@ public class Position2D {
 		 * @param x - an x co-ordinate
 		 */
 		public void set(double x) {
-			position.setX(x);
+			pMatrix.setX(x);
 		}
 
 		/**
 		 * @return the position's x co-ordinate as a double
 		 */
 		public double asDouble() {
-			return position.x();
+			return pMatrix.x();
 		}
 
 		/**
 		 * @return the position's x co-ordinate as an integer
 		 */
 		public int asInt() {
-			return (int) position.x();
+			return (int) pMatrix.x();
 		}
 
 		/**
@@ -159,7 +159,7 @@ public class Position2D {
 		 * @param ty - a scalar to translate this position's y co-ordinate
 		 */
 		public void translate(double ty) {
-			position.translateYEquals(ty);
+			pMatrix.translateY(ty);
 		}
 
 		/**
@@ -168,21 +168,21 @@ public class Position2D {
 		 * @param y - an y co-ordinate
 		 */
 		public void set(double y) {
-			position.setY(y);
+			pMatrix.setY(y);
 		}
 
 		/**
 		 * @return the position's y co-ordinate as a double
 		 */
 		public double asDouble() {
-			return position.y();
+			return pMatrix.y();
 		}
 
 		/**
 		 * @return the position's y co-ordinate as an integer
 		 */
 		public int asInt() {
-			return (int) position.y();
+			return (int) pMatrix.y();
 		}
 
 		/**

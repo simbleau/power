@@ -6,7 +6,6 @@ import java.util.List;
 import com.game.engine.driver.GameDriver;
 import com.game.engine.graphics.common.GLObject;
 import com.game.engine.graphics.common.Renderable;
-import com.game.engine.physics2D.Collision;
 import com.game.engine.physics2D.PhysicsComponent;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.jogamp.opengl.GL2;
@@ -130,14 +129,27 @@ public abstract class AbstractGameObject implements Updateable, Renderable, GLOb
 		this.position.set(targetPosition);
 	}
 
+	/**
+	 * @return true if the object has physics, false otherwise
+	 */
 	public boolean hasPhysics() {
 		return this.physics != null;
 	}
 
+	/**
+	 * @return the physics component for this object
+	 * @see PhysicsComponent
+	 */
 	public PhysicsComponent getPhysics() {
 		return this.physics;
 	}
 
+	/**
+	 * Set the physics component for this object.
+	 *
+	 * @param c - a physics component
+	 * @see PhysicsComponent
+	 */
 	public void setPhysics(PhysicsComponent c) {
 		this.physics = c;
 	}

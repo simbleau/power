@@ -134,11 +134,11 @@ public class Line implements Drawable {
 	}
 
 	/**
-	 * Helper method to calculate the alpha of a pixel with
+	 * Helper method to calculate the alpha of a pixel with a given calculated error
+	 * from the line.
 	 *
-	 * @param argb
-	 * @param error
-	 * @return
+	 * @param error - the error from the line
+	 * @return the color of a pixel given the error from its line
 	 */
 	int aaColor(float error) {
 		int alpha = 0xff - (int) (0xff * error);

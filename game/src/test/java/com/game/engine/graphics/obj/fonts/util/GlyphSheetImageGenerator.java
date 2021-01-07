@@ -45,12 +45,10 @@ public class GlyphSheetImageGenerator {
 		ALPHABET = sb.toString();
 	}
 
-	private GlyphSheetImageGenerator() {
-		// Prevents instantiation
-	}
-
 	/**
 	 * Prints a detailed message of the runtime arguments for this program.
+	 *
+	 * @param args - the user-provided CLI arguments
 	 */
 	private static void printUsage(String[] args) {
 		System.err.println("Usage: <save-path> <font-name> <font-size> <font-type>");
@@ -62,7 +60,7 @@ public class GlyphSheetImageGenerator {
 	 * Generate a font glyph sheet image using the arguments provided.
 	 *
 	 * @param args - Arguments for runtime.
-	 * @see #printUsage()
+	 * @see #printUsage(String[])
 	 */
 	public static void main(String[] args) {
 		Assert.assertTrue(args.length == 4);

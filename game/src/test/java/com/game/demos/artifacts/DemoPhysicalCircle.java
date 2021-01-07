@@ -3,22 +3,24 @@ package com.game.demos.artifacts;
 import java.util.Random;
 
 import com.game.engine.driver.GameDriver;
-import com.game.engine.game.AbstractGameObject;
 import com.game.engine.game.AbstractMotionGameObject;
-import com.game.engine.game.Position2D;
 import com.game.engine.graphics.common.Drawable;
 import com.game.engine.graphics.common.RenderRequest;
 import com.game.engine.graphics.obj.Ellipse;
 import com.game.engine.logger.PowerLogger;
-import com.game.engine.maths.Matrix;
 import com.game.engine.physics2D.Collision;
 import com.game.engine.physics2D.PhysicsComponent;
-import com.game.engine.physics2D.common.Collidable;
 import com.game.engine.physics2D.sat.SATCircle;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.common.RenderLevel;
 import com.jogamp.opengl.GL2;
 
+/**
+ * A mock circular object with physics.
+ *
+ * @author Spencer Imbleau
+ * @version January 2021
+ */
 public class DemoPhysicalCircle extends AbstractMotionGameObject {
 
 	/**
@@ -118,6 +120,10 @@ public class DemoPhysicalCircle extends AbstractMotionGameObject {
 		this.body.stage(driver, renderer);
 	}
 
+	/**
+	 * TODO: Document
+	 */
+	@SuppressWarnings({ "javadoc", "unused" })
 	private double reverseDirection(double dir) {
 		if (dir < 0) {
 			return dir + Math.PI;
@@ -145,8 +151,7 @@ public class DemoPhysicalCircle extends AbstractMotionGameObject {
 		double unitX = dx / length;
 		double unitY = dy / length;
 
-		this.position.set(
-				collision.force.position.x() + (radiiSum + 1) * unitX,
+		this.position.set(collision.force.position.x() + (radiiSum + 1) * unitX,
 				collision.force.position.y() + (radiiSum + 1) * unitY);
 //
 //	        c1.x = c2.x + (radii_sum + 1) * unit_x;

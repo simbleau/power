@@ -1,19 +1,11 @@
-package com.game.demos.physics;
+package com.game.demos.physics2d;
 
-import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 
-import com.game.demos.artifacts.DemoEllipse;
 import com.game.demos.artifacts.DemoPhysicalCircle;
-import com.game.demos.chunker.VerboseDemoUpdatingImage;
 import com.game.engine.camera.AbstractCamera;
-import com.game.engine.camera.DevCamera;
-import com.game.engine.camera.StationaryCamera;
-import com.game.engine.camera.TargetCamera;
 import com.game.engine.driver.GameDriver;
-import com.game.engine.game.AbstractChunkedPlane;
 import com.game.engine.game.AbstractGameObject;
-import com.game.engine.game.AbstractMotionGameObject;
 import com.game.engine.game.AbstractPlane;
 import com.game.engine.game.Chunk;
 import com.game.engine.graphics.common.RenderRequest;
@@ -33,10 +25,19 @@ import com.game.engine.rendering.common.RenderLevel;
  */
 public class PhysicsPlane extends AbstractPlane {
 
+	/**
+	 * The maximum size of objects in this physics plane.
+	 */
 	static final int OBJ_SIZE = 3 * Chunk.SIZE / 5;
 
+	/**
+	 * The amount of chunks this plane is wide.
+	 */
 	static final int CHUNKS_WIDE = 3;
 
+	/**
+	 * The amount of chunks this plane is tall.
+	 */
 	static final int CHUNKS_HIGH = 3;
 
 	/**
@@ -163,6 +164,10 @@ public class PhysicsPlane extends AbstractPlane {
 		this.updateStampLabel();
 	}
 
+	/**
+	 * TODO: Document
+	 */
+	@SuppressWarnings("javadoc")
 	private void stampObject(GameDriver driver, int planeX, int planeY) throws CloneNotSupportedException {
 		PowerLogger.LOGGER.info("Adding " + STAMPS[stampIndex].getClass().getSimpleName() + " to the plane at ("
 				+ planeX + ", " + planeY + ").");

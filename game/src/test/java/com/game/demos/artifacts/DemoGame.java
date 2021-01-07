@@ -6,7 +6,7 @@ import com.game.engine.game.AbstractPlane;
 import com.game.engine.rendering.common.AbstractRenderer;
 
 /**
- * A mock demo game
+ * A mock demo game.
  *
  * @author Spencer Imbleau
  * @version December 2020

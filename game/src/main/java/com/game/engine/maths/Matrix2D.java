@@ -2,44 +2,42 @@ package com.game.engine.maths;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.util.Arrays;
 
 import com.game.engine.camera.AbstractCamera;
 
 /**
- * A coordinate matrix for 2D cartesian points
+ * A two-dimensional matrix for handling double precision float data. This
+ * matrix class also uses the decorator pattern to increase readability and make
+ * it easy to transform matrices quickly.
  *
  * @author Spencer Imbleau
- * @version July 2020
+ * @version January 2021
  */
 public class Matrix2D extends Matrix {
 
 	/**
-	 * Construct a 2D coordinate matrix.
-	 * 
-	 * @param matrix - the matrix data
-	 */
-	private Matrix2D(double[][] matrix) {
-		super(matrix, 1, 2);
-	}
-
-	/**
-	 * Create a 2D coordinate matrix.
+	 * Construct a 2D matrix.
 	 *
 	 * @param x - the x coordinate
 	 * @param y - the y coordinate
-	 * @return a coordinate matrix with the given coordinates
 	 */
-	public static Matrix2D create(double x, double y) {
-		double[][] matrix = { { x, y } };
-		return new Matrix2D(matrix);
+	public Matrix2D(double x, double y) {
+		super(new double[][] { { x, y } }, 1, 2);
 	}
 
 	/**
-	 * Helper method which creates a rotation matrix which multiplies with a
-	 * {@link Matrix2D}
+	 * Construct a 2D matrix with zeroed values.
+	 */
+	public Matrix2D() {
+		this(0, 0);
+	}
+
+	/**
+	 * Creates and returns a rotation matrix with a given angle in radians, theta.
+	 * The resulting matrix is compatible for matrix multiplication on a
+	 * {@link Matrix2D} object.
 	 *
-	 * @param theta - the angle of rotation (in radians)
+	 * @param theta - the angle, in radians, to rotate the X and Y elements
 	 * @return a rotation matrix
 	 */
 	private static Matrix rotationMatrix(double theta) {
@@ -48,44 +46,55 @@ public class Matrix2D extends Matrix {
 	}
 
 	/**
-	 * Helper method which creates a scaling matrix which multiplies with a
-	 * {@link Matrix2D}
+	 * Creates and returns a scaling matrix with given axial scalars. The resulting
+	 * matrix is compatible for matrix multiplication on a {@link Matrix2D} object.
 	 *
-	 * @param sx - the scale factor for the X axis
-	 * @param sy - the scale factor for the Y axis
-	 * @return a rotation matrix
+	 * @param sx - the axial scaling factor for the X element
+	 * @param sy - the axial scaling factor for the Y element
+	 * @return a scaling matrix
 	 */
-	private static Matrix scaleMatrix(double sx, double sy) {
+	public static Matrix scaleMatrix(double sx, double sy) {
 		double[][] scaleMatrix = { { sx, 0 }, { 0, sy } };
 		return new Matrix(scaleMatrix, 2, 2);
 	}
 
+	/**
+	 * Represent this 2D matrix in standard matrix representation. For readability,
+	 * all floating-point values have been rounded to the tenths-place and decimal
+	 * values will display a leading zero.<br>
+	 * <br>
+	 * e.g., a 2D matrix with x of 1 and y of 0 will output:
+	 *
+	 * <pre>
+	 * {1.0, 0.0}
+	 * </pre>
+	 *
+	 */
 	@Override
 	public String toString() {
-		NumberFormat formatter = new DecimalFormat("000.0");
+		NumberFormat formatter = new DecimalFormat("0.0");
 		StringBuilder sb = new StringBuilder();
-		sb.append('[');
+		sb.append('{');
 		sb.append(formatter.format(this.matrix[0][0]));
 		sb.append(", ");
 		sb.append(formatter.format(this.matrix[0][1]));
-		sb.append(']');
+		sb.append('}');
 		return sb.toString();
 	}
 
+	/**
+	 * Creates and returns a deep-copy of this 2D Matrix object.
+	 */
 	@Override
 	public Matrix2D clone() {
-		double[][] copyMatrix = null;
-		if (this.getArray() != null) {
-			copyMatrix = Arrays.stream(this.matrix).map(double[]::clone).toArray(double[][]::new);
-		}
-		return new Matrix2D(copyMatrix);
+		return new Matrix2D(this.x(), this.y());
 	}
 
 	/**
-	 * Setter method for the X and Y element at once.
-	 * 
-	 * @param x - The value to set for X
-	 * @param y - The value to set for Y
+	 * Set both the X and Y elements at once.
+	 *
+	 * @param x - The value to set for the X element
+	 * @param y - The value to set for the Y element
 	 */
 	public void set(double x, double y) {
 		this.matrix[0][0] = x;
@@ -93,225 +102,126 @@ public class Matrix2D extends Matrix {
 	}
 
 	/**
-	 * Setter method for the X element element.
-	 * 
-	 * @param s - The value to set for X
+	 * Set the X element.
+	 *
+	 * @param s - The value to set for the X element
 	 */
 	public void setX(double s) {
 		this.matrix[0][0] = s;
 	}
 
 	/**
-	 * Setter method for the Y element element.
-	 * 
-	 * @param s - The value to set for Y
+	 * Set the Y element.
+	 *
+	 * @param s - The value to set for the Y element
 	 */
 	public void setY(double s) {
 		this.matrix[0][1] = s;
 	}
 
 	/**
-	 * Translates a matrix by given deltas.
-	 * 
+	 * Translates this matrix by given deltas.
+	 *
 	 * @param tx - translational delta x
 	 * @param ty - translational delta y
-	 * @return A new matrix equaling this matrix translated by given constants.
+	 * @return this matrix with a translated elements
 	 */
 	public Matrix2D translate(double tx, double ty) {
-		double[][] translateData = { { this.matrix[0][0] + tx, this.matrix[0][1] + ty } };
-		return new Matrix2D(translateData);
-	}
-
-	/**
-	 * Translates this matrix by given deltas.
-	 * 
-	 * @param tx - translational delta x
-	 * @param ty - translational delta y
-	 * @return this matrix equaling translated by given constants.
-	 */
-	public Matrix2D translateEquals(double tx, double ty) {
 		this.matrix[0][0] = this.matrix[0][0] + tx;
 		this.matrix[0][1] = this.matrix[0][1] + ty;
 		return this;
 	}
 
 	/**
-	 * Translates the X co-ordinate of a matrix by a given delta.
-	 * 
+	 * Translates the X element of this matrix by a given delta.
+	 *
 	 * @param tx - translational delta x
-	 * @return A new matrix equaling this matrix translated on the X axis by a given
-	 *         constant.
+	 * @return this matrix with a translated X element
 	 */
 	public Matrix2D translateX(double tx) {
-		double[][] translateData = { { this.matrix[0][0] + tx, this.matrix[0][1] } };
-		return new Matrix2D(translateData);
-	}
-
-	/**
-	 * Translates the X co-ordinate of this matrix by a given delta.
-	 * 
-	 * @param tx - translational delta x
-	 * @return this matrix equaling translated on the X axis by given constant.
-	 */
-	public Matrix2D translateXEquals(double tx) {
 		this.matrix[0][0] = this.matrix[0][0] + tx;
 		return this;
 	}
 
 	/**
-	 * Translates the Y co-ordinate of a matrix by a given delta.
-	 * 
+	 * Translates the Y element of this matrix by a given delta.
+	 *
 	 * @param ty - translational delta y
-	 * @return A new matrix equaling this matrix translated on the Y axis by a given
-	 *         constant.
+	 * @return this matrix with a translated Y element
 	 */
 	public Matrix2D translateY(double ty) {
-		double[][] translateData = { { this.matrix[0][0], this.matrix[0][1] + ty } };
-		return new Matrix2D(translateData);
-	}
-
-	/**
-	 * Translates the Y co-ordinate of this matrix by a given delta.
-	 * 
-	 * @param ty - translational delta y
-	 * @return this matrix equaling translated on the Y axis by given constant.
-	 */
-	public Matrix2D translateYEquals(double ty) {
 		this.matrix[0][1] = this.matrix[0][1] + ty;
 		return this;
 	}
 
 	/**
-	 * Rotates a matrix by a given angle.
-	 * 
+	 * Rotates this matrix by a given angle. Positive values rotate
+	 * counter-clockwise and negative values rotate clockwise.
+	 *
 	 * @param theta - the angle of rotation (in radians)
-	 * @return A new matrix equaling this matrix rotated by a given theta.
+	 * @return this matrix rotated by a given theta
 	 */
 	public Matrix2D rotate(double theta) {
-		Matrix buf = this.times(rotationMatrix(theta));
-		return Matrix2D.create(buf.matrix[0][0], buf.matrix[0][1]);
+		return (Matrix2D) this.times(rotationMatrix(theta));
 	}
 
 	/**
-	 * Rotates this matrix by a given angle.
-	 * 
-	 * @param theta - the angle of rotation (in radians)
-	 * @return This matrix equaling rotated by a given theta.
-	 */
-	public Matrix2D rotateEquals(double theta) {
-		return (Matrix2D) this.timesEquals(rotationMatrix(theta));
-	}
-
-	/**
-	 * Rotates a matrix by a given angle around an anchor point.
-	 * 
+	 * Rotates this matrix by a given angle in radians around an anchor point.
+	 * Positive values rotate counter-clockwise and negative values rotate
+	 * clockwise.
+	 *
 	 * @param theta - the angle of rotation (in radians)
 	 * @param x     - anchor point x to rotate around
 	 * @param y     - anchor point y to rotate around
-	 * @return A new matrix equaling this matrix rotated by a given theta around an
-	 *         anchor point.
+	 * @return this matrix rotated by a given theta around an anchor point
 	 */
 	public Matrix2D rotate(double theta, double x, double y) {
-		return this.translate(-x, -y).rotateEquals(theta).translateEquals(x, y);
+		return this.translate(-x, -y).rotate(theta).translate(x, y);
 	}
 
 	/**
-	 * Rotates this matrix by a given angle around an anchor point.
-	 * 
-	 * @param theta - the angle of rotation (in radians)
-	 * @param x     - anchor point x to rotate around
-	 * @param y     - anchor point y to rotate around
-	 * @return This matrix equaling rotated by a given theta around an anchor point.
-	 */
-	public Matrix2D rotateEquals(double theta, double x, double y) {
-		return this.translateEquals(-x, -y).rotateEquals(theta).translateEquals(x, y);
-	}
-
-	/**
-	 * Scales a matrix by given scalars
-	 * 
-	 * @param sx - the scale factor for the X axis
-	 * @param sy - the scale factor for the Y axis
-	 * @return A new matrix equaling this matrix scaled by the given scalars.
+	 * Scales this matrix by given scalars values.
+	 *
+	 * @param sx - the scale factor for the X element
+	 * @param sy - the scale factor for the Y element
+	 * @return this matrix scaled by given scalars
 	 */
 	public Matrix2D scale(double sx, double sy) {
-		Matrix buf = this.times(scaleMatrix(sx, sy));
-		return Matrix2D.create(buf.matrix[0][0], buf.matrix[0][1]);
+		return (Matrix2D) this.times(scaleMatrix(sx, sy));
 	}
 
 	/**
-	 * Scales this matrix by given scalars
-	 * 
-	 * @param sx - the scale factor for the X axis
-	 * @param sy - the scale factor for the Y axis
-	 * @return This matrix scaled by the given scalars.
-	 */
-	public Matrix2D scaleEquals(double sx, double sy) {
-		return (Matrix2D) this.timesEquals(scaleMatrix(sx, sy));
-	}
-
-	/**
-	 * Scales a matrix by a constant scalar
-	 * 
-	 * @param s - the scale factor
-	 * @return A new matrix equaling this matrix scaled by the constant scalar.
+	 * Scales all elements in this matrix by a scalar value.
+	 *
+	 * @param s - the scale factor for the X and Y element
+	 * @return this matrix scaled by a given scalar
 	 */
 	public Matrix2D scale(double s) {
-		Matrix buf = this.times(s);
-		return Matrix2D.create(buf.matrix[0][0], buf.matrix[0][1]);
-	}
-
-	/**
-	 * Scales this matrix by a constant scalar
-	 * 
-	 * @param s - the scale factor
-	 * @return This matrix scaled by the constant scalar.
-	 */
-	public Matrix2D scaleEquals(double s) {
-		return (Matrix2D) this.timesEquals(s);
-	}
-
-	/**
-	 * Transform a matrix by a given camera.
-	 *
-	 * @param camera - a camera
-	 * @return A new matrix equaling this matrix transformed by a given camera.
-	 */
-	public Matrix2D transform(AbstractCamera camera) {
-		return this.translate(-camera.viewport.x(), -camera.viewport.y()).scaleEquals(camera.zoom());
+		return (Matrix2D) this.times(s);
 	}
 
 	/**
 	 * Transform this matrix by a given camera.
 	 *
 	 * @param camera - a camera
-	 * @return This matrix transformed by a given camera.
+	 * @return this matrix transformed by a given camera.
 	 */
-	public Matrix2D transformEquals(AbstractCamera camera) {
-		return this.translateEquals(-camera.viewport.x(), -camera.viewport.y()).scaleEquals(camera.zoom());
-	}
-	
-	public double dot(Matrix2D m) {
-		return this.x() * m.x() + this.y() * m.y();
-	}
-
-	public double cross(Matrix2D m) {
-		return this.x() * m.y() - this.y() * m.x();
+	public Matrix2D transform(AbstractCamera camera) {
+		return this.translate(-camera.viewport.x(), -camera.viewport.y()).scale(camera.zoom());
 	}
 
 	/**
-	 * @return the x value in this coordinate matrix
+	 * @return the x element in this 2D matrix
 	 */
 	public double x() {
 		return this.matrix[0][0];
 	}
 
 	/**
-	 * @return the y value in this coordinate matrix
+	 * @return the y element in this 2D matrix
 	 */
 	public double y() {
 		return this.matrix[0][1];
 	}
-	
-	
+
 }

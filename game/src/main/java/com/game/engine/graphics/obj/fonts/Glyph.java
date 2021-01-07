@@ -1,5 +1,7 @@
 package com.game.engine.graphics.obj.fonts;
 
+import javafx.scene.input.KeyCode;
+
 /**
  * Information about a glyph in a font.
  * 

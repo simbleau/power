@@ -50,7 +50,7 @@ public class TestDisplaySettings {
 
 	/**
 	 * Test
-	 * {@link DisplaySettings#DisplaySettings(Dimension, RenderMode, AbstractCamera)}.
+	 * {@link DisplaySettings#DisplaySettings(RenderMode, Dimension, AbstractCamera)}.
 	 */
 	@Test
 	public void testCreate() {

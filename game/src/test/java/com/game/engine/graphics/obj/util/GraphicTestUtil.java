@@ -1,23 +1,14 @@
 package com.game.engine.graphics.obj.util;
 
-import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
 import org.junit.Assert;
 
-import com.game.engine.cache.Cache;
-import com.game.engine.cache.LRUCache;
 import com.game.engine.camera.StationaryCamera;
-import com.game.engine.display.DisplaySettings;
-import com.game.engine.driver.DriverSettings;
-import com.game.engine.driver.GameDriver;
-import com.game.engine.game.AbstractGame;
-import com.game.engine.game.AbstractPlane;
 import com.game.engine.graphics.common.Drawable;
 import com.game.engine.graphics.common.RenderRequest;
 import com.game.engine.rendering.common.RenderLevel;
-import com.game.engine.rendering.common.RenderMode;
 import com.game.engine.rendering.cpu.CPURenderer;
 import com.game.engine.rendering.opengl.JOGLRenderer;
 
@@ -39,16 +30,6 @@ public class GraphicTestUtil {
 	 * The height a drawable should be for graphic testing.
 	 */
 	public static final int DRAWABLE_MAX_HEIGHT = 10;
-
-	/**
-	 * An arbitrary driver settings for testing.
-	 */
-	private static final DriverSettings TEST_DRIVER_SETTINGS = new DriverSettings(1);
-
-	/**
-	 * An arbitrary cache for testing.
-	 */
-	private static final Cache TEST_CACHE = new LRUCache(0);
 
 	/**
 	 * Generate a safe-mode render of a drawable and return a buffered image for
@@ -128,9 +109,7 @@ public class GraphicTestUtil {
 	/**
 	 * Return the string representation of a boolean map.
 	 *
-	 * @param map    - the boolean map
-	 * @param width  - the width of the map
-	 * @param height - the height of the map
+	 * @param map - the boolean map
 	 * @return a string representation of a boolean map
 	 */
 	public static String mapToString(boolean[][] map) {

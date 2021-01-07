@@ -54,7 +54,14 @@ public interface Collidable {
 					c.getClass().getSimpleName() + " has not implemented collision retrieval.");
 		}
 	}
-
+	
+	/**
+	 * Return the collision incurred by this object and a {@link SATCircle} objects, or null, if
+	 * no collision occurred.
+	 *
+	 * @param c - a collidable
+	 * @return a collision, or null, if no collision occurred.
+	 */
 	public abstract Collision getCollision(SATCircle c);
 
 }

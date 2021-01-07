@@ -4,18 +4,16 @@ import java.nio.file.Paths;
 import java.util.Random;
 
 import com.game.engine.driver.GameDriver;
-import com.game.engine.game.AbstractGameObject;
 import com.game.engine.game.AbstractMotionGameObject;
 import com.game.engine.graphics.common.Drawable;
 import com.game.engine.graphics.common.RenderRequest;
 import com.game.engine.graphics.obj.Image;
-import com.game.engine.physics2D.Collision;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.common.RenderLevel;
 import com.jogamp.opengl.GL2;
 
 /**
- * A mock demo image
+ * A mock demo image with no physics.
  * 
  * @author Spencer Imbleau
  * @version December 2020

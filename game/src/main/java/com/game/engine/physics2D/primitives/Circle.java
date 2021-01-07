@@ -1,5 +1,9 @@
 package com.game.engine.physics2D.primitives;
 
+/**
+ * TODO: Document
+ */
+@SuppressWarnings("javadoc")
 public class Circle {
 
 	public double radius;

@@ -10,6 +10,13 @@ import com.game.engine.physics2D.common.Collidable;
 import com.game.engine.rendering.common.AbstractRenderer;
 import com.game.engine.rendering.common.RenderLevel;
 
+/**
+ * TODO: Document
+ *
+ * @author Spencer Imbleau
+ * @version January 2021
+ */
+@SuppressWarnings("javadoc")
 public class SATCircle implements Collidable, BoundingVolume {
 
 	/**

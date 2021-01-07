@@ -189,7 +189,7 @@ public class TestGameDriver {
 	}
 
 	/**
-	 * Test {@link GameDriver#start(DisplaySettings)}.
+	 * Test {@link GameDriver#start()}.
 	 */
 	@Test
 	public void testStart() {

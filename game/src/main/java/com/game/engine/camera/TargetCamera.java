@@ -105,10 +105,10 @@ public class TargetCamera extends AbstractCamera {
 			return;
 		}
 
-		// Declare target focus
-		Matrix2D focus = Matrix2D.create(this.target.position.x(), this.target.position.y());
+		// Get desired focus
+		Matrix2D focus = new Matrix2D(this.target.position.x(), this.target.position.y());
 		// Center the focus on the screen
-		focus.translateEquals(-(this.viewport.width / this.zoom / 2), -(this.viewport.height / this.zoom / 2));
+		focus.translate(-(this.viewport.width / this.zoom / 2), -(this.viewport.height / this.zoom / 2));
 		// Springarm bounds
 		focus.setX(Math.min(focus.x(), driver.game.getPlane().width - (this.viewport.width / this.zoom)));
 		focus.setX(Math.max(focus.x(), 0));

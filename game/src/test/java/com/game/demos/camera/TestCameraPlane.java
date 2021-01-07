@@ -39,7 +39,7 @@ public class TestCameraPlane extends AbstractChunkedPlane {
 	/**
 	 * All cameras to cycle through.
 	 */
-	private static final AbstractCamera CAMERAS[] = {
+	private static final AbstractCamera CAMERAS[] = { //
 			new DevCamera(0, 0, 0, 0, 1), // 0
 			new StationaryCamera(0, 0, 0, 0, 1), // 1
 			new TargetCamera(0, 0, 0, 0, 1) // 2
@@ -64,6 +64,7 @@ public class TestCameraPlane extends AbstractChunkedPlane {
 	 * The font used for our labels.
 	 */
 	private static final Font FONT = MockFonts.FONT_256;
+
 	/**
 	 * The color for our labels.
 	 */
@@ -73,23 +74,30 @@ public class TestCameraPlane extends AbstractChunkedPlane {
 	 * The label which shows the camera type used.
 	 */
 	private static final Label TYPE_LABEL = new Label(FONT, LABEL_COLOR);
+
 	/**
 	 * The label which shows the camera's origin.
 	 */
 	private static final Label ORIGIN_LABEL = new Label(FONT, LABEL_COLOR);
+
 	/**
 	 * The label which shows the camera's viewport.
 	 */
 	private static final Label VIEWPORT_LABEL = new Label(FONT, LABEL_COLOR);
+
 	/**
 	 * The label which shows the mouse's position.
 	 */
 	private static final Label LOCAL_MOUSE_LABEL = new Label(FONT, LABEL_COLOR);
+
 	/**
 	 * The label which shows the mouse's position on the plane.
 	 */
 	private static final Label PLANE_MOUSE_LABEL = new Label(FONT, LABEL_COLOR);
 
+	/**
+	 * The current camera being used.
+	 */
 	private static int cameraIndex = 0;
 
 	/**
@@ -204,6 +212,8 @@ public class TestCameraPlane extends AbstractChunkedPlane {
 
 	/**
 	 * Helper method to update the local mouse position label.
+	 *
+	 * @param driver - the driver for the game
 	 */
 	private void updateLocalMouseLabel(GameDriver driver) {
 		StringBuilder sb = new StringBuilder();
@@ -217,6 +227,8 @@ public class TestCameraPlane extends AbstractChunkedPlane {
 
 	/**
 	 * Helper method to update the plane mouse position label.
+	 *
+	 * @param driver - the driver for the game
 	 */
 	private void updatePlaneMouseLabel(GameDriver driver) {
 		StringBuilder sb = new StringBuilder();

@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import com.game.engine.graphics.obj.util.GraphicTestUtil;
+import com.game.engine.rendering.common.RenderMode;
 
 /**
  * Test {@link Ellipse}.

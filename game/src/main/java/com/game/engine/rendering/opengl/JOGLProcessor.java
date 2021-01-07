@@ -38,7 +38,7 @@ public class JOGLProcessor extends AbstractProcessor {
 	 */
 	public void draw(GL2 gl, RenderRequest request) {
 		AbstractCamera camera = this.renderer.getCamera();
-		Matrix2D requestMatrix = Matrix2D.create(request.x, request.y).transform(camera);
+		Matrix2D requestMatrix = new Matrix2D(request.x, request.y).transform(camera);
 
 		request.drawable.draw(this, gl, requestMatrix.x(), requestMatrix.y(), camera.zoom(), camera.zoom());
 	}

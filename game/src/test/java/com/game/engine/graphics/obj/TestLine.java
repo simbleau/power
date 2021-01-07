@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import com.game.engine.graphics.obj.util.GraphicTestUtil;
 import com.game.engine.graphics.obj.util.GraphicTestUtil.PixelPosition;
+import com.game.engine.rendering.common.RenderMode;
 
 /**
  * Test {@link Line}.
@@ -102,8 +103,7 @@ public class TestLine {
 	 * Helper method to test the render of a drawable.
 	 *
 	 * @param render - a rendered drawable
-	 * @param dW     - the drawable's width
-	 * @param dH     - the drawable's height
+	 * @param line   - the drawable
 	 */
 	private static final void testRender(BufferedImage render, Line line) {
 		boolean[][] pixelMap = GraphicTestUtil.mapPixels(render, TEST_COLOR);
@@ -161,9 +161,9 @@ public class TestLine {
 	 * @param p2 - the end of a line
 	 * @return the distance from a pixel and a line
 	 */
-	private static double pixelDeviation(PixelPosition p, PixelPosition p1, PixelPosition p2) {
-		int x = p.x;
-		int y = p.y;
+	private static double pixelDeviation(PixelPosition p0, PixelPosition p1, PixelPosition p2) {
+		int x = p0.x;
+		int y = p0.y;
 		int x1 = p1.x;
 		int y1 = p1.y;
 		int x2 = p2.x;

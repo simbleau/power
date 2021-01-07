@@ -60,7 +60,7 @@ public class CPUProcessor extends AbstractProcessor {
 	 */
 	public void draw(RenderRequest request) {
 		AbstractCamera camera = this.renderer.getCamera();
-		Matrix2D requestMatrix = Matrix2D.create(request.x, request.y).transform(camera);
+		Matrix2D requestMatrix = new Matrix2D(request.x, request.y).transform(camera);
 
 		request.drawable.draw(this, (int) requestMatrix.x(), (int) requestMatrix.y(), camera.zoom(), camera.zoom());
 	}

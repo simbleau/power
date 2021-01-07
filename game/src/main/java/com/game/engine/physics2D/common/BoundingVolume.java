@@ -1,6 +1,9 @@
 package com.game.engine.physics2D.common;
 
-
+/**
+ * TODO: Document
+ */
+@SuppressWarnings("javadoc")
 public interface BoundingVolume {
 
 		public abstract int xMin();
