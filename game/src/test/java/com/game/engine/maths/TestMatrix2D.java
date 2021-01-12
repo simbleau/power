@@ -1,11 +1,10 @@
-package com.game.engine.coordinates;
+package com.game.engine.maths;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import com.game.engine.camera.AbstractCamera;
 import com.game.engine.driver.GameDriver;
-import com.game.engine.maths.Matrix2D;
 
 /**
  * Test a {@link Matrix2D}.
@@ -13,7 +12,7 @@ import com.game.engine.maths.Matrix2D;
  * @author Spencer Imbleau
  * @version October 2020
  */
-public class TestCoordinateMatrix {
+public class TestMatrix2D {
 
 	/**
 	 * A test X coordinate.

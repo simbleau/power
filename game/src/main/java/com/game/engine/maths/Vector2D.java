@@ -58,6 +58,23 @@ public class Vector2D implements Cloneable {
 	}
 
 	/**
+	 * Checks the equivalence of an object to this 2D vector. For a 2D vector to be
+	 * equal, the backing 2D matrices must be equal.
+	 *
+	 * @param o - the vector to be tested against.
+	 * @return true if they are equal, false otherwise.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Vector2D) {
+			Vector2D v = (Vector2D) o;
+			return this.vMatrix.equals(v.vMatrix);
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Represent this vector in standard vector representation. For readability, all
 	 * floating-point values have been rounded to the tenths-place and decimal
 	 * values will display a leading zero.<br>
@@ -89,18 +106,32 @@ public class Vector2D implements Cloneable {
 		Matrix2D m = this.vMatrix.clone();
 		return new Vector2D(m);
 	}
+	
+	public Matrix2D getMatrix() {
+		return this.vMatrix;
+	}
+	
+	public Vector2D invert() {
+		if (this.x() != 0) {
+			this.vMatrix.setX(1d / this.x());
+		}
+		if (this.y() != 0) {
+			this.vMatrix.setY(1d / this.y());
+		}
+		return this;
+	}
 
 	/**
 	 * @return the displacement in the x direction of this vector
 	 */
-	public double dx() {
+	public double x() {
 		return this.vMatrix.x();
 	}
 
 	/**
 	 * @return the displacement in the y direction of this vector
 	 */
-	public double dy() {
+	public double y() {
 		return this.vMatrix.y();
 	}
 
@@ -111,7 +142,7 @@ public class Vector2D implements Cloneable {
 	 * @return this vector added by the given vector
 	 */
 	public Vector2D plus(Vector2D v) {
-		this.vMatrix.translate(v.dx(), v.dy());
+		this.vMatrix.translate(v.x(), v.y());
 		return this;
 	}
 
@@ -122,7 +153,7 @@ public class Vector2D implements Cloneable {
 	 * @return this vector subtracted by the given vector
 	 */
 	public Vector2D minus(Vector2D v) {
-		this.vMatrix.translate(-v.dx(), -v.dy());
+		this.vMatrix.translate(-v.x(), -v.y());
 		return this;
 	}
 
@@ -144,7 +175,40 @@ public class Vector2D implements Cloneable {
 	 * @return this vector normalized
 	 */
 	public Vector2D normalize() {
-		this.scale(1d / this.length());
+		double length = this.length();
+		if (length == 0) {
+			// Cannot normalize it
+			return this;
+		}
+		this.scale(1d / length);
+		return this;
+	}
+
+	/**
+	 * Rotates this vector by a given angle in radians around the point (0, 0).
+	 * Positive values rotate counter-clockwise and negative values rotate
+	 * clockwise.
+	 * 
+	 * @param theta - the angle of rotation (in radians)
+	 * @return this vector rotated by a given theta
+	 */
+	public Vector2D rotate(double theta) {
+		this.vMatrix.rotate(theta);
+		return this;
+	}
+
+	/**
+	 * Rotates this vector by a given angle in radians around an anchor point.
+	 * Positive values rotate counter-clockwise and negative values rotate
+	 * clockwise.
+	 * 
+	 * @param theta - the angle of rotation (in radians)
+	 * @param x     - anchor point x to rotate around
+	 * @param y     - anchor point y to rotate around
+	 * @return this vector rotated by a given theta around an anchor point
+	 */
+	public Vector2D rotate(double theta, double x, double y) {
+		this.vMatrix.rotate(theta, x, y);
 		return this;
 	}
 
@@ -156,7 +220,7 @@ public class Vector2D implements Cloneable {
 	 * @return this vector, now the component product of the given vector
 	 */
 	public Vector2D componentProduct(Vector2D v) {
-		this.vMatrix.scale(v.dx(), v.dy());
+		this.vMatrix.scale(v.x(), v.y());
 		return this;
 	}
 
@@ -180,7 +244,15 @@ public class Vector2D implements Cloneable {
 	 * @return the length (also known as the magnitude) of this vector
 	 */
 	public double length() {
-		return Math.sqrt(this.dx() * this.dx() + this.dy() * this.dy());
+		return Math.sqrt(this.lengthSquared());
+	}
+
+	/**
+	 * @return the length (also known as the magnitude) of this vector to the power
+	 *         of two
+	 */
+	public double lengthSquared() {
+		return this.vMatrix.x() * this.vMatrix.x() + this.vMatrix.y() * this.vMatrix.y();
 	}
 
 	/**

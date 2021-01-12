@@ -5,7 +5,8 @@ import com.game.engine.maths.Matrix2D;
 /**
  * TODO: Document
  */
-public class Collider2D {
+@SuppressWarnings("javadoc")
+public class Collider {
 
 	/**
 	 * TODO: Document

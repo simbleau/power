@@ -59,6 +59,37 @@ public class Matrix2D extends Matrix {
 	}
 
 	/**
+	 * Checks the equivalence of an object to this 2D matrix. For a 2D matrix to be
+	 * equal, elements in one 2D matrix must correspond in equivalence to an allowed
+	 * degree of error to the other 2D matrix.
+	 *
+	 * @param o - the 2D matrix to be tested against.
+	 * @return true if they are equal, false otherwise.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		if (o instanceof Matrix2D) {
+			Matrix2D m = (Matrix2D) o;
+			// Test x equivalence
+			double x1 = this.matrix[0][0];
+			double x2 = m.matrix[0][0];
+			if (Math.abs(x1 - x2) > Double.MIN_VALUE * Math.max(1, Math.max(x1, x2))) {
+				return false;
+			}
+			// Test y equivalence
+			double y1 = this.matrix[0][1];
+			double y2 = m.matrix[0][1];
+			if (Math.abs(y1 - y2) > Double.MIN_VALUE * Math.max(1, Math.max(y1, y2))) {
+				return false;
+			}
+			// No checks failed, they are equal
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Represent this 2D matrix in standard matrix representation. For readability,
 	 * all floating-point values have been rounded to the tenths-place and decimal
 	 * values will display a leading zero.<br>
@@ -66,7 +97,7 @@ public class Matrix2D extends Matrix {
 	 * e.g., a 2D matrix with x of 1 and y of 0 will output:
 	 *
 	 * <pre>
-	 * {1.0, 0.0}
+	 * { 1.0, 0.0 }
 	 * </pre>
 	 *
 	 */
@@ -155,8 +186,9 @@ public class Matrix2D extends Matrix {
 	}
 
 	/**
-	 * Rotates this matrix by a given angle. Positive values rotate
-	 * counter-clockwise and negative values rotate clockwise.
+	 * Rotates this matrix by a given angle in radians around the point (0, 0).
+	 * Positive values rotate counter-clockwise and negative values rotate
+	 * clockwise.
 	 *
 	 * @param theta - the angle of rotation (in radians)
 	 * @return this matrix rotated by a given theta

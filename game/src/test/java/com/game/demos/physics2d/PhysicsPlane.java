@@ -1,4 +1,4 @@
-package com.game.demos.physics2d;
+package com.game.demos.physics2D;
 
 import java.util.logging.Level;
 

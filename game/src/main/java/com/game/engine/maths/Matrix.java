@@ -135,8 +135,14 @@ public class Matrix implements Cloneable {
 
 	/**
 	 * Checks the equivalence of an object to this matrix. For a matrix to be equal,
-	 * both must have the same number of rows and columns with the same entries in
-	 * every cell.
+	 * the following conditions must be true:
+	 * 
+	 * <ul>
+	 * <li>Both matrices must have the same number of rows</li>
+	 * <li>Both matrices must have the same number of columns</li>
+	 * <li>Elements in one matrix must correspond in equivalence to an allowed
+	 * degree of error to the other matrix</li>
+	 * </ul>
 	 *
 	 * @param o - the matrix to be tested against.
 	 * @return true if they are equal, false otherwise.
@@ -145,13 +151,26 @@ public class Matrix implements Cloneable {
 	public boolean equals(Object o) {
 		if (o instanceof Matrix) {
 			Matrix m = (Matrix) o;
+			// Test row equivalence
 			if (m.rows != this.rows) {
 				return false;
 			}
+			// Test column equivalence
 			if (m.columns != this.columns) {
 				return false;
 			}
-			return Arrays.deepEquals(m.matrix, this.matrix);
+			// Test double equivalence
+			for (int i = 0; i < this.rows; i++) {
+				for (int j = 0; j < this.columns; j++) {
+					double e1 = this.matrix[i][j];
+					double e2 = m.matrix[i][j];
+					if (Math.abs(e1 - e2) > Double.MIN_VALUE * Math.max(1, Math.max(e1, e2))) {
+						return false;
+					}
+				}
+			}
+			// No checks failed, they are equal
+			return true;
 		} else {
 			return false;
 		}

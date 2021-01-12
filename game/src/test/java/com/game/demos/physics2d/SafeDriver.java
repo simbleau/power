@@ -1,4 +1,4 @@
-package com.game.demos.physics2d;
+package com.game.demos.physics2D;
 
 import com.game.demos.artifacts.DemoGame;
 import com.game.demos.util.DemoDisplaySupport;

@@ -1,12 +1,10 @@
-package com.game.engine.coordinates;
+package com.game.engine.maths;
 
 import java.util.Arrays;
 import java.util.Random;
 
 import org.junit.Assert;
 import org.junit.Test;
-
-import com.game.engine.maths.Matrix;
 
 /**
  * Tests a {@link Matrix}
@@ -669,7 +667,7 @@ public class TestMatrix {
 		Matrix m3 = new Matrix(a3);
 
 		// Test for error when dimensions are invalid
-		Assert.assertThrows(UnsupportedOperationException.class, () -> m3.times(m1));
+		Assert.assertThrows(IllegalArgumentException.class, () -> m3.times(m1));
 
 		// Test for correct multiplication
 		Assert.assertEquals(m1m2, m1.times(m2));
